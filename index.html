@@ -716,6 +716,8 @@ const DEFS = {
     {id:'t9',name:'Expo / EAS',cat:'Dev',email:'corujalabs_dev@gmail.com',url:'expo.dev',notes:'expo prebuild → pasta android.'},
     {id:'t10',name:'Google Tag Manager',cat:'Analytics',email:'corujalabs_dev@gmail.com',url:'tagmanager.google.com',notes:'Container "Produtos digitais Solano".'},
     {id:'t11',name:'Meta Business',cat:'Analytics',email:'',url:'business.facebook.com',notes:'Pixel SaaS. CAPI: StartTrial + Subscribe.'},
+    {id:'t12',name:'Google Groups — Teste App 1',cat:'Loja',email:'teste_app_1@googlegroups.com',url:'groups.google.com/g/teste_app_1',notes:'Grupo de testadores internos. Usado no Google Play Console para testes fechados.'},
+    {id:'t13',name:'Google Groups — App Testers',cat:'Loja',email:'apptester-testers@googlegroups.com',url:'groups.google.com/g/apptester-testers',notes:'Grupo de testadores externos. Vinculado ao Play Console para distribuição de teste.'},
   ],
   costs:[
     {id:'c1',service:'Google Play Console',val:25,freq:'Único',proj:'PlannerOrganiza App',cur:'USD'},
@@ -922,23 +924,58 @@ const catMeta={
   'DNS / Hospedagem':{col:'#14B8A6',bg:'#CCFBF1'},Outro:{col:'#9CA3AF',bg:'#F3F4F6'}
 };
 
-function getFavicon(url){
-  if(!url) return null;
-  try{
-    const domain = url.replace(/^https?:\/\//,'').split('/')[0];
+const ICON_MAP = {
+  'firebase':    'https://www.gstatic.com/devrel-devsite/prod/v45f61267e66cbf32eb21c0e7155e0e6/firebase/images/touchicon-180.png',
+  'github':      'https://github.githubassets.com/favicons/favicon.svg',
+  'render':      'https://render.com/icons/favicon-32x32.png',
+  'replit':      'https://replit.com/public/icons/favicon-196.png',
+  'stripe':      'https://dashboard.stripe.com/favicon.ico',
+  'play':        'https://www.gstatic.com/android/market_images/web/favicon_v2.ico',
+  'google play': 'https://www.gstatic.com/android/market_images/web/favicon_v2.ico',
+  'expo':        'https://expo.dev/static/favicons/favicon-32x32.png',
+  'android':     'https://developer.android.com/static/images/brand/Android_Robot.svg',
+  'sendgrid':    'https://sendgrid.com/favicon.ico',
+  'brevo':       'https://www.brevo.com/wp-content/uploads/2023/01/cropped-favicon-brevo-32x32.png',
+  'meta':        'https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico',
+  'tag manager': 'https://www.gstatic.com/analytics-suite/header/suite/v2/ic_tag_manager.svg',
+  'gtm':         'https://www.gstatic.com/analytics-suite/header/suite/v2/ic_tag_manager.svg',
+  'analytics':   'https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg',
+  'google':      'https://www.google.com/favicon.ico',
+  'groups':      'https://www.gstatic.com/images/branding/product/1x/groups_2020q4_32dp.png',
+  'notion':      'https://www.notion.so/front-static/favicon.ico',
+  'vercel':      'https://assets.vercel.com/image/upload/front/favicon/vercel/favicon.ico',
+  'netlify':     'https://www.netlify.com/favicon/favicon-32x32.png',
+  'supabase':    'https://supabase.com/favicon/favicon-32x32.png',
+  'mongodb':     'https://www.mongodb.com/assets/images/global/favicon.ico',
+  'postgresql':  'https://www.postgresql.org/favicon.ico',
+  'cloudflare':  'https://www.cloudflare.com/favicon.ico',
+  'aws':         'https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico',
+  'figma':       'https://static.figma.com/app/icon/1/favicon.ico',
+};
+
+function getFaviconUrl(t){
+  const nameLower = t.name.toLowerCase();
+  for(const [key,url] of Object.entries(ICON_MAP)){
+    if(nameLower.includes(key)) return url;
+  }
+  if(t.url){
+    const domain = t.url.replace(/^https?:\/\//,'').split('/')[0];
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-  }catch(e){return null;}
+  }
+  return null;
 }
 
 function toolFaviconHtml(t){
-  const favicon = getFavicon(t.url);
   const meta = catMeta[t.cat]||catMeta.Outro;
-  if(favicon){
+  const src = getFaviconUrl(t);
+  const fallback = `<span class="fb" style="color:${meta.col};background:${meta.bg};width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:7px">${t.name.slice(0,2).toUpperCase()}</span>`;
+  if(src){
     return `<div class="tool-favicon">
-      <img src="${favicon}" onerror="this.parentElement.innerHTML='<span class=\\"fb\\" style=\\"color:${meta.col}\\">${t.name.slice(0,2).toUpperCase()}</span>'" alt="${t.name}">
+      <img src="${src}" width="20" height="20" style="object-fit:contain;border-radius:3px"
+        onerror="this.outerHTML='${fallback.replace(/'/g,"\\'")}'">
     </div>`;
   }
-  return `<div class="tool-favicon" style="background:${meta.bg}"><span class="fb" style="color:${meta.col}">${t.name.slice(0,2).toUpperCase()}</span></div>`;
+  return `<div class="tool-favicon" style="background:${meta.bg}">${fallback}</div>`;
 }
 
 function renderTools(){
