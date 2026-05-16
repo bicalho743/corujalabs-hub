@@ -85,6 +85,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .sc.c2::before{background:linear-gradient(90deg,#22C55E,#14B8A6)}
 .sc.c3::before{background:linear-gradient(90deg,#3B82F6,#06B6D4)}
 .sc.c4::before{background:linear-gradient(90deg,#F59E0B,#EF4444)}
+.sc[onclick]:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:transparent}
 .sl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);margin-bottom:8px}
 .sv{font-size:30px;font-weight:800;letter-spacing:-.8px;line-height:1}
 .ss{font-size:13px;color:var(--tx3);margin-top:5px}
@@ -805,10 +806,27 @@ function renderDash(){
     {l:'Ao vivo',v:s.live,s:'ativos',c:'c2'},
     {l:'Em dev',v:s.dev,s:'em andamento',c:'c3'},
     {l:'Tarefas concluídas',v:`${done}/${total}`,s:Math.round(done/Math.max(1,total)*100)+'%',c:'c4'},
-  ].map(x=>`<div class="sc ${x.c}"><div class="sl">${x.l}</div><div class="sv">${x.v}</div><div class="ss">${x.s}</div></div>`).join('');
+  ].map((x,i)=>`<div class="sc ${x.c}" onclick="dashNav(${i})" style="cursor:pointer;user-select:none"><div class="sl">${x.l}</div><div class="sv">${x.v}</div><div class="ss">${x.s} <span style="font-size:10px;opacity:.5">↗</span></div></div>`).join('');
   const active=D.projects.filter(p=>p.status==='dev'||p.status==='live');
   document.getElementById('dash-pgrid').innerHTML=active.map(projCard).join('');
   document.getElementById('dash-log').innerHTML=[...D.logs].reverse().slice(0,4).map(logItem).join('')||'<div class="empty">Nenhuma atividade.</div>';
+}
+
+function openProj(id){
+  const sel=document.getElementById('pipe-sel');
+  if(sel)sel.value=id;
+  go('pipeline');
+  renderPipeline();
+}
+
+function dashNav(i){
+  const acts=[
+    ()=>{go("projetos");document.getElementById("pfilter").value="";renderProjetos();},
+    ()=>{go("projetos");document.getElementById("pfilter").value="live";renderProjetos();},
+    ()=>{go("projetos");document.getElementById("pfilter").value="dev";renderProjetos();},
+    ()=>go("pipeline"),
+  ];
+  if(acts[i])acts[i]();
 }
 
 // PROJETOS
@@ -822,7 +840,7 @@ function projCard(p){
   const prog=Math.min(100,parseInt(p.progress)||0);
   const tags=(p.stack||'').split('·').filter(Boolean).map(t=>`<span class="stag">${t.trim()}</span>`).join('');
   const fase=PHASES[parseInt(p.fase)||0]||'';
-  return `<div class="pc">
+  return `<div class="pc" onclick="openProj('${p.id}')" style="cursor:pointer">
     <div class="pc-top ${sm.tp}"></div>
     <div class="pch">
       <div style="padding-top:2px">
@@ -831,7 +849,7 @@ function projCard(p){
       </div>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
         <span class="badge ${sm.cls}">${sm.l}</span>
-        <button class="ibtn" onclick="delProj('${p.id}')" title="Excluir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
+        <button class="ibtn" onclick="event.stopPropagation();delProj('${p.id}')" title="Excluir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
       </div>
     </div>
     <div class="pd">${p.desc||'Sem descrição.'}</div>
