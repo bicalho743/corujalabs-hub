@@ -271,6 +271,39 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
   .sidebar{width:56px}.brand-name,.brand-sub,.nav-lbl,.ni span,.nb{display:none}.ni{justify-content:center;padding:8px}.brand{justify-content:center}
   .content{padding:16px}.stats{grid-template-columns:1fr 1fr}.pgrid{grid-template-columns:1fr}.fg{grid-template-columns:1fr}.fgrp.s2{grid-column:span 1}
 }
+
+/* EMPRESA PAGE */
+.sec-lbl{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.09em;font-family:var(--mono);margin-bottom:12px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:4px}
+.info-card{background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--shadow);transition:all .2s}
+.info-card:hover{box-shadow:var(--shadow2);transform:translateY(-1px)}
+.info-icon{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-label{font-size:11px;font-family:var(--mono);font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.info-value{font-size:14px;font-weight:600;color:var(--tx)}
+.info-value a{color:var(--acc);text-decoration:none}.info-value a:hover{text-decoration:underline}
+.email-explain{background:linear-gradient(135deg,#FFFBEB,#FEF9C3);border:1.5px solid #FDE68A;border-radius:var(--r2);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.email-explain-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.email-table-wrap{background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden;box-shadow:var(--shadow)}
+.email-table{width:100%;border-collapse:collapse}
+.email-table th{font-size:11px;font-family:var(--mono);font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;background:var(--bg2);text-align:left}
+.email-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.email-table tr:last-child td{border-bottom:none}
+.email-table tr:hover td{background:var(--bg2)}
+.email-cell-input{width:100%;padding:5px 8px;border:1.5px solid transparent;border-radius:var(--r);font-size:13px;font-family:var(--mono);background:transparent;color:var(--tx);outline:none;cursor:pointer;transition:all .15s}
+.email-cell-input:hover{background:var(--bg2)}
+.email-cell-input:focus{border-color:var(--acc);background:#fff;cursor:text}
+.copy-cell-btn{padding:4px 10px;background:var(--acc-bg);color:var(--acc);border:1.5px solid rgba(79,110,247,.2);border-radius:var(--r);font-size:11px;cursor:pointer;font-family:var(--sans);font-weight:600;transition:all .15s;white-space:nowrap}
+.copy-cell-btn:hover{background:var(--acc);color:#fff}
+.copy-cell-btn.ok{background:var(--green-bg);color:var(--green-tx);border-color:rgba(34,197,94,.3)}
+.del-row-btn{padding:4px 6px;background:transparent;border:none;color:var(--tx3);cursor:pointer;border-radius:var(--r);transition:all .15s;font-size:13px}
+.del-row-btn:hover{background:var(--red-bg);color:var(--red-tx)}
+.steps-list{display:flex;flex-direction:column;gap:0;background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden;box-shadow:var(--shadow)}
+.step-item{display:flex;gap:14px;align-items:flex-start;padding:14px 18px;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px}
+.step-title{font-size:14px;font-weight:600;color:var(--tx);line-height:1.5}
+.step-desc{font-size:13px;color:var(--tx2);margin-top:3px;line-height:1.6}
+.step-desc code{background:var(--bg3);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
 </style>
 </head>
 <body>
@@ -290,6 +323,10 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
     <div class="ni active" onclick="go('dashboard')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
       <span>Dashboard</span>
+    </div>
+    <div class="ni" onclick="go('empresa')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Coruja Labs</span>
     </div>
     <div class="ni" onclick="go('prompt')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
@@ -349,6 +386,119 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
   <div class="pgrid" id="dash-pgrid"></div>
   <p style="font-size:12px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.09em;font-family:var(--mono);margin:24px 0 14px">Atividade recente</p>
   <div class="fcard" style="padding:4px 0 0"><div class="lfeed" id="dash-log" style="padding:0 18px"></div></div>
+</div>
+
+<!-- EMPRESA -->
+<div class="page" id="page-empresa">
+  <div class="ph"><div><div class="pt">Coruja Labs</div><div class="ps">Dados da empresa, emails e configurações</div></div></div>
+
+  <!-- IDENTIDADE -->
+  <p class="sec-lbl">Identidade</p>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon" style="background:#DCFCE7;color:#16A34A">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      </div>
+      <div class="info-body">
+        <div class="info-label">Nome</div>
+        <div class="info-value">Coruja Labs</div>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon" style="background:#DBEAFE;color:#1D4ED8">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="info-body">
+        <div class="info-label">Responsável</div>
+        <div class="info-value">bicalho743</div>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon" style="background:#EDE9FE;color:#6D28D9">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      </div>
+      <div class="info-body">
+        <div class="info-label">GitHub</div>
+        <div class="info-value"><a href="https://github.com/bicalho743" target="_blank">github.com/bicalho743</a></div>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon" style="background:#FEF3C7;color:#B45309">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="info-body">
+        <div class="info-label">Pasta base (Windows)</div>
+        <div class="info-value" style="font-family:var(--mono);font-size:13px">C:\APLICATIVOS\</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAILS -->
+  <p class="sec-lbl" style="margin-top:24px">Estratégia de emails</p>
+
+  <div class="email-explain">
+    <div class="email-explain-icon">💡</div>
+    <div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px">Como funciona o truque do <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;font-size:13px">+</code> no Gmail</div>
+      <div style="font-size:13px;color:var(--tx2);line-height:1.7">O Gmail ignora tudo que vem depois do <code style="background:var(--bg3);padding:1px 5px;border-radius:4px">+</code> no endereço. Todos os emails chegam na <strong>mesma caixa</strong> — mas você pode criar <strong>filtros por remetente</strong> e organizar com etiquetas coloridas. Ideal para cadastrar em cada app/serviço sem criar contas novas.</div>
+    </div>
+  </div>
+
+  <div class="email-table-wrap">
+    <table class="email-table">
+      <thead><tr><th>App / Uso</th><th>Email para cadastrar</th><th>Chega em</th><th>Copiar</th></tr></thead>
+      <tbody id="email-tbody"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button class="btn btn-p btn-sm" onclick="addEmailRow()">+ Adicionar app</button>
+    <span style="font-size:12px;color:var(--tx3)">Clique em qualquer campo para editar</span>
+  </div>
+
+  <!-- GMAIL FILTROS -->
+  <p class="sec-lbl" style="margin-top:28px">Como criar os filtros no Gmail</p>
+  <div class="steps-list">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Abra o Gmail → Configurações (⚙️) → Ver todas as configurações → Filtros e endereços bloqueados</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Clique em "Criar novo filtro"</div>
+        <div class="step-desc">No campo <strong>Para:</strong> coloque <code>corujalabs_dev+plannerorganiza@gmail.com</code></div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Aplique a ação: "Aplicar etiqueta" → crie uma nova etiqueta com o nome do app</div>
+        <div class="step-desc">Ex: etiqueta <strong>PlannerOrganiza</strong> — aparece colorida na barra lateral do Gmail</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Repita para cada app</div>
+        <div class="step-desc">Cada app tem seu email <code>+nomeapp</code> e sua própria etiqueta. Tudo centralizado numa conta só.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE OPCIONAL -->
+  <p class="sec-lbl" style="margin-top:28px">Opção profissional (domínio próprio)</p>
+  <div class="info-card" style="max-width:600px">
+    <div class="info-icon" style="background:#EEF1FE;color:#4F6EF7">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+    </div>
+    <div class="info-body">
+      <div class="info-label">Google Workspace (~R$30/mês)</div>
+      <div class="info-value" style="font-size:13px;color:var(--tx2);line-height:1.7;margin-top:2px">Com um domínio como <strong>corujalabs.com.br</strong> você cria <code>dev@corujalabs.com.br</code>, <code>planner@corujalabs.com.br</code>, <code>suporte@corujalabs.com.br</code> — visual muito mais profissional para clientes e lojas.</div>
+    </div>
+  </div>
 </div>
 
 <!-- PROMPT IA -->
@@ -777,7 +927,7 @@ function go(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const ord=['dashboard','prompt','projetos','pipeline','ideias','ferramentas','custos','log','add'];
+  const ord=['dashboard','empresa','prompt','projetos','pipeline','ideias','ferramentas','custos','log','add'];
   document.querySelectorAll('.ni')[ord.indexOf(p)]?.classList.add('active');
 }
 
@@ -1143,6 +1293,67 @@ function delTool(id){D.tools=D.tools.filter(t=>t.id!==id);save();renderTools();u
 function delCost(id){D.costs=D.costs.filter(c=>c.id!==id);save();renderCosts();}
 function delLog(id){D.logs=D.logs.filter(l=>l.id!==id);save();renderAll();}
 
+
+// EMPRESA — email rows
+const BASE_EMAIL = 'corujalabs_dev@gmail.com';
+const INBOX = 'corujalabs_dev@gmail.com';
+const EK = 'corujalabs_emails_v1';
+
+let emailRows = [
+  {id:'e1', app:'Geral / Central',    alias:'corujalabs_dev@gmail.com',        uso:'Conta master. Vincula todos os serviços.'},
+  {id:'e2', app:'PlannerOrganiza SaaS',alias:'corujalabs_dev+plannerorganiza@gmail.com', uso:'Firebase, Stripe, Render, Brevo'},
+  {id:'e3', app:'PlannerOrganiza App', alias:'corujalabs_dev+plannerapp@gmail.com',      uso:'Google Play Console, Expo'},
+  {id:'e4', app:'Multiplicamente',     alias:'corujalabs_dev+multiplicamente@gmail.com', uso:'Google Play Console'},
+  {id:'e5', app:'Tâmara Cavalcante',   alias:'corujalabs_dev+tamara@gmail.com',          uso:'Site, produtos digitais'},
+  {id:'e6', app:'Testadores (Play)',   alias:'teste_app_1@googlegroups.com',             uso:'Google Groups — testes internos'},
+  {id:'e7', app:'App Testers (Play)',  alias:'apptester-testers@googlegroups.com',       uso:'Google Groups — testes externos'},
+];
+
+function loadEmails(){
+  try{const r=localStorage.getItem(EK);if(r)emailRows=JSON.parse(r);}catch(e){}
+  renderEmails();
+}
+function saveEmails(){
+  try{localStorage.setItem(EK,JSON.stringify(emailRows));}catch(e){}
+}
+function renderEmails(){
+  const tb = document.getElementById('email-tbody');
+  if(!tb) return;
+  tb.innerHTML = emailRows.map(row=>`<tr id="erow-${row.id}">
+    <td><input class="email-cell-input" value="${row.app}" onchange="updateEmail('${row.id}','app',this.value)" style="font-weight:600"></td>
+    <td><input class="email-cell-input" id="ecopy-${row.id}" value="${row.alias}" onchange="updateEmail('${row.id}','alias',this.value)" style="color:var(--acc);font-family:var(--mono);font-size:12px"></td>
+    <td><input class="email-cell-input" value="${row.uso}" onchange="updateEmail('${row.id}','uso',this.value)" style="color:var(--tx2)"></td>
+    <td style="white-space:nowrap;display:flex;gap:6px;align-items:center">
+      <button class="copy-cell-btn" id="cbtn-${row.id}" onclick="copyEmail('${row.id}')">Copiar</button>
+      <button class="del-row-btn" onclick="delEmailRow('${row.id}')">✕</button>
+    </td>
+  </tr>`).join('');
+}
+function updateEmail(id,field,val){
+  const r=emailRows.find(x=>x.id===id);if(r){r[field]=val;saveEmails();}
+}
+function copyEmail(id){
+  const r=emailRows.find(x=>x.id===id);if(!r)return;
+  navigator.clipboard.writeText(r.alias).then(()=>{
+    const btn=document.getElementById('cbtn-'+id);
+    btn.textContent='✓ Copiado!';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2000);
+  });
+}
+function addEmailRow(){
+  const id='e'+Date.now();
+  emailRows.push({id,app:'Novo app',alias:'corujalabs_dev+nomeapp@gmail.com',uso:'Descreva onde usar'});
+  saveEmails();renderEmails();
+  setTimeout(()=>{
+    const inputs=document.querySelectorAll(`#erow-${id} input`);
+    if(inputs[0]){inputs[0].focus();inputs[0].select();}
+  },50);
+}
+function delEmailRow(id){
+  emailRows=emailRows.filter(x=>x.id!==id);saveEmails();renderEmails();
+}
+
+loadEmails();
 load();
 </script>
 </body>
