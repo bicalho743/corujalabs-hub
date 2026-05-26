@@ -678,6 +678,7 @@ const db   = firebase.firestore();
       <div class="fgrp"><label class="flbl">GitHub repo</label><input class="finput" id="p-repo" placeholder="github.com/bicalho743/..."></div>
       <div class="fgrp s2"><label class="flbl">Stack (separar por ·)</label><input class="finput" id="p-stack" placeholder="React Native · Expo · Firebase"></div>
       <div class="fgrp"><label class="flbl">Progresso (%)</label><input class="finput" id="p-prog" placeholder="0"></div>
+      <div class="fgrp"><label class="flbl">Data início</label><input class="finput" type="date" id="p-date"></div>
       <div class="fgrp"><label class="flbl">Fase atual</label><select class="fsel" id="p-fase"><option value="0">1 — Ideia</option><option value="1">2 — Planejamento</option><option value="2">3 — Desenvolvimento</option><option value="3">4 — Beta / Testes</option><option value="4">5 — Lançamento</option><option value="5">6 — Pós-lançamento</option></select></div>
       <div class="fgrp s2"><label class="flbl">Descrição</label><textarea class="fta" id="p-desc"></textarea></div>
     </div>
@@ -693,6 +694,7 @@ const db   = firebase.firestore();
       <div class="fgrp"><label class="flbl">Monetização</label><input class="finput" id="i-mono" placeholder="Assinatura, Freemium, B2B..."></div>
       <div class="fgrp"><label class="flbl">Referências</label><input class="finput" id="i-ref" placeholder="Anki, Duolingo..."></div>
       <div class="fgrp s2"><label class="flbl">Descrição e problema que resolve</label><textarea class="fta" id="i-desc"></textarea></div>
+      <div class="fgrp"><label class="flbl">Data da ideia</label><input class="finput" type="date" id="i-date"></div>
     </div>
     <div class="factions"><button class="btn btn-p" onclick="addIdeia()">Salvar ideia</button><button class="btn btn-g" onclick="clrForm('ideia')">Limpar</button></div>
   </div>
@@ -896,15 +898,15 @@ Prefiro código completo, comandos via CMD do Windows, e instruções passo a pa
 
 const DEFS = {
   projects:[
-    {id:'p1',name:'PlannerOrganiza SaaS',status:'dev',url:'plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'Streamlit · Python · PostgreSQL · Firebase · Stripe · Brevo',progress:70,fase:2,desc:'B2B SaaS para personal organizers. CRM, propostas, financeiro, pós-organização.',
+    {id:'p1',name:'PlannerOrganiza SaaS',status:'dev',date:'2024-03-01',url:'plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'Streamlit · Python · PostgreSQL · Firebase · Stripe · Brevo',progress:70,fase:2,desc:'B2B SaaS para personal organizers. CRM, propostas, financeiro, pós-organização.',
     phases:[{tasks:[{t:'Definir ICP',done:true},{t:'Validar com organizers',done:true}],note:'ICP: organizer feminina 24-45 anos.'},{tasks:[{t:'Stack definida',done:true},{t:'Landing page',done:true},{t:'Firebase + Stripe',done:true}],note:''},{tasks:[{t:'Módulo CRM',done:true},{t:'Módulo propostas',done:true},{t:'Módulo financeiro',done:true},{t:'Pós-organização',done:false},{t:'Rebuild FastAPI',done:false}],note:'propostas_unificado.py ativo.'},{tasks:[{t:'Teste fechado',done:false},{t:'Coletar feedback',done:false}],note:''},{tasks:[{t:'Meta Ads',done:false},{t:'Google Ads Search',done:false},{t:'CAPI',done:false}],note:'Manual pronto.'},{tasks:[{t:'NPS mensal',done:false},{t:'A/B testes',done:false}],note:''}]},
-    {id:'p2',name:'PlannerOrganiza App',status:'dev',url:'Google Play (interno)',repo:'github.com/bicalho743/planner-app',stack:'React Native · Expo · Firebase · JWT',progress:45,fase:2,desc:'App Android/iOS. Expo prebuild feito, Firebase + SHA configurados.',
+    {id:'p2',name:'PlannerOrganiza App',status:'dev',date:'2024-08-01',url:'Google Play (interno)',repo:'github.com/bicalho743/planner-app',stack:'React Native · Expo · Firebase · JWT',progress:45,fase:2,desc:'App Android/iOS. Expo prebuild feito, Firebase + SHA configurados.',
     phases:[{tasks:[{t:'Definir telas',done:true}],note:''},{tasks:[{t:'Setup Expo + eas.json',done:true},{t:'Firebase registrado',done:true},{t:'google-services.json',done:true}],note:''},{tasks:[{t:'Resolver Gradle sync',done:false},{t:'Build AAB Android Studio',done:false},{t:'Login Firebase',done:false},{t:'Telas principais',done:false}],note:'npx expo install --fix e prebuild --clean.'},{tasks:[{t:'Upload Play Console',done:false},{t:'Testes com 5 usuários',done:false}],note:''},{tasks:[{t:'Publicar Google Play',done:false},{t:'App Store iOS',done:false}],note:'Apple: US$99/ano'},{tasks:[],note:''}]},
-    {id:'p3',name:'PlannerOrganiza Landing',status:'live',url:'promo.plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'React · Node.js · TypeScript',progress:90,fase:4,desc:'Landing page do SaaS. GTM instalado. Pixel Meta e GA4 pendentes.',
+    {id:'p3',name:'PlannerOrganiza Landing',status:'live',date:'2024-05-01',url:'promo.plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'React · Node.js · TypeScript',progress:90,fase:4,desc:'Landing page do SaaS. GTM instalado. Pixel Meta e GA4 pendentes.',
     phases:[{tasks:[{t:'Proposta de valor',done:true}],note:''},{tasks:[{t:'Wireframe',done:true}],note:''},{tasks:[{t:'Dev React',done:true}],note:''},{tasks:[{t:'Deploy Render',done:true}],note:''},{tasks:[{t:'GTM instalado',done:true},{t:'Pixel Meta',done:false},{t:'GA4',done:false}],note:''},{tasks:[{t:'Otimizar conversão',done:false}],note:''}]},
-    {id:'p4',name:'Tâmara Cavalcante',status:'live',url:'tamaracavalcante.com.br',repo:'',stack:'Instagram · Produtos digitais · Domínios',progress:85,fase:5,desc:'Site B2C luxury. @tamaraorganiza. Produtos: Profissão Organizer, Caos Nunca Mais.',
+    {id:'p4',name:'Tâmara Cavalcante',status:'live',date:'2023-11-01',url:'tamaracavalcante.com.br',repo:'',stack:'Instagram · Produtos digitais · Domínios',progress:85,fase:5,desc:'Site B2C luxury. @tamaraorganiza. Produtos: Profissão Organizer, Caos Nunca Mais.',
     phases:[{tasks:[{t:'Posicionamento luxury',done:true}],note:''},{tasks:[{t:'Site + domínios',done:true}],note:''},{tasks:[{t:'Produtos digitais',done:true}],note:''},{tasks:[{t:'Testes premium BH',done:true}],note:''},{tasks:[{t:'@tamaraorganiza ativo',done:true}],note:''},{tasks:[{t:'Meta Ads',done:false},{t:'Fluxo pós-organização',done:false}],note:''}]},
-    {id:'p5',name:'Multiplicamente',status:'live',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
+    {id:'p5',name:'Multiplicamente',status:'live',date:'2023-06-01',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
     phases:[{tasks:[{t:'Conceito',done:true}],note:''},{tasks:[{t:'Planejamento',done:true}],note:''},{tasks:[{t:'Desenvolvimento',done:true}],note:''},{tasks:[{t:'Testes internos',done:true}],note:''},{tasks:[{t:'Publicado Play Store',done:true}],note:''},{tasks:[{t:'Monitorar avaliações',done:false}],note:''}]},
   ],
   tools:[
@@ -1058,6 +1060,7 @@ function projCard(p){
     <div class="pmeta">
       <div class="mr"><span class="mk">fase</span><span class="mv" style="color:${sm.col};font-weight:700">${parseInt(p.fase)+1} — ${fase}</span></div>
       ${p.repo?`<div class="mr"><span class="mk">repo</span><span class="mv"><a href="https://${p.repo}" target="_blank">${p.repo.replace('github.com/','')}</a></span></div>`:''}
+      ${p.date?`<div class="mr"><span class="mk">início</span><span class="mv">${p.date}</span></div>`:''}
     </div>
     <div class="prog-w">
       <div class="prog-top"><span class="prog-lbl">progresso</span><span class="prog-pct">${prog}%</span></div>
@@ -1126,6 +1129,7 @@ function ideaCard(id){
         ${id.stack?`<span class="itag">${id.stack}</span>`:''}
         ${id.mono?`<span class="itag green">${id.mono}</span>`:''}
         ${id.ref?`<span class="itag">ref: ${id.ref}</span>`:''}
+        ${id.date?`<span class="itag" style="color:var(--tx3)">${id.date}</span>`:''}
       </div>
       <div class="iactions">
         <button class="btn-cpri" onclick="cyclePri('${id.id}')">↑ ${priLbl[id.pri]||'Média'}</button>
@@ -1308,12 +1312,12 @@ function setAddType(t){
 function clrForm(t){document.getElementById('form-'+t).querySelectorAll('input,textarea').forEach(e=>e.value='');}
 function addProject(){
   const name=document.getElementById('p-name').value.trim();if(!name)return alert('Nome obrigatório');
-  D.projects.push({id:uid(),name,status:document.getElementById('p-status').value,url:document.getElementById('p-url').value.trim(),repo:document.getElementById('p-repo').value.trim(),stack:document.getElementById('p-stack').value.trim(),progress:parseInt(document.getElementById('p-prog').value)||0,fase:parseInt(document.getElementById('p-fase').value)||0,desc:document.getElementById('p-desc').value.trim(),phases:Array(6).fill(null).map(()=>({tasks:[],note:''}))});
+  D.projects.push({id:uid(),name,status:document.getElementById('p-status').value,url:document.getElementById('p-url').value.trim(),repo:document.getElementById('p-repo').value.trim(),stack:document.getElementById('p-stack').value.trim(),progress:parseInt(document.getElementById('p-prog').value)||0,fase:parseInt(document.getElementById('p-fase').value)||0,date:document.getElementById('p-date').value||new Date().toISOString().slice(0,10),desc:document.getElementById('p-desc').value.trim(),phases:Array(6).fill(null).map(()=>({tasks:[],note:''}))});
   save();renderAll();go('projetos');clrForm('projeto');
 }
 function addIdeia(){
   const name=document.getElementById('i-name').value.trim();if(!name)return alert('Nome obrigatório');
-  D.ideias.push({id:uid(),name,pri:parseInt(document.getElementById('i-pri').value),cat:document.getElementById('i-cat').value.trim(),stack:document.getElementById('i-stack').value.trim(),mono:document.getElementById('i-mono').value.trim(),desc:document.getElementById('i-desc').value.trim(),ref:document.getElementById('i-ref').value.trim(),date:new Date().toISOString().slice(0,10)});
+  D.ideias.push({id:uid(),name,pri:parseInt(document.getElementById('i-pri').value),cat:document.getElementById('i-cat').value.trim(),stack:document.getElementById('i-stack').value.trim(),mono:document.getElementById('i-mono').value.trim(),desc:document.getElementById('i-desc').value.trim(),ref:document.getElementById('i-ref').value.trim(),date:document.getElementById('i-date').value||new Date().toISOString().slice(0,10)});
   save();renderAll();go('ideias');clrForm('ideia');
 }
 function addTool(){
