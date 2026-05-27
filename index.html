@@ -637,7 +637,19 @@ const db   = firebase.firestore();
 
 <!-- FERRAMENTAS -->
 <div class="page" id="page-ferramentas">
-  <div class="ph"><div><div class="pt">Ferramentas</div><div class="ps">Serviços, contas e credenciais</div></div><button class="btn btn-p btn-sm" onclick="go('add');setAddType('tool')">+ Ferramenta</button></div>
+  <div class="ph">
+    <div><div class="pt">Ferramentas</div><div class="ps">Serviços, contas e credenciais</div></div>
+    <div class="pa">
+      <input id="tool-search" type="text" placeholder="Buscar..." oninput="renderTools()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--sans);color:var(--tx);outline:none;width:160px">
+      <select id="tool-cat-filter" onchange="renderTools()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
+        <option value="">Todas categorias</option>
+        <option>Auth</option><option>Deploy</option><option>Database</option>
+        <option>Email</option><option>Pagamento</option><option>Analytics</option>
+        <option>Dev</option><option>Loja</option><option>DNS / Hospedagem</option><option>Outro</option>
+      </select>
+      <button class="btn btn-p btn-sm" onclick="go('add');setAddType('tool')">+ Ferramenta</button>
+    </div>
+  </div>
   <div id="tgrid"></div>
 </div>
 
@@ -648,6 +660,9 @@ const db   = firebase.firestore();
     <div class="pa">
       <select id="cost-month-filter" onchange="renderCosts()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
         <option value="">Todos os meses</option>
+      </select>
+      <select id="cost-service-filter" onchange="renderCosts()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
+        <option value="">Todos os serviços</option>
       </select>
       <select id="cost-freq-filter" onchange="renderCosts()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
         <option value="">Todas frequências</option>
@@ -1217,8 +1232,14 @@ function toolFaviconHtml(t){
 }
 
 function renderTools(){
+  const search=(document.getElementById('tool-search')?.value||'').toLowerCase();
+  const catF=document.getElementById('tool-cat-filter')?.value||'';
   const el = document.getElementById('tgrid');
+  let toolList=D.tools;
+  if(catF) toolList=toolList.filter(t=>t.cat===catF);
+  if(search) toolList=toolList.filter(t=>t.name.toLowerCase().includes(search)||t.cat.toLowerCase().includes(search)||(t.email||'').toLowerCase().includes(search)||(t.notes||'').toLowerCase().includes(search));
   if(!D.tools.length){el.innerHTML='<div class="empty"><strong>Nenhuma ferramenta</strong>Adicione seus serviços.</div>';return;}
+  if(!toolList.length){el.innerHTML='<div class="empty">Nenhuma ferramenta com esse filtro.</div>';return;}
   const catOpts = Object.keys(catMeta).map(k=>`<option ${''}>` + k + '</option>').join('');
   el.innerHTML = `
   <div class="tool-list">
@@ -1230,7 +1251,7 @@ function renderTools(){
       <div>Link / URL</div>
       <div></div>
     </div>
-    ${D.tools.map(t=>{
+    ${toolList.map(t=>{
       const meta=catMeta[t.cat]||catMeta.Outro;
       return `<div class="tool-row" id="trow-${t.id}">
         <div>${toolFaviconHtml(t)}</div>
@@ -1273,40 +1294,67 @@ function saveEditTool(id){
 }
 
 // COSTS
-function populateCostMonthFilter(){
-  const sel = document.getElementById('cost-month-filter');
-  if(!sel) return;
-  const cur = sel.value;
-  // collect unique months from costs
-  const months = [...new Set(D.costs.filter(c=>c.date).map(c=>c.date.slice(0,7)))].sort().reverse();
-  sel.innerHTML = '<option value="">Todos os meses</option>' +
-    months.map(m=>{
-      const [y,mo] = m.split('-');
-      const label = new Date(y, parseInt(mo)-1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
-      return `<option value="${m}" ${m===cur?'selected':''}>${label}</option>`;
-    }).join('');
+let costSortCol='date', costSortDir=-1;
+
+function populateCostFilters(){
+  const msel=document.getElementById('cost-month-filter');
+  const ssel=document.getElementById('cost-service-filter');
+  if(!msel||!ssel) return;
+  const curM=msel.value, curS=ssel.value;
+  const months=[...new Set(D.costs.filter(c=>c.date).map(c=>c.date.slice(0,7)))].sort().reverse();
+  msel.innerHTML='<option value="">Todos os meses</option>'+months.map(m=>{
+    const label=new Date(m+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    return `<option value="${m}"${m===curM?' selected':''}>${label}</option>`;
+  }).join('');
+  const services=[...new Set(D.costs.map(c=>c.service))].sort();
+  ssel.innerHTML='<option value="">Todos os serviços</option>'+services.map(s=>`<option value="${s}"${s===curS?' selected':''}>${s}</option>`).join('');
+}
+
+function sortCosts(col){
+  if(costSortCol===col) costSortDir*=-1; else {costSortCol=col;costSortDir=1;}
+  renderCosts();
 }
 
 function renderCosts(){
-  populateCostMonthFilter();
-  const monthF = document.getElementById('cost-month-filter')?.value||'';
-  const freqF  = document.getElementById('cost-freq-filter')?.value||'';
+  populateCostFilters();
+  const monthF   = document.getElementById('cost-month-filter')?.value||'';
+  const freqF    = document.getElementById('cost-freq-filter')?.value||'';
+  const serviceF = document.getElementById('cost-service-filter')?.value||'';
   const el=document.getElementById('ctable');
-  
-  let list = D.costs;
-  if(monthF) list = list.filter(c=>c.date && c.date.startsWith(monthF));
-  if(freqF)  list = list.filter(c=>c.freq===freqF);
-  
+
+  let list=[...D.costs];
+  if(monthF)   list=list.filter(c=>c.date&&c.date.startsWith(monthF));
+  if(freqF)    list=list.filter(c=>c.freq===freqF);
+  if(serviceF) list=list.filter(c=>c.service===serviceF);
+
+  list.sort((a,b)=>{
+    let av=a[costSortCol]||'', bv=b[costSortCol]||'';
+    if(costSortCol==='val'){av=parseFloat(a.val)||0;bv=parseFloat(b.val)||0;}
+    return av<bv?-costSortDir:av>bv?costSortDir:0;
+  });
+
   if(!D.costs.length){el.innerHTML='<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--tx3)">Nenhum custo.</td></tr>';document.getElementById('ctotal').innerHTML='';return;}
-  if(!list.length){el.innerHTML='<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--tx3)">Nenhum custo nesse filtro.</td></tr>';document.getElementById('ctotal').innerHTML='';return;}
-  
-  let brl=0,usd=0;
-  el.innerHTML=`<thead><tr><th>Serviço</th><th>Projeto</th><th>Frequência</th><th>Data pagamento</th><th>Valor</th><th></th></tr></thead><tbody>`+
+  if(!list.length){el.innerHTML='<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--tx3)">Nenhum resultado.</td></tr>';document.getElementById('ctotal').innerHTML='';return;}
+
+  let brl=0, usd=0;
+  list.forEach(c=>{
+    if(c.freq==='%') return;
+    const v=parseFloat(c.val)||0;
+    if(c.cur==='USD') usd+=v; else brl+=v;
+  });
+
+  const arrow=col=>col===costSortCol?(costSortDir===1?' ↑':' ↓'):'';
+  const ths='cursor:pointer;user-select:none;white-space:nowrap';
+  el.innerHTML=`<thead><tr>
+    <th style="${ths}" onclick="sortCosts('service')">Serviço${arrow('service')}</th>
+    <th style="${ths}" onclick="sortCosts('proj')">Projeto${arrow('proj')}</th>
+    <th style="${ths}" onclick="sortCosts('freq')">Frequência${arrow('freq')}</th>
+    <th style="${ths}" onclick="sortCosts('date')">Data pagamento${arrow('date')}</th>
+    <th style="${ths}" onclick="sortCosts('val')">Valor${arrow('val')}</th>
+    <th></th>
+  </tr></thead><tbody>`+
   list.map(c=>{
-    if(c.cur==='BRL'&&(c.freq==='Mensal'||c.freq==='Anual'))brl+=parseFloat(c.val)||(c.freq==='Anual'?(parseFloat(c.val)||0)/12:0);
-    if(c.cur==='USD') usd+=parseFloat(c.val)||0;
     const vs=c.freq==='%'?c.val+'%':((c.cur==='USD'?'US$':'R$')+' '+(parseFloat(c.val)||0).toFixed(2));
-    const dateLabel = c.date ? new Date(c.date+'T12:00:00').toLocaleDateString('pt-BR') : '';
     return `<tr>
       <td style="font-weight:600">${c.service}</td>
       <td style="color:var(--tx2)">${c.proj||'—'}</td>
@@ -1316,12 +1364,12 @@ function renderCosts(){
       <td><button class="ibtn" onclick="delCost('${c.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></td>
     </tr>`;
   }).join('')+'</tbody>';
-  
-  const totalLabel = monthF ? 
-    `Total em ${new Date(monthF+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}` : 
-    'Total mensal estimado';
-  document.getElementById('ctotal').innerHTML=`<span class="ctlabel">${totalLabel}</span><span class="ctval">R$ ${brl.toFixed(2)} + US$ ${usd.toFixed(2)}</span>`;
+
+  const hasF=monthF||freqF||serviceF;
+  const lbl=monthF?`Total em ${new Date(monthF+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}`:hasF?'Total filtrado':'Total geral';
+  document.getElementById('ctotal').innerHTML=`<span class="ctlabel">${lbl} (${list.length} item${list.length!==1?'s':''})</span><span class="ctval">R$ ${brl.toFixed(2)} + US$ ${usd.toFixed(2)}</span>`;
 }
+
 
 // LOG
 function logItem(l){
