@@ -304,6 +304,25 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .step-title{font-size:14px;font-weight:600;color:var(--tx);line-height:1.5}
 .step-desc{font-size:13px;color:var(--tx2);margin-top:3px;line-height:1.6}
 .step-desc code{background:var(--bg3);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* FINANCIAL */
+.fin-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.fin-bar-label{font-size:12px;font-weight:600;color:var(--tx2);min-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fin-bar-bg{flex:1;height:18px;background:var(--bg3);border-radius:20px;overflow:hidden}
+.fin-bar-fill{height:18px;border-radius:20px;transition:width .6s;display:flex;align-items:center;padding:0 8px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.fin-bar-val{font-size:12px;font-family:var(--mono);font-weight:700;color:var(--tx);min-width:80px;text-align:right}
+.fin-bar-pct{font-size:11px;color:var(--tx3);min-width:36px;text-align:right}
+.kpi-card{background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:14px 16px;box-shadow:var(--shadow)}
+.kpi-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;font-family:var(--mono);margin-bottom:6px}
+.kpi-val{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.kpi-sub{font-size:11px;color:var(--tx3);margin-top:4px}
+.kpi-alert{color:var(--red-tx)!important}
+.kpi-good{color:var(--green-tx)!important}
+.roi-table{width:100%;border-collapse:collapse}
+.roi-table th{font-size:11px;font-family:var(--mono);font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;background:var(--bg2);text-align:left}
+.roi-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.roi-table tr:last-child td{border-bottom:none}
+.roi-table tr:hover td{background:var(--bg2)}
 </style>
 
 <!-- Firebase SDKs -->
@@ -406,6 +425,10 @@ const db   = firebase.firestore();
     <div class="ni" onclick="go('custos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       <span>Custos</span>
+    </div>
+    <div class="ni" onclick="go('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Financeiro</span>
     </div>
   </div>
   <div class="nav-sect">
@@ -597,6 +620,80 @@ const db   = firebase.firestore();
       <button class="btn btn-g btn-sm" onclick="saveCtx()">Salvar alterações</button>
     </div>
     <textarea class="fta" id="ctx-edit" style="min-height:200px;font-family:var(--mono);font-size:13px;line-height:1.8"></textarea>
+  </div>
+</div>
+
+
+<!-- FINANCEIRO -->
+<div class="page" id="page-financeiro">
+  <div class="ph">
+    <div><div class="pt">Painel Financeiro</div><div class="ps">Saúde da operação, queima de caixa e distribuição de gastos</div></div>
+    <div class="pa">
+      <select id="fin-month" onchange="renderFinanceiro()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
+        <option value="">Todos os meses</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div id="fin-kpis" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px"></div>
+
+  <!-- RECEITA INPUT -->
+  <div class="fcard" style="margin-bottom:20px;padding:16px 20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--tx)">Receita do mês</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px">Informe a receita para calcular lucro e runway</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:13px;font-weight:600;color:var(--tx2)">R$</span>
+        <input type="number" id="fin-receita" placeholder="0.00" onchange="saveReceita()" style="width:140px;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:15px;font-weight:700;font-family:var(--mono);color:var(--tx);background:var(--bg1);outline:none" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="saveReceita()" class="btn btn-p btn-sm">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+    <!-- DISTRIBUIÇÃO POR CATEGORIA -->
+    <div class="fcard">
+      <div style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Distribuição por categoria
+      </div>
+      <div id="fin-cat-chart"></div>
+    </div>
+    <!-- DISTRIBUIÇÃO POR NATUREZA -->
+    <div class="fcard">
+      <div style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Operacional vs Investimento
+      </div>
+      <div id="fin-nature-chart"></div>
+    </div>
+  </div>
+
+  <!-- CUSTOS POR PROJETO -->
+  <div class="fcard" style="margin-bottom:20px">
+    <div style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Custo por projeto
+    </div>
+    <div id="fin-proj-chart"></div>
+  </div>
+
+  <!-- LINHA DO TEMPO MENSAL -->
+  <div class="fcard" style="margin-bottom:20px">
+    <div style="font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Gastos mensais
+    </div>
+    <div id="fin-timeline"></div>
+  </div>
+
+  <!-- TABELA ROI por ferramenta -->
+  <div class="fcard">
+    <div style="font-size:14px;font-weight:700;margin-bottom:14px">ROI por ferramenta / serviço</div>
+    <div id="fin-roi-table"></div>
   </div>
 </div>
 
@@ -994,7 +1091,7 @@ function saveCtx(){
 function uid(){return 'x'+Math.random().toString(36).slice(2,8)}
 
 function renderAll(){
-  updateBadges();renderDash();renderProjetos();renderPipeline();renderIdeias();renderTools();renderCosts();renderMainLog();populateSels();
+  updateBadges();renderDash();renderProjetos();renderPipeline();renderIdeias();renderTools();renderCosts();renderMainLog();populateSels();renderFinanceiro();
   renderPrompt();document.getElementById('ctx-edit').value=CTX;
 }
 
@@ -1008,7 +1105,7 @@ function go(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const ord=['dashboard','empresa','prompt','projetos','pipeline','ideias','ferramentas','custos','log','add'];
+  const ord=['dashboard','empresa','prompt','projetos','pipeline','ideias','ferramentas','custos','financeiro','log','add'];
   document.querySelectorAll('.ni')[ord.indexOf(p)]?.classList.add('active');
 }
 
@@ -1516,7 +1613,10 @@ const ALLOWED_EMAILS = ['corujalabs_dev@gmail.com','solanobicalho@gmail.com'];
 function signIn(){
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
-  auth.signInWithPopup(provider).catch(e=>alert('Erro ao entrar: '+e.message));
+  auth.signInWithPopup(provider).catch(e=>{
+    if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request') return;
+    alert('Erro ao entrar: '+e.message);
+  });
 }
 function signOut(){
   if(confirm('Sair do hub?')) auth.signOut();
