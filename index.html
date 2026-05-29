@@ -335,6 +335,15 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .pc-fase{font-size:12px;font-weight:600;font-family:var(--mono);white-space:nowrap;flex-shrink:0}
 .pc-prog-wrap{display:flex;align-items:center;flex-shrink:0}
 @media(max-width:700px){.pc-fase,.pc-prog-wrap{display:none}}
+
+/* MODAL */
+.modal-tab{padding:10px 18px;border:none;background:transparent;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;font-family:var(--sans);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.modal-tab:hover{color:var(--tx)}
+.modal-tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
+.modal-meta-row{background:var(--bg2);border-radius:var(--r);padding:10px 12px}
+.modal-meta-lbl{font-size:10px;font-family:var(--mono);font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.modal-meta-val{font-size:13px;font-weight:600;color:var(--tx)}
+.modal-meta-val a{color:var(--acc);text-decoration:none}.modal-meta-val a:hover{text-decoration:underline}
 </style>
 
 <!-- Firebase SDKs -->
@@ -1036,15 +1045,15 @@ Prefiro código completo, comandos via CMD do Windows, e instruções passo a pa
 
 const DEFS = {
   projects:[
-    {id:'p1',name:'PlannerOrganiza SaaS',status:'dev',date:'2024-03-01',url:'plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'Streamlit · Python · PostgreSQL · Firebase · Stripe · Brevo',progress:70,fase:2,desc:'B2B SaaS para personal organizers. CRM, propostas, financeiro, pós-organização.',
+    {id:'p1',name:'PlannerOrganiza SaaS',status:'dev',docs:'',date:'2024-03-01',url:'plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'Streamlit · Python · PostgreSQL · Firebase · Stripe · Brevo',progress:70,fase:2,desc:'B2B SaaS para personal organizers. CRM, propostas, financeiro, pós-organização.',
     phases:[{tasks:[{t:'Definir ICP',done:true},{t:'Validar com organizers',done:true}],note:'ICP: organizer feminina 24-45 anos.'},{tasks:[{t:'Stack definida',done:true},{t:'Landing page',done:true},{t:'Firebase + Stripe',done:true}],note:''},{tasks:[{t:'Módulo CRM',done:true},{t:'Módulo propostas',done:true},{t:'Módulo financeiro',done:true},{t:'Pós-organização',done:false},{t:'Rebuild FastAPI',done:false}],note:'propostas_unificado.py ativo.'},{tasks:[{t:'Teste fechado',done:false},{t:'Coletar feedback',done:false}],note:''},{tasks:[{t:'Meta Ads',done:false},{t:'Google Ads Search',done:false},{t:'CAPI',done:false}],note:'Manual pronto.'},{tasks:[{t:'NPS mensal',done:false},{t:'A/B testes',done:false}],note:''}]},
-    {id:'p2',name:'PlannerOrganiza App',status:'dev',date:'2024-08-01',url:'Google Play (interno)',repo:'github.com/bicalho743/planner-app',stack:'React Native · Expo · Firebase · JWT',progress:45,fase:2,desc:'App Android/iOS. Expo prebuild feito, Firebase + SHA configurados.',
+    {id:'p2',name:'PlannerOrganiza App',status:'dev',docs:'',date:'2024-08-01',url:'Google Play (interno)',repo:'github.com/bicalho743/planner-app',stack:'React Native · Expo · Firebase · JWT',progress:45,fase:2,desc:'App Android/iOS. Expo prebuild feito, Firebase + SHA configurados.',
     phases:[{tasks:[{t:'Definir telas',done:true}],note:''},{tasks:[{t:'Setup Expo + eas.json',done:true},{t:'Firebase registrado',done:true},{t:'google-services.json',done:true}],note:''},{tasks:[{t:'Resolver Gradle sync',done:false},{t:'Build AAB Android Studio',done:false},{t:'Login Firebase',done:false},{t:'Telas principais',done:false}],note:'npx expo install --fix e prebuild --clean.'},{tasks:[{t:'Upload Play Console',done:false},{t:'Testes com 5 usuários',done:false}],note:''},{tasks:[{t:'Publicar Google Play',done:false},{t:'App Store iOS',done:false}],note:'Apple: US$99/ano'},{tasks:[],note:''}]},
-    {id:'p3',name:'PlannerOrganiza Landing',status:'live',date:'2024-05-01',url:'promo.plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'React · Node.js · TypeScript',progress:90,fase:4,desc:'Landing page do SaaS. GTM instalado. Pixel Meta e GA4 pendentes.',
+    {id:'p3',name:'PlannerOrganiza Landing',status:'live',docs:'',date:'2024-05-01',url:'promo.plannerorganiza.com.br',repo:'github.com/bicalho743/PlannerOrganizer',stack:'React · Node.js · TypeScript',progress:90,fase:4,desc:'Landing page do SaaS. GTM instalado. Pixel Meta e GA4 pendentes.',
     phases:[{tasks:[{t:'Proposta de valor',done:true}],note:''},{tasks:[{t:'Wireframe',done:true}],note:''},{tasks:[{t:'Dev React',done:true}],note:''},{tasks:[{t:'Deploy Render',done:true}],note:''},{tasks:[{t:'GTM instalado',done:true},{t:'Pixel Meta',done:false},{t:'GA4',done:false}],note:''},{tasks:[{t:'Otimizar conversão',done:false}],note:''}]},
-    {id:'p4',name:'Tâmara Cavalcante',status:'live',date:'2023-11-01',url:'tamaracavalcante.com.br',repo:'',stack:'Instagram · Produtos digitais · Domínios',progress:85,fase:5,desc:'Site B2C luxury. @tamaraorganiza. Produtos: Profissão Organizer, Caos Nunca Mais.',
+    {id:'p4',name:'Tâmara Cavalcante',status:'live',docs:'',date:'2023-11-01',url:'tamaracavalcante.com.br',repo:'',stack:'Instagram · Produtos digitais · Domínios',progress:85,fase:5,desc:'Site B2C luxury. @tamaraorganiza. Produtos: Profissão Organizer, Caos Nunca Mais.',
     phases:[{tasks:[{t:'Posicionamento luxury',done:true}],note:''},{tasks:[{t:'Site + domínios',done:true}],note:''},{tasks:[{t:'Produtos digitais',done:true}],note:''},{tasks:[{t:'Testes premium BH',done:true}],note:''},{tasks:[{t:'@tamaraorganiza ativo',done:true}],note:''},{tasks:[{t:'Meta Ads',done:false},{t:'Fluxo pós-organização',done:false}],note:''}]},
-    {id:'p5',name:'Multiplicamente',status:'live',date:'2023-06-01',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
+    {id:'p5',name:'Multiplicamente',status:'live',docs:'',date:'2023-06-01',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
     phases:[{tasks:[{t:'Conceito',done:true}],note:''},{tasks:[{t:'Planejamento',done:true}],note:''},{tasks:[{t:'Desenvolvimento',done:true}],note:''},{tasks:[{t:'Testes internos',done:true}],note:''},{tasks:[{t:'Publicado Play Store',done:true}],note:''},{tasks:[{t:'Monitorar avaliações',done:false}],note:''}]},
   ],
   tools:[
@@ -1517,7 +1526,7 @@ function setAddType(t){
 function clrForm(t){document.getElementById('form-'+t).querySelectorAll('input,textarea').forEach(e=>e.value='');}
 function addProject(){
   const name=document.getElementById('p-name').value.trim();if(!name)return alert('Nome obrigatório');
-  D.projects.push({id:uid(),name,status:document.getElementById('p-status').value,url:document.getElementById('p-url').value.trim(),repo:document.getElementById('p-repo').value.trim(),stack:document.getElementById('p-stack').value.trim(),progress:parseInt(document.getElementById('p-prog').value)||0,fase:parseInt(document.getElementById('p-fase').value)||0,date:document.getElementById('p-date').value||new Date().toISOString().slice(0,10),desc:document.getElementById('p-desc').value.trim(),phases:Array(6).fill(null).map(()=>({tasks:[],note:''}))});
+  D.projects.push({id:uid(),name,status:document.getElementById('p-status').value,url:document.getElementById('p-url').value.trim(),repo:document.getElementById('p-repo').value.trim(),stack:document.getElementById('p-stack').value.trim(),progress:parseInt(document.getElementById('p-prog').value)||0,fase:parseInt(document.getElementById('p-fase').value)||0,date:document.getElementById('p-date').value||new Date().toISOString().slice(0,10),desc:document.getElementById('p-desc').value.trim(),docs:'',phases:Array(6).fill(null).map(()=>({tasks:[],note:''}))});
   save();renderAll();go('projetos');clrForm('projeto');
 }
 function addIdeia(){
@@ -1732,5 +1741,59 @@ function saveCtx(){
 }
 
 </script>
+
+<!-- PROJECT DETAIL MODAL -->
+<div id="proj-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);overflow-y:auto;padding:24px 16px" onclick="if(event.target===this)closeModal()">
+  <div style="background:var(--bg1);border-radius:var(--r3);max-width:780px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,.18);border:1.5px solid var(--border);overflow:hidden">
+    <!-- Modal header -->
+    <div id="modal-header" style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div id="modal-name" style="font-size:22px;font-weight:800;letter-spacing:-.4px"></div>
+          <div id="modal-badge"></div>
+        </div>
+        <div id="modal-url" style="font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:3px"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button onclick="openProjPipeline()" class="btn btn-p btn-sm" style="display:flex;align-items:center;gap:5px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Ver Pipeline
+        </button>
+        <button onclick="closeModal()" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;cursor:pointer;color:var(--tx2);font-family:var(--sans);font-size:13px">✕</button>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 24px">
+      <button class="modal-tab active" id="mtab-info" onclick="switchModalTab('info')">Informações</button>
+      <button class="modal-tab" id="mtab-docs" onclick="switchModalTab('docs')">📄 Documentação</button>
+      <button class="modal-tab" id="mtab-tasks" onclick="switchModalTab('tasks')">✅ Tarefas</button>
+    </div>
+    <!-- INFO TAB -->
+    <div id="modal-tab-info" class="modal-tab-content" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px" id="modal-meta-grid"></div>
+      <div id="modal-desc" style="font-size:14px;color:var(--tx2);line-height:1.7;padding:12px 14px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px"></div>
+      <div id="modal-tags"></div>
+      <!-- Inline edit -->
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="startEditModal()" class="btn btn-g btn-sm">✏️ Editar</button>
+        <button onclick="openProjPipeline()" class="btn btn-g btn-sm">Ir para Pipeline →</button>
+      </div>
+    </div>
+    <!-- DOCS TAB -->
+    <div id="modal-tab-docs" class="modal-tab-content" style="display:none;padding:20px 24px">
+      <div style="font-size:13px;color:var(--tx3);margin-bottom:10px">Cole aqui resumos, documentação técnica, links, notas de desenvolvimento...</div>
+      <textarea id="modal-docs-input" style="width:100%;min-height:380px;padding:14px;border:1.5px solid var(--border);border-radius:var(--r2);font-size:13px;font-family:var(--mono);color:var(--tx);background:var(--bg2);outline:none;resize:vertical;line-height:1.8" placeholder="# Documentação do projeto&#10;&#10;## Stack&#10;- React Native + Expo&#10;...&#10;&#10;## Como retomar&#10;cd C:\APLICATIVOS\...&#10;npx expo start" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="saveModalDocs()" class="btn btn-p btn-sm">💾 Salvar documentação</button>
+        <span id="docs-save-msg" style="font-size:12px;color:var(--green-tx);align-self:center"></span>
+      </div>
+    </div>
+    <!-- TASKS TAB -->
+    <div id="modal-tab-tasks" class="modal-tab-content" style="display:none;padding:20px 24px">
+      <div id="modal-tasks-content"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
