@@ -323,6 +323,18 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .roi-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
 .roi-table tr:last-child td{border-bottom:none}
 .roi-table tr:hover td{background:var(--bg2)}
+
+/* PROJECT ROW */
+.proj-list-wrap{background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden;box-shadow:var(--shadow)}
+.pc-row{display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);transition:background .15s;position:relative}
+.pc-row:last-child{border-bottom:none}
+.pc-row:hover{background:var(--bg2)}
+.pc-num{font-size:12px;font-family:var(--mono);font-weight:700;color:var(--tx3);min-width:24px;text-align:center}
+.pc-accent{width:3px;height:32px;border-radius:3px;flex-shrink:0}
+.pc-main{flex:1;min-width:0}
+.pc-fase{font-size:12px;font-weight:600;font-family:var(--mono);white-space:nowrap;flex-shrink:0}
+.pc-prog-wrap{display:flex;align-items:center;flex-shrink:0}
+@media(max-width:700px){.pc-fase,.pc-prog-wrap{display:none}}
 </style>
 
 <!-- Firebase SDKs -->
@@ -1137,8 +1149,10 @@ function renderDash(){
     {l:'Em dev',v:s.dev,s:'em andamento',c:'c3'},
     {l:'Tarefas concluídas',v:`${done}/${total}`,s:Math.round(done/Math.max(1,total)*100)+'%',c:'c4'},
   ].map((x,i)=>`<div class="sc ${x.c}" onclick="dashNav(${i})" style="cursor:pointer;user-select:none"><div class="sl">${x.l}</div><div class="sv">${x.v}</div><div class="ss">${x.s} <span style="font-size:10px;opacity:.5">↗</span></div></div>`).join('');
-  const active=D.projects.filter(p=>p.status==='dev'||p.status==='live');
-  document.getElementById('dash-pgrid').innerHTML=active.map(projCard).join('');
+  const active=[...D.projects].filter(p=>p.status==='dev'||p.status==='live').sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
+  const dg=document.getElementById('dash-pgrid');
+  dg.style.gridTemplateColumns='1fr';
+  dg.innerHTML=`<div class="proj-list-wrap">${active.map((p,i)=>projCard(p,i)).join('')}</div>`;
   document.getElementById('dash-log').innerHTML=[...D.logs].reverse().slice(0,4).map(logItem).join('')||'<div class="empty">Nenhuma atividade.</div>';
 }
 
@@ -1162,37 +1176,33 @@ function dashNav(i){
 // PROJETOS
 function renderProjetos(){
   const f=document.getElementById('pfilter')?.value;
-  const list=f?D.projects.filter(p=>p.status===f):D.projects;
-  document.getElementById('pgrid').innerHTML=list.map(projCard).join('')+`<button class="add-dashed" onclick="go('add');setAddType('projeto')">+ Novo projeto</button>`;
+  let list=f?D.projects.filter(p=>p.status===f):[...D.projects];
+  list.sort((a,b)=>(a.date||'9999')>(b.date||'9999')?1:-1);
+  const el=document.getElementById('pgrid');
+  el.style.gridTemplateColumns='1fr';
+  el.innerHTML=`<div class="proj-list-wrap">${list.map((p,i)=>projCard(p,i)).join('')}</div>`+`<button class="add-dashed" onclick="go('add');setAddType('projeto')" style="margin-top:10px">+ Novo projeto</button>`;
 }
-function projCard(p){
+function projCard(p, idx){
   const sm=SM[p.status]||SM.dev;
   const prog=Math.min(100,parseInt(p.progress)||0);
-  const tags=(p.stack||'').split('·').filter(Boolean).map(t=>`<span class="stag">${t.trim()}</span>`).join('');
   const fase=PHASES[parseInt(p.fase)||0]||'';
-  return `<div class="pc" onclick="openProj('${p.id}')" style="cursor:pointer">
-    <div class="pc-top ${sm.tp}"></div>
-    <div class="pch">
-      <div style="padding-top:2px">
-        <div class="pn">${p.name}</div>
-        <div class="pu">${p.url||'—'}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+  const num=String((idx||0)+1).padStart(2,'0');
+  return `<div class="pc-row" onclick="openProj('${p.id}')" style="cursor:pointer">
+    <div class="pc-num">${num}</div>
+    <div class="pc-accent" style="background:${sm.col}"></div>
+    <div class="pc-main">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="pn" style="font-size:15px">${p.name}</span>
         <span class="badge ${sm.cls}">${sm.l}</span>
-        <button class="ibtn" onclick="event.stopPropagation();delProj('${p.id}')" title="Excluir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
       </div>
+      <div style="font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:1px">${p.url||''}</div>
     </div>
-    <div class="pd">${p.desc||'Sem descrição.'}</div>
-    <div class="pmeta">
-      <div class="mr"><span class="mk">fase</span><span class="mv" style="color:${sm.col};font-weight:700">${parseInt(p.fase)+1} — ${fase}</span></div>
-      ${p.repo?`<div class="mr"><span class="mk">repo</span><span class="mv"><a href="https://${p.repo}" target="_blank">${p.repo.replace('github.com/','')}</a></span></div>`:''}
-      ${p.date?`<div class="mr"><span class="mk">início</span><span class="mv">${p.date}</span></div>`:''}
+    <div class="pc-fase" style="color:${sm.col}">${parseInt(p.fase)+1} — ${fase}</div>
+    <div class="pc-prog-wrap">
+      <div class="prog-bg" style="width:120px"><div class="prog-fill" style="width:${prog}%;background:${sm.col}"></div></div>
+      <span style="font-size:11px;font-family:var(--mono);color:var(--tx3);margin-left:6px">${prog}%</span>
     </div>
-    <div class="prog-w">
-      <div class="prog-top"><span class="prog-lbl">progresso</span><span class="prog-pct">${prog}%</span></div>
-      <div class="prog-bg"><div class="prog-fill" style="width:${prog}%;background:${sm.col}"></div></div>
-    </div>
-    ${tags?`<div class="stags">${tags}</div>`:''}
+    <button class="ibtn" onclick="event.stopPropagation();delProj('${p.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
   </div>`;
 }
 
@@ -1652,6 +1662,8 @@ async function fsLoad(uid){
     if(edoc.exists && edoc.data().rows) emailRows = edoc.data().rows;
     const cdoc = await db.collection('ctx').doc(uid).get();
     if(cdoc.exists && cdoc.data().ctx) CTX = cdoc.data().ctx;
+    const rdoc = await db.collection('receita').doc(uid).get();
+    if(rdoc.exists) receitaData = rdoc.data();
   }catch(e){console.warn('fsLoad error',e);}
 }
 
