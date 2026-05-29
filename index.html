@@ -369,7 +369,7 @@ const db   = firebase.firestore();
 </head>
 <body>
 
-<div id="login-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f0fdf4,#dcfce7,#eff6ff);z-index:9999;display:flex;align-items:center;justify-content:center">
+<div id="login-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f0fdf4,#dcfce7,#eff6ff);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:20px;padding:48px 40px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.12);max-width:380px;width:90%">
     <div style="width:72px;height:72px;background:linear-gradient(135deg,#16A34A,#059669);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(22,163,74,.3)">
       <svg width="36" height="36" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -1752,22 +1752,13 @@ function signIn(){
   provider.setCustomParameters({prompt: 'select_account'});
   auth.signInWithPopup(provider).catch(e=>{
     if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request') return;
-    // Fallback: redirect if popup blocked
     if(e.code==='auth/popup-blocked'){
       auth.signInWithRedirect(provider);
       return;
     }
-    console.error('Login error:', e.code, e.message);
     alert('Erro ao entrar: '+e.message);
   });
 }
-
-// Handle redirect result on page load
-auth.getRedirectResult().then(result=>{
-  // handled by onAuthStateChanged
-}).catch(e=>{
-  if(e.code && e.code!=='auth/no-current-user') console.warn('Redirect result error:', e.code);
-});
 function signOut(){
   if(confirm('Sair do hub?')) auth.signOut();
 }
