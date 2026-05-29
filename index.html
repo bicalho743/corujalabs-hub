@@ -369,7 +369,7 @@ const db   = firebase.firestore();
 </head>
 <body>
 
-<div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#f0fdf4,#dcfce7,#eff6ff);z-index:9999;align-items:center;justify-content:center">
+<div id="login-screen" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,#f0fdf4,#dcfce7,#eff6ff);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:20px;padding:48px 40px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.12);max-width:380px;width:90%">
     <div style="width:72px;height:72px;background:linear-gradient(135deg,#16A34A,#059669);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(22,163,74,.3)">
       <svg width="36" height="36" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -1789,14 +1789,11 @@ const ALLOWED_EMAILS = ['corujalabs_dev@gmail.com','solanobicalho@gmail.com'];
 function signIn(){
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
-  // Use redirect — GitHub Pages COOP policy blocks popups
-  auth.signInWithRedirect(provider);
+  auth.signInWithPopup(provider).catch(e=>{
+    if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request') return;
+    alert('Erro ao entrar: '+e.message);
+  });
 }
-
-// Handle redirect result when page loads back
-auth.getRedirectResult().catch(e=>{
-  if(e && e.code) console.warn('Redirect auth error:', e.code);
-});
 function signOut(){
   if(confirm('Sair do hub?')) auth.signOut();
 }
@@ -1855,14 +1852,8 @@ function fsSave(uid){
 
 let currentUID = null;
 
-// Fallback: if Firebase takes too long, show login
-setTimeout(()=>{
-  const ls=document.getElementById('login-screen');
-  const as=document.getElementById('app-shell');
-  if(ls&&ls.style.display==='none'&&as&&as.style.display==='none'){
-    ls.style.display='flex';
-  }
-},3000);
+// Show login screen immediately while waiting for Firebase
+showLogin();
 
 auth.onAuthStateChanged(async user=>{
   if(!user){
@@ -1880,7 +1871,7 @@ auth.onAuthStateChanged(async user=>{
   await fsLoad(currentUID);
   loadEmails();
   load();
-}); // end onAuthStateChanged
+});
 
 // Override save() to use Firestore
 const _origSave = save;
