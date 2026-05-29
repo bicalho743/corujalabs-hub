@@ -1137,8 +1137,7 @@ npx expo start --host lan --clear
 Backend: cd ..\\backend && node server.js
 AAB: Android Studio > Build > Generate Signed Bundle
 Push: git add . && git commit -m "msg" && git push origin main`;
-const _p6 = DEFS.projects.find(p=>p.id==="p6");
-if(_p6) _p6.docs = CONTRATO_DOCS;
+try{const _p6=DEFS.projects.find(p=>p.id==="p6");if(_p6)_p6.docs=CONTRATO_DOCS;}catch(e){}
 
 let D=JSON.parse(JSON.stringify(DEFS));
 let CTX=DEFAULT_CTX;
@@ -1790,15 +1789,14 @@ const ALLOWED_EMAILS = ['corujalabs_dev@gmail.com','solanobicalho@gmail.com'];
 function signIn(){
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
-  auth.signInWithPopup(provider).catch(e=>{
-    if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request') return;
-    if(e.code==='auth/popup-blocked'){
-      auth.signInWithRedirect(provider);
-      return;
-    }
-    alert('Erro ao entrar: '+e.message);
-  });
+  // Use redirect — GitHub Pages COOP policy blocks popups
+  auth.signInWithRedirect(provider);
 }
+
+// Handle redirect result when page loads back
+auth.getRedirectResult().catch(e=>{
+  if(e && e.code) console.warn('Redirect auth error:', e.code);
+});
 function signOut(){
   if(confirm('Sair do hub?')) auth.signOut();
 }
