@@ -1059,7 +1059,7 @@ const DEFS = {
     {id:'p5',name:'Multiplicamente',status:'live',docs:'',date:'2023-06-01',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
     phases:[{tasks:[{t:'Conceito',done:true}],note:''},{tasks:[{t:'Planejamento',done:true}],note:''},{tasks:[{t:'Desenvolvimento',done:true}],note:''},{tasks:[{t:'Testes internos',done:true}],note:''},{tasks:[{t:'Publicado Play Store',done:true}],note:''},{tasks:[{t:'Monitorar avaliações',done:false}],note:''}]},
     ,
-    {id:'p6',name:'Contrato Fácil',status:'dev',docs:'# Contrato Fácil\n\n## Stack\n- React Native + Expo SDK 54\n- Backend: Node.js + Express (Render)\n- IA: Claude API (claude-opus-4-5)\n- Build: Android Studio\n- Repo: github.com/bicalho743/Contrato-facil\n\n## Serviços\n- Render: contrato-facil-eofn.onrender.com\n- Play Console ID: 4973994370147261105\n- Anthropic: console.anthropic.com\n\n## Keystore\n- C:\\Users\\solan\\coruja-labs.jks\n- Alias: coruja\n- ⚠️ Backup no Google Drive!\n\n## Funcionalidades\n✅ 11 tipos de contrato\n✅ Geração por IA\n✅ Exportação PDF\n✅ Histórico (AsyncStorage)\n✅ Cadastro de clientes\n✅ 4 abas: Modelos, Históricos, Clientes, Ajustes\n✅ Tema Gold & Navy\n✅ 3 grátis + R$ 19,90 vitalício\n\n## Pendente\n⬜ Google Play Billing\n⬜ Ícone 512x512 PNG\n⬜ Feature Graphic 1024x500 PNG\n⬜ Screenshots Play Console\n⬜ Política de privacidade\n⬜ Teste fechado 12 testadores 14 dias\n⬜ Aprovação Google Play\n\n## Como retomar\ncd C:\\APLICATIVOS\\contrato-facil\\contrato-facil\nnpx expo start --host lan --clear\n\nBackend:\ncd C:\\APLICATIVOS\\contrato-facil\\backend\nnode server.js\n\nAAB: Android Studio → Build → Generate Signed Bundle\nKeystore: C:\\Users\\solan\\coruja-labs.jks / Alias: coruja\n\nPush: git add . && git commit -m '' && git push origin main\nDeploy backend: automático no push.',date:'2026-05-01',url:'contrato-facil-eofn.onrender.com',repo:'github.com/bicalho743/Contrato-facil',stack:'React Native · Expo · Node.js · Claude API · Android Studio',progress:75,fase:3,desc:'App de geração de contratos por IA. 11 tipos, PDF, histórico, clientes. Monetização: 3 grátis + R$19,90 vitalício. Pendente: Play Billing, assets Play Console, teste fechado.',
+    {id:'p6',name:'Contrato Fácil',status:'dev',docs:'',date:'2026-05-01',url:'contrato-facil-eofn.onrender.com',repo:'github.com/bicalho743/Contrato-facil',stack:'React Native · Expo · Node.js · Claude API · Android Studio',progress:75,fase:3,desc:'App de geração de contratos por IA. 11 tipos, PDF, histórico, clientes. Monetização: 3 grátis + R$19,90 vitalício. Pendente: Play Billing, assets Play Console, teste fechado.',
     phases:[
       {tasks:[{t:'Definir tipos de contrato',done:true}],note:''},
       {tasks:[{t:'Stack definida',done:true},{t:'Repo criado',done:true}],note:''},
@@ -1099,6 +1099,46 @@ const DEFS = {
     {id:'l3',text:'Manual de tráfego: Meta + Google Ads em paralelo. Budget fase 2: R$1.050/mês.',proj:'PlannerOrganiza SaaS',date:'2026-04-07'},
   ]
 };
+
+
+const CONTRATO_DOCS = `# Contrato Fácil
+
+## Stack
+- React Native + Expo SDK 54
+- Backend: Node.js + Express (Render)
+- IA: Claude API (claude-opus-4-5)
+- Build: Android Studio
+- Repo: github.com/bicalho743/Contrato-facil
+
+## Serviços
+- Render: contrato-facil-eofn.onrender.com
+- Play Console ID: 4973994370147261105
+
+## Keystore
+- C:\\Users\\solan\\coruja-labs.jks / Alias: coruja
+- Backup no Google Drive!
+
+## Funcionalidades
+✅ 11 tipos de contrato
+✅ Geração por IA, PDF, Histórico, Clientes
+✅ 3 grátis + R$ 19,90 vitalício
+
+## Pendente
+⬜ Google Play Billing
+⬜ Ícone 512x512 + Feature Graphic
+⬜ Screenshots Play Console
+⬜ Política de privacidade
+⬜ Teste fechado 12 testadores 14 dias
+
+## Retomar
+cd C:\\APLICATIVOS\\contrato-facil\\contrato-facil
+npx expo start --host lan --clear
+
+Backend: cd ..\\backend && node server.js
+AAB: Android Studio > Build > Generate Signed Bundle
+Push: git add . && git commit -m "msg" && git push origin main`;
+const _p6 = DEFS.projects.find(p=>p.id==="p6");
+if(_p6) _p6.docs = CONTRATO_DOCS;
 
 let D=JSON.parse(JSON.stringify(DEFS));
 let CTX=DEFAULT_CTX;
