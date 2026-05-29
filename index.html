@@ -1055,6 +1055,16 @@ const DEFS = {
     phases:[{tasks:[{t:'Posicionamento luxury',done:true}],note:''},{tasks:[{t:'Site + domínios',done:true}],note:''},{tasks:[{t:'Produtos digitais',done:true}],note:''},{tasks:[{t:'Testes premium BH',done:true}],note:''},{tasks:[{t:'@tamaraorganiza ativo',done:true}],note:''},{tasks:[{t:'Meta Ads',done:false},{t:'Fluxo pós-organização',done:false}],note:''}]},
     {id:'p5',name:'Multiplicamente',status:'live',docs:'',date:'2023-06-01',url:'Google Play Store',repo:'',stack:'React Native · Android Studio · Google Play',progress:100,fase:5,desc:'App publicado. Build via Android Studio sem EAS. Referência para outros apps.',
     phases:[{tasks:[{t:'Conceito',done:true}],note:''},{tasks:[{t:'Planejamento',done:true}],note:''},{tasks:[{t:'Desenvolvimento',done:true}],note:''},{tasks:[{t:'Testes internos',done:true}],note:''},{tasks:[{t:'Publicado Play Store',done:true}],note:''},{tasks:[{t:'Monitorar avaliações',done:false}],note:''}]},
+    ,
+    {id:'p6',name:'Contrato Fácil',status:'dev',docs:'# Contrato Fácil\n\n## Stack\n- React Native + Expo SDK 54\n- Backend: Node.js + Express (Render)\n- IA: Claude API (claude-opus-4-5)\n- Build: Android Studio\n- Repo: github.com/bicalho743/Contrato-facil\n\n## Serviços\n- Render: contrato-facil-eofn.onrender.com\n- Play Console ID: 4973994370147261105\n- Anthropic: console.anthropic.com\n\n## Keystore\n- C:\\Users\\solan\\coruja-labs.jks\n- Alias: coruja\n- ⚠️ Backup no Google Drive!\n\n## Funcionalidades\n✅ 11 tipos de contrato\n✅ Geração por IA\n✅ Exportação PDF\n✅ Histórico (AsyncStorage)\n✅ Cadastro de clientes\n✅ 4 abas: Modelos, Históricos, Clientes, Ajustes\n✅ Tema Gold & Navy\n✅ 3 grátis + R$ 19,90 vitalício\n\n## Pendente\n⬜ Google Play Billing\n⬜ Ícone 512x512 PNG\n⬜ Feature Graphic 1024x500 PNG\n⬜ Screenshots Play Console\n⬜ Política de privacidade\n⬜ Teste fechado 12 testadores 14 dias\n⬜ Aprovação Google Play\n\n## Como retomar\ncd C:\\APLICATIVOS\\contrato-facil\\contrato-facil\nnpx expo start --host lan --clear\n\nBackend:\ncd C:\\APLICATIVOS\\contrato-facil\\backend\nnode server.js\n\nAAB: Android Studio → Build → Generate Signed Bundle\nKeystore: C:\\Users\\solan\\coruja-labs.jks / Alias: coruja\n\nPush: git add . && git commit -m '' && git push origin main\nDeploy backend: automático no push.',date:'2026-05-01',url:'contrato-facil-eofn.onrender.com',repo:'github.com/bicalho743/Contrato-facil',stack:'React Native · Expo · Node.js · Claude API · Android Studio',progress:75,fase:3,desc:'App de geração de contratos por IA. 11 tipos, PDF, histórico, clientes. Monetização: 3 grátis + R$19,90 vitalício. Pendente: Play Billing, assets Play Console, teste fechado.',
+    phases:[
+      {tasks:[{t:'Definir tipos de contrato',done:true}],note:''},
+      {tasks:[{t:'Stack definida',done:true},{t:'Repo criado',done:true}],note:''},
+      {tasks:[{t:'11 tipos implementados',done:true},{t:'Geração IA',done:true},{t:'Exportação PDF',done:true},{t:'Histórico AsyncStorage',done:true},{t:'Paywall implementado',done:true}],note:''},
+      {tasks:[{t:'Google Play Billing',done:false},{t:'Ícone 512x512',done:false},{t:'Feature Graphic',done:false},{t:'Screenshots',done:false},{t:'Política de privacidade',done:false},{t:'Teste fechado 12 testadores',done:false}],note:'14 dias de teste obrigatório.'},
+      {tasks:[{t:'Aprovação Google Play',done:false}],note:''},
+      {tasks:[],note:''}
+    ]}
   ],
   tools:[
     {id:'t1',name:'Firebase',cat:'Auth',email:'corujalabs_dev@gmail.com',url:'console.firebase.google.com',notes:'PlannerOrganiza Web e App. SHA fingerprints registrados.'},
@@ -1165,11 +1175,116 @@ function renderDash(){
   document.getElementById('dash-log').innerHTML=[...D.logs].reverse().slice(0,4).map(logItem).join('')||'<div class="empty">Nenhuma atividade.</div>';
 }
 
+let _modalProjId = null;
+
 function openProj(id){
+  _modalProjId = id;
+  const p = D.projects.find(x=>x.id===id);
+  if(!p) return;
+  const sm = SM[p.status]||SM.dev;
+  const prog = Math.min(100,parseInt(p.progress)||0);
+  const fase = PHASES[parseInt(p.fase)||0]||'';
+
+  document.getElementById('modal-name').textContent = p.name;
+  document.getElementById('modal-badge').innerHTML = `<span class="badge ${sm.cls}">${sm.l}</span>`;
+  document.getElementById('modal-url').textContent = p.url||'';
+
+  const metas = [
+    {l:'Fase atual', v:`<span style="color:${sm.col};font-weight:700">${parseInt(p.fase)+1} — ${fase}</span>`},
+    {l:'Progresso', v:`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:var(--bg3);border-radius:6px;overflow:hidden"><div style="height:6px;background:${sm.col};width:${prog}%;border-radius:6px"></div></div><span>${prog}%</span></div>`},
+    {l:'GitHub', v: p.repo?`<a href="https://${p.repo}" target="_blank">${p.repo.replace('github.com/','')}</a>`:'—'},
+    {l:'Data início', v: p.date||'—'},
+  ];
+  document.getElementById('modal-meta-grid').innerHTML = metas.map(m=>`
+    <div class="modal-meta-row">
+      <div class="modal-meta-lbl">${m.l}</div>
+      <div class="modal-meta-val">${m.v}</div>
+    </div>`).join('');
+
+  document.getElementById('modal-desc').textContent = p.desc||'Sem descrição.';
+  const tags = (p.stack||'').split('·').filter(Boolean);
+  document.getElementById('modal-tags').innerHTML = tags.length?`<div class="stags">${tags.map(t=>`<span class="stag">${t.trim()}</span>`).join('')}</div>`:'';
+  document.getElementById('modal-docs-input').value = p.docs||'';
+  renderModalTasks(p);
+  switchModalTab('info');
+  document.getElementById('proj-modal').style.display='block';
+  document.body.style.overflow='hidden';
+}
+
+function renderModalTasks(p){
+  const phases=(p.phases||[]).concat(Array(6).fill(null)).slice(0,6);
+  const cur=parseInt(p.fase)||0;
+  document.getElementById('modal-tasks-content').innerHTML=phases.map((ph,i)=>{
+    const tasks=(ph?.tasks)||[];
+    const done=tasks.filter(t=>t.done).length;
+    const isCur=i===cur;
+    if(!tasks.length&&!isCur) return '';
+    return `<div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;color:${isCur?'var(--acc)':'var(--tx3)'};margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)">Fase ${i+1} — ${PHASES[i]} ${isCur?'◎ atual':done===tasks.length&&tasks.length?'✓':''}</div>
+      ${tasks.map((tk,ti)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer" onclick="toggleTaskModal('${p.id}',${i},${ti})">
+        <div style="width:14px;height:14px;border-radius:3px;border:1.5px solid ${tk.done?'var(--green)':'var(--border)'};background:${tk.done?'var(--green)':'transparent'};flex-shrink:0;display:flex;align-items:center;justify-content:center">
+          ${tk.done?'<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+        </div>
+        <span style="color:${tk.done?'var(--tx3)':'var(--tx)'};text-decoration:${tk.done?'line-through':'none'}">${tk.t}</span>
+      </div>`).join('')}
+      ${tasks.length?`<div style="font-size:11px;color:var(--tx3);margin-top:4px;font-family:var(--mono)">${done}/${tasks.length} concluídas</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function toggleTaskModal(pid,fi,ti){
+  const p=D.projects.find(x=>x.id===pid);
+  if(!p?.phases?.[fi]?.tasks) return;
+  p.phases[fi].tasks[ti].done=!p.phases[fi].tasks[ti].done;
+  save();renderModalTasks(p);renderPipeline();
+}
+
+function switchModalTab(tab){
+  ['info','docs','tasks'].forEach(t=>{
+    document.getElementById('modal-tab-'+t).style.display=t===tab?'block':'none';
+    document.getElementById('mtab-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function saveModalDocs(){
+  const p=D.projects.find(x=>x.id===_modalProjId);
+  if(!p) return;
+  p.docs=document.getElementById('modal-docs-input').value;
+  save();
+  const msg=document.getElementById('docs-save-msg');
+  msg.textContent='✓ Salvo!';
+  setTimeout(()=>msg.textContent='',2500);
+}
+
+function openProjPipeline(){
+  closeModal();
   const sel=document.getElementById('pipe-sel');
-  if(sel)sel.value=id;
+  if(sel) sel.value=_modalProjId;
   go('pipeline');
   renderPipeline();
+}
+
+function closeModal(){
+  document.getElementById('proj-modal').style.display='none';
+  document.body.style.overflow='';
+}
+
+function startEditModal(){
+  const p=D.projects.find(x=>x.id===_modalProjId);
+  closeModal();
+  go('add');setAddType('projeto');
+  if(!p) return;
+  setTimeout(()=>{
+    document.getElementById('p-name').value=p.name||'';
+    document.getElementById('p-status').value=p.status||'dev';
+    document.getElementById('p-url').value=p.url||'';
+    document.getElementById('p-repo').value=p.repo||'';
+    document.getElementById('p-stack').value=p.stack||'';
+    document.getElementById('p-prog').value=p.progress||0;
+    document.getElementById('p-fase').value=p.fase||0;
+    document.getElementById('p-desc').value=p.desc||'';
+    if(document.getElementById('p-date')) document.getElementById('p-date').value=p.date||'';
+  },80);
 }
 
 function dashNav(i){
