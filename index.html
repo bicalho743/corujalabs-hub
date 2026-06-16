@@ -1908,6 +1908,7 @@ auth.onAuthStateChanged(async user=>{
   document.getElementById('sts').textContent='Carregando...';
   await fsLoad(currentUID);
   _dataLoaded = true;
+  loadReceita();
   loadEmails();
   load();
   setTimeout(renderFinanceiro, 300);
@@ -1941,65 +1942,7 @@ function saveCtx(){
   document.getElementById('sts').textContent='Contexto salvo ✓';
 }
 
-</script>
 
-
-
-<!-- PROJECT DETAIL MODAL -->
-<div id="proj-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);overflow-y:auto;padding:24px 16px" onclick="if(event.target===this)closeModal()">
-  <div style="background:var(--bg1);border-radius:var(--r3);max-width:780px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,.18);border:1.5px solid var(--border);overflow:hidden">
-    <!-- Modal header -->
-    <div id="modal-header" style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <div id="modal-name" style="font-size:22px;font-weight:800;letter-spacing:-.4px"></div>
-          <div id="modal-badge"></div>
-        </div>
-        <div id="modal-url" style="font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:3px"></div>
-      </div>
-      <div style="display:flex;gap:8px;flex-shrink:0">
-        <button onclick="openProjPipeline()" class="btn btn-p btn-sm" style="display:flex;align-items:center;gap:5px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          Ver Pipeline
-        </button>
-        <button onclick="closeModal()" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;cursor:pointer;color:var(--tx2);font-family:var(--sans);font-size:13px">✕</button>
-      </div>
-    </div>
-    <!-- Tabs -->
-    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 24px">
-      <button class="modal-tab active" id="mtab-info" onclick="switchModalTab('info')">Informações</button>
-      <button class="modal-tab" id="mtab-docs" onclick="switchModalTab('docs')">📄 Documentação</button>
-      <button class="modal-tab" id="mtab-tasks" onclick="switchModalTab('tasks')">✅ Tarefas</button>
-    </div>
-    <!-- INFO TAB -->
-    <div id="modal-tab-info" class="modal-tab-content" style="padding:20px 24px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px" id="modal-meta-grid"></div>
-      <div id="modal-desc" style="font-size:14px;color:var(--tx2);line-height:1.7;padding:12px 14px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px"></div>
-      <div id="modal-tags"></div>
-      <!-- Inline edit -->
-      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-        <button onclick="startEditModal()" class="btn btn-g btn-sm">✏️ Editar</button>
-        <button onclick="openProjPipeline()" class="btn btn-g btn-sm">Ir para Pipeline →</button>
-      </div>
-    </div>
-    <!-- DOCS TAB -->
-    <div id="modal-tab-docs" class="modal-tab-content" style="display:none;padding:20px 24px">
-      <div style="font-size:13px;color:var(--tx3);margin-bottom:10px">Cole aqui resumos, documentação técnica, links, notas de desenvolvimento...</div>
-      <textarea id="modal-docs-input" style="width:100%;min-height:380px;padding:14px;border:1.5px solid var(--border);border-radius:var(--r2);font-size:13px;font-family:var(--mono);color:var(--tx);background:var(--bg2);outline:none;resize:vertical;line-height:1.8" placeholder="# Documentação do projeto&#10;&#10;## Stack&#10;- React Native + Expo&#10;...&#10;&#10;## Como retomar&#10;cd C:\APLICATIVOS\...&#10;npx expo start" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button onclick="saveModalDocs()" class="btn btn-p btn-sm">💾 Salvar documentação</button>
-        <span id="docs-save-msg" style="font-size:12px;color:var(--green-tx);align-self:center"></span>
-      </div>
-    </div>
-    <!-- TASKS TAB -->
-    <div id="modal-tab-tasks" class="modal-tab-content" style="display:none;padding:20px 24px">
-      <div id="modal-tasks-content"></div>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
 // ── FINANCEIRO ────────────────────────────────────────────────────────────────
 const RK = 'corujalabs_receita';
 let receitaData = {};
@@ -2130,3 +2073,62 @@ function renderFinanceiro(){
   if(totEl&&!monthF) totEl.innerHTML=`<span class="ctlabel">${lbl} (${costs.length} items)</span><span class="ctval">R$ ${totalBRL.toFixed(2)} + US$ ${totalUSD.toFixed(2)}</span>`;
 }
 
+</script>
+
+
+
+<!-- PROJECT DETAIL MODAL -->
+<div id="proj-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);overflow-y:auto;padding:24px 16px" onclick="if(event.target===this)closeModal()">
+  <div style="background:var(--bg1);border-radius:var(--r3);max-width:780px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,.18);border:1.5px solid var(--border);overflow:hidden">
+    <!-- Modal header -->
+    <div id="modal-header" style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div id="modal-name" style="font-size:22px;font-weight:800;letter-spacing:-.4px"></div>
+          <div id="modal-badge"></div>
+        </div>
+        <div id="modal-url" style="font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:3px"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button onclick="openProjPipeline()" class="btn btn-p btn-sm" style="display:flex;align-items:center;gap:5px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Ver Pipeline
+        </button>
+        <button onclick="closeModal()" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;cursor:pointer;color:var(--tx2);font-family:var(--sans);font-size:13px">✕</button>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 24px">
+      <button class="modal-tab active" id="mtab-info" onclick="switchModalTab('info')">Informações</button>
+      <button class="modal-tab" id="mtab-docs" onclick="switchModalTab('docs')">📄 Documentação</button>
+      <button class="modal-tab" id="mtab-tasks" onclick="switchModalTab('tasks')">✅ Tarefas</button>
+    </div>
+    <!-- INFO TAB -->
+    <div id="modal-tab-info" class="modal-tab-content" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px" id="modal-meta-grid"></div>
+      <div id="modal-desc" style="font-size:14px;color:var(--tx2);line-height:1.7;padding:12px 14px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px"></div>
+      <div id="modal-tags"></div>
+      <!-- Inline edit -->
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="startEditModal()" class="btn btn-g btn-sm">✏️ Editar</button>
+        <button onclick="openProjPipeline()" class="btn btn-g btn-sm">Ir para Pipeline →</button>
+      </div>
+    </div>
+    <!-- DOCS TAB -->
+    <div id="modal-tab-docs" class="modal-tab-content" style="display:none;padding:20px 24px">
+      <div style="font-size:13px;color:var(--tx3);margin-bottom:10px">Cole aqui resumos, documentação técnica, links, notas de desenvolvimento...</div>
+      <textarea id="modal-docs-input" style="width:100%;min-height:380px;padding:14px;border:1.5px solid var(--border);border-radius:var(--r2);font-size:13px;font-family:var(--mono);color:var(--tx);background:var(--bg2);outline:none;resize:vertical;line-height:1.8" placeholder="# Documentação do projeto&#10;&#10;## Stack&#10;- React Native + Expo&#10;...&#10;&#10;## Como retomar&#10;cd C:\APLICATIVOS\...&#10;npx expo start" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="saveModalDocs()" class="btn btn-p btn-sm">💾 Salvar documentação</button>
+        <span id="docs-save-msg" style="font-size:12px;color:var(--green-tx);align-self:center"></span>
+      </div>
+    </div>
+    <!-- TASKS TAB -->
+    <div id="modal-tab-tasks" class="modal-tab-content" style="display:none;padding:20px 24px">
+      <div id="modal-tasks-content"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
