@@ -779,6 +779,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
         <option value="Único">Único</option>
       </select>
       <button class="btn btn-p btn-sm" onclick="go('add');setAddType('custo')">+ Custo</button>
+      <button class="btn btn-g btn-sm" onclick="resetCosts()" title="Recarregar dados padrão">↺ Reset</button>
     </div>
   </div>
   <div class="fcard" style="padding:0;overflow:hidden"><table class="ctable" id="ctable"></table></div>
@@ -1733,6 +1734,12 @@ function updateCostField(id,field,val){
   if(c){c[field]=val;save();renderFinanceiro();}
 }
 function delCost(id){D.costs=D.costs.filter(c=>c.id!==id);save();renderCosts();}
+function resetCosts(){
+  if(!confirm('Substituir custos atuais pelos 119 lançamentos importados?')) return;
+  D.costs = JSON.parse(JSON.stringify(DEFS.costs));
+  save();renderCosts();renderFinanceiro();
+  alert('Custos resetados! ' + D.costs.length + ' lançamentos carregados.');
+}
 function delLog(id){D.logs=D.logs.filter(l=>l.id!==id);save();renderAll();}
 
 
@@ -1835,8 +1842,13 @@ async function fsLoad(uid){
       if(saved.tools)    D.tools    = saved.tools;
       if(saved.ideias)   D.ideias   = saved.ideias;
       if(saved.logs)     D.logs     = saved.logs;
-      if(saved.costs)    D.costs    = saved.costs.map(c=>({...c, date: c.date||''}));
-      else needsSave = true; // no costs in Firestore — will save defaults
+      if(saved.costs && saved.costs.length >= 10){
+        D.costs = saved.costs.map(c=>({...c, date: c.date||''}));
+      } else {
+        // Old/empty costs — use new defaults and save
+        needsSave = true;
+        console.log('Costs reset: using new defaults (' + DEFS.costs.length + ' items)');
+      }
     } else {
       needsSave = true; // no document yet — save all defaults
     }
