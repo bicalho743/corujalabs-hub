@@ -671,7 +671,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Distribuição por categoria
       </div>
-      <div id="fin-cat-chart"></div>
+      <div id="fin-cat-chart" style="min-height:40px"></div>
     </div>
     <!-- DISTRIBUIÇÃO POR NATUREZA -->
     <div class="fcard">
@@ -679,7 +679,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         Operacional vs Investimento
       </div>
-      <div id="fin-nature-chart"></div>
+      <div id="fin-nature-chart" style="min-height:40px"></div>
     </div>
   </div>
 
@@ -1621,19 +1621,28 @@ function renderCosts(){
   el.innerHTML=`<thead><tr>
     <th style="${ths}" onclick="sortCosts('service')">Serviço${arrow('service')}</th>
     <th style="${ths}" onclick="sortCosts('proj')">Projeto${arrow('proj')}</th>
-    <th style="${ths}" onclick="sortCosts('freq')">Frequência${arrow('freq')}</th>
-    <th style="${ths}" onclick="sortCosts('date')">Data pagamento${arrow('date')}</th>
+    <th style="${ths}" onclick="sortCosts('freq')">Freq.${arrow('freq')}</th>
+    <th style="${ths}" onclick="sortCosts('date')">Data${arrow('date')}</th>
     <th style="${ths}" onclick="sortCosts('val')">Valor${arrow('val')}</th>
+    <th>Categoria / Natureza</th>
     <th></th>
   </tr></thead><tbody>`+
   list.map(c=>{
     const vs=c.freq==='%'?c.val+'%':((c.cur==='USD'?'US$':'R$')+' '+(parseFloat(c.val)||0).toFixed(2));
+    const catOpts=['','Ferramentas IA','Infraestrutura','Marketing','Conteúdo','SaaS / Assinaturas','Freelancers','Administrativo','Operacional','IOF / Taxas','Loja'].map(o=>`<option value="${o}" ${o===c.cat?'selected':''}>${o||'— Categoria'}</option>`).join('');
+    const natOpts=['','Operacional','Investimento','Marketing','Cliente','Administrativo'].map(o=>`<option value="${o}" ${o===c.nature?'selected':''}>${o||'— Natureza'}</option>`).join('');
+    const projOpts=['','Tâmara Cavalcante','PlannerOrganiza SaaS','PlannerOrganiza App','Multiplicamente','Contrato Fácil','Personagens Virtuais','Empresa / Desenvolvimento',...D.projects.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i).map(o=>`<option value="${o}" ${o===c.proj?'selected':''}>${o||'— Projeto'}</option>`).join('');
+    const selStyle='border:1px solid var(--border);border-radius:5px;padding:3px 6px;font-size:11px;font-family:var(--sans);color:var(--tx2);background:var(--bg1);outline:none;cursor:pointer;max-width:130px';
     return `<tr>
       <td style="font-weight:600">${c.service}</td>
-      <td style="color:var(--tx2)">${c.proj||'—'}</td>
+      <td><select style="${selStyle}" onchange="updateCostField('${c.id}','proj',this.value)">${projOpts}</select></td>
       <td><span class="badge" style="background:var(--bg3);color:var(--tx2)">${c.freq}</span></td>
-      <td><input type="date" value="${c.date||''}" onchange="updateCostDate('${c.id}',this.value)" style="border:1px solid var(--border);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--mono);color:var(--tx2);background:var(--bg1);outline:none;cursor:pointer;width:140px" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></td>
+      <td><input type="date" value="${c.date||''}" onchange="updateCostDate('${c.id}',this.value)" style="border:1px solid var(--border);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--mono);color:var(--tx2);background:var(--bg1);outline:none;cursor:pointer;width:130px" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></td>
       <td style="font-family:var(--mono);font-weight:700">${vs}</td>
+      <td style="white-space:nowrap">
+        <select style="${selStyle}" onchange="updateCostField('${c.id}','cat',this.value)">${catOpts}</select>
+        <select style="${selStyle};margin-top:3px" onchange="updateCostField('${c.id}','nature',this.value)">${natOpts}</select>
+      </td>
       <td><button class="ibtn" onclick="delCost('${c.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></td>
     </tr>`;
   }).join('')+'</tbody>';
@@ -1717,7 +1726,11 @@ function delIdeia(id){D.ideias=D.ideias.filter(x=>x.id!==id);save();renderIdeias
 function delTool(id){D.tools=D.tools.filter(t=>t.id!==id);save();renderTools();updateBadges();}
 function updateCostDate(id,val){
   const c=D.costs.find(x=>x.id===id);
-  if(c){c.date=val;save();renderCosts();}
+  if(c){c.date=val;save();renderCosts();renderFinanceiro();}
+}
+function updateCostField(id,field,val){
+  const c=D.costs.find(x=>x.id===id);
+  if(c){c[field]=val;save();renderFinanceiro();}
 }
 function delCost(id){D.costs=D.costs.filter(c=>c.id!==id);save();renderCosts();}
 function delLog(id){D.logs=D.logs.filter(l=>l.id!==id);save();renderAll();}
@@ -1815,15 +1828,19 @@ function showApp(user){
 async function fsLoad(uid){
   try{
     const doc = await db.collection('hubs').doc(uid).get();
+    let needsSave = false;
     if(doc.exists){
       const saved = doc.data();
       if(saved.projects) D.projects = saved.projects;
       if(saved.tools)    D.tools    = saved.tools;
       if(saved.ideias)   D.ideias   = saved.ideias;
       if(saved.logs)     D.logs     = saved.logs;
-      // merge costs: keep saved but add date field if missing
       if(saved.costs)    D.costs    = saved.costs.map(c=>({...c, date: c.date||''}));
+      else needsSave = true; // no costs in Firestore — will save defaults
+    } else {
+      needsSave = true; // no document yet — save all defaults
     }
+    if(needsSave) setTimeout(()=>fsSave(uid), 1500);
     const edoc = await db.collection('emails').doc(uid).get();
     if(edoc.exists && edoc.data().rows) emailRows = edoc.data().rows;
     const cdoc = await db.collection('ctx').doc(uid).get();
@@ -1872,6 +1889,7 @@ auth.onAuthStateChanged(async user=>{
   _dataLoaded = true;
   loadEmails();
   load();
+  setTimeout(renderFinanceiro, 500);
 });
 
 // Override save() to use Firestore — only after data loaded
