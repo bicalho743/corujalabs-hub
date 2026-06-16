@@ -1853,7 +1853,7 @@ async function fsLoad(uid){
     } else {
       needsSave = true; // no document yet — save all defaults
     }
-    if(needsSave) setTimeout(()=>fsSave(uid), 1500);
+    // needsSave handled after _dataLoaded is set below
     const edoc = await db.collection('emails').doc(uid).get();
     if(edoc.exists && edoc.data().rows) emailRows = edoc.data().rows;
     const cdoc = await db.collection('ctx').doc(uid).get();
@@ -1910,7 +1910,8 @@ auth.onAuthStateChanged(async user=>{
   _dataLoaded = true;
   loadEmails();
   load();
-  setTimeout(renderFinanceiro, 500);
+  setTimeout(renderFinanceiro, 300);
+  if(needsSave) setTimeout(()=>fsSave(currentUID), 2000);
 });
 
 // Override save() to use Firestore — only after data loaded
@@ -1999,3 +2000,133 @@ function saveCtx(){
 
 </body>
 </html>
+// ── FINANCEIRO ────────────────────────────────────────────────────────────────
+const RK = 'corujalabs_receita';
+let receitaData = {};
+
+function loadReceita(){
+  try{const r=localStorage.getItem(RK);if(r)receitaData=JSON.parse(r);}catch(e){}
+}
+function saveReceita(){
+  const v=parseFloat(document.getElementById('fin-receita')?.value)||0;
+  const sel=document.getElementById('fin-month');
+  const month=(sel&&sel.value)?sel.value:new Date().toISOString().slice(0,7);
+  receitaData[month]=v;
+  try{localStorage.setItem(RK,JSON.stringify(receitaData));}catch(e){}
+  if(currentUID) db.collection('receita').doc(currentUID).set(receitaData).catch(e=>console.warn(e));
+  renderFinanceiro();
+}
+
+const CAT_COLORS={'Ferramentas IA':'#6366F1','Infraestrutura':'#22C55E','Marketing':'#F59E0B','Conteúdo':'#EC4899','SaaS / Assinaturas':'#3B82F6','Freelancers':'#8B5CF6','Administrativo':'#14B8A6','Operacional':'#6B7280','IOF / Taxas':'#9CA3AF','Loja':'#60A5FA',''  :'#9CA3AF'};
+const NAT_COLORS={'Operacional':'#3B82F6','Investimento':'#8B5CF6','Marketing':'#F59E0B','Cliente':'#22C55E','Administrativo':'#14B8A6',''  :'#9CA3AF'};
+
+function renderFinanceiro(){
+  console.log('renderFinanceiro: costs=', D.costs.length);
+  
+  const msel=document.getElementById('fin-month');
+  if(msel){
+    const cur=msel.value;
+    const months=[...new Set(D.costs.filter(c=>c.date).map(c=>c.date.slice(0,7)))].sort().reverse();
+    msel.innerHTML='<option value="">Todos os meses</option>'+months.map(m=>{
+      const label=new Date(m+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+      return `<option value="${m}"${m===cur?' selected':''}>${label}</option>`;
+    }).join('');
+    if(cur) msel.value=cur;
+  }
+
+  const monthF=document.getElementById('fin-month')?.value||'';
+  let costs=D.costs.filter(c=>c.freq!=='%');
+  if(monthF) costs=costs.filter(c=>c.date&&c.date.startsWith(monthF));
+
+  const totalBRL=costs.filter(c=>c.cur!=='USD').reduce((a,c)=>a+(parseFloat(c.val)||0),0);
+  const totalUSD=costs.filter(c=>c.cur==='USD').reduce((a,c)=>a+(parseFloat(c.val)||0),0);
+  const curMonth=monthF||new Date().toISOString().slice(0,7);
+  const receita=receitaData[curMonth]||0;
+  const lucro=receita-totalBRL;
+  const burnRate=totalBRL>0?(totalBRL/30):0;
+  const investimento=costs.filter(c=>c.nature==='Investimento'&&c.cur!=='USD').reduce((a,c)=>a+(parseFloat(c.val)||0),0);
+  const runway=burnRate>0?Math.floor(receita/burnRate):0;
+
+  const ri=document.getElementById('fin-receita');
+  if(ri) ri.value=receitaData[curMonth]||'';
+
+  const kpisEl=document.getElementById('fin-kpis');
+  if(kpisEl) kpisEl.innerHTML=[
+    {l:'Receita',v:'R$ '+receita.toFixed(2),s:'mês atual',cls:receita>0?'kpi-good':''},
+    {l:'Total gasto',v:'R$ '+totalBRL.toFixed(2),s:costs.length+' lançamentos',cls:''},
+    {l:'Resultado',v:'R$ '+lucro.toFixed(2),s:lucro>=0?'positivo':'negativo',cls:lucro>=0?'kpi-good':'kpi-alert'},
+    {l:'Burn rate',v:'R$ '+burnRate.toFixed(2)+'/dia',s:'custo diário',cls:''},
+    {l:'Investimento',v:'R$ '+investimento.toFixed(2),s:'em produtos',cls:''},
+    {l:'Runway',v:runway>0?(runway+' dias'):'—',s:'com receita atual',cls:runway>0&&runway<60?'kpi-alert':runway>=60?'kpi-good':''},
+  ].map(k=>`<div class="kpi-card"><div class="kpi-label">${k.l}</div><div class="kpi-val ${k.cls}">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('');
+
+  function makeBar(label,val,max,col,pct){
+    return `<div class="fin-bar-row">
+      <div class="fin-bar-label" title="${label}">${label}</div>
+      <div class="fin-bar-bg"><div class="fin-bar-fill" style="width:${Math.round(val/max*100)}%;background:${col}">${pct>8?pct+'%':''}</div></div>
+      <div class="fin-bar-val">R$ ${val.toFixed(2)}</div>
+      <div class="fin-bar-pct">${pct}%</div>
+    </div>`;
+  }
+
+  // Category chart
+  const byCat={};
+  costs.filter(c=>c.cur!=='USD').forEach(c=>{byCat[c.cat||'Sem categoria']=(byCat[c.cat||'Sem categoria']||0)+(parseFloat(c.val)||0);});
+  const sortedCat=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const maxCat=sortedCat[0]?.[1]||1;
+  const catEl=document.getElementById('fin-cat-chart');
+  if(catEl) catEl.innerHTML=sortedCat.length?sortedCat.map(([cat,val])=>makeBar(cat,val,maxCat,CAT_COLORS[cat]||'#9CA3AF',Math.round(val/totalBRL*100)||0)).join(''):'<div style="color:var(--tx3);font-size:13px;padding:8px">Adicione categorias nos custos.</div>';
+
+  // Nature chart
+  const byNat={};
+  costs.filter(c=>c.cur!=='USD').forEach(c=>{byNat[c.nature||'Não classificado']=(byNat[c.nature||'Não classificado']||0)+(parseFloat(c.val)||0);});
+  const sortedNat=Object.entries(byNat).sort((a,b)=>b[1]-a[1]);
+  const maxNat=sortedNat[0]?.[1]||1;
+  const natEl=document.getElementById('fin-nature-chart');
+  if(natEl) natEl.innerHTML=sortedNat.length?sortedNat.map(([nat,val])=>makeBar(nat,val,maxNat,NAT_COLORS[nat]||'#9CA3AF',Math.round(val/totalBRL*100)||0)).join(''):'<div style="color:var(--tx3);font-size:13px;padding:8px">Adicione natureza nos custos.</div>';
+
+  // By project
+  const byProj={};
+  costs.filter(c=>c.cur!=='USD').forEach(c=>{const p=c.proj||'Empresa geral';byProj[p]=(byProj[p]||0)+(parseFloat(c.val)||0);});
+  const sortedProj=Object.entries(byProj).sort((a,b)=>b[1]-a[1]);
+  const maxProj=sortedProj[0]?.[1]||1;
+  const PCOLS=['#4F6EF7','#22C55E','#F59E0B','#EC4899','#8B5CF6','#14B8A6','#EF4444','#06B6D4'];
+  const projEl=document.getElementById('fin-proj-chart');
+  if(projEl) projEl.innerHTML=sortedProj.map(([proj,val],i)=>makeBar(proj,val,maxProj,PCOLS[i%PCOLS.length],Math.round(val/totalBRL*100)||0)).join('');
+
+  // Monthly timeline
+  const byMonth={};
+  D.costs.filter(c=>c.freq!=='%'&&c.date&&c.cur!=='USD').forEach(c=>{const m=c.date.slice(0,7);byMonth[m]=(byMonth[m]||0)+(parseFloat(c.val)||0);});
+  const months=Object.keys(byMonth).sort();
+  const maxM=Math.max(...Object.values(byMonth),1);
+  const tlEl=document.getElementById('fin-timeline');
+  if(tlEl) tlEl.innerHTML=months.length?`<div style="display:flex;align-items:flex-end;gap:6px;height:90px;padding:4px 0 0">${months.map(m=>{
+    const v=byMonth[m],h=Math.round(v/maxM*72),isCur=m===new Date().toISOString().slice(0,7);
+    const label=new Date(m+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'short'});
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0">
+      <div style="font-size:9px;font-family:var(--mono);color:var(--tx3)">${v>=1000?(v/1000).toFixed(1)+'k':v.toFixed(0)}</div>
+      <div style="width:100%;height:${h}px;background:${isCur?'var(--acc)':'var(--bg3)'};border-radius:4px 4px 0 0;min-height:3px" title="${m}: R$${v.toFixed(2)}"></div>
+      <div style="font-size:9px;font-family:var(--mono);color:${isCur?'var(--acc)':'var(--tx3)'};">${label}</div>
+    </div>`;}).join('')}</div>`:'<div style="color:var(--tx3);font-size:13px;padding:8px">Adicione datas nos custos.</div>';
+
+  // ROI table
+  const bySvc={};
+  costs.forEach(c=>{if(!bySvc[c.service])bySvc[c.service]={total:0,cat:c.cat||'',nat:c.nature||'',obs:c.obs||''};bySvc[c.service].total+=(parseFloat(c.val)||0);if(c.obs)bySvc[c.service].obs=c.obs;});
+  const sortedSvc=Object.entries(bySvc).sort((a,b)=>b[1].total-a[1].total);
+  const roiEl=document.getElementById('fin-roi-table');
+  if(roiEl) roiEl.innerHTML=`<table class="roi-table"><thead><tr><th>Serviço</th><th>Categoria</th><th>Natureza</th><th>Total</th><th>Observação</th></tr></thead><tbody>${
+    sortedSvc.map(([svc,d])=>`<tr>
+      <td style="font-weight:700">${svc}</td>
+      <td>${d.cat?`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bg3);color:var(--tx2)">${d.cat}</span>`:''}</td>
+      <td>${d.nat?`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:var(--acc-bg);color:var(--acc)">${d.nat}</span>`:''}</td>
+      <td style="font-family:var(--mono);font-weight:700">R$ ${d.total.toFixed(2)}</td>
+      <td style="font-size:12px;color:var(--tx2)">${d.obs||'—'}</td>
+    </tr>`).join('')
+  }</tbody></table>`;
+
+  const hasF=monthF;
+  const lbl=monthF?`Total em ${new Date(monthF+'-01T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}`:'Total geral';
+  const totEl=document.getElementById('ctotal');
+  if(totEl&&!monthF) totEl.innerHTML=`<span class="ctlabel">${lbl} (${costs.length} items)</span><span class="ctval">R$ ${totalBRL.toFixed(2)} + US$ ${totalUSD.toFixed(2)}</span>`;
+}
+
