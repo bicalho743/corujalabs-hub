@@ -349,23 +349,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .modal-meta-val a{color:var(--acc);text-decoration:none}.modal-meta-val a:hover{text-decoration:underline}
 </style>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAdBDAmVvLfr0ng6LdiSW1yelUVYFbZB_E",
-  authDomain: "corujalabs-hub.firebaseapp.com",
-  projectId: "corujalabs-hub",
-  storageBucket: "corujalabs-hub.firebasestorage.app",
-  messagingSenderId: "577213021883",
-  appId: "1:577213021883:web:1827050ab02e4d4b58739e"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
-</script>
+
 </head>
 <body>
 
@@ -878,6 +862,23 @@ const db   = firebase.firestore();
 
 </div></main></div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAdBDAmVvLfr0ng6LdiSW1yelUVYFbZB_E",
+  authDomain: "corujalabs-hub.firebaseapp.com",
+  projectId: "corujalabs-hub",
+  storageBucket: "corujalabs-hub.firebasestorage.app",
+  messagingSenderId: "577213021883",
+  appId: "1:577213021883:web:1827050ab02e4d4b58739e"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+</script>
 <script>
 const SK='corujalabs_v3';
 const CTX_KEY='corujalabs_ctx';
