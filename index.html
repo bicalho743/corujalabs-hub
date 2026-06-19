@@ -1896,34 +1896,41 @@ let currentUID = null;
 showLogin();
 
 // Wait for DOM + Firebase to be fully ready
-document.addEventListener('DOMContentLoaded', function() {
-  if(typeof firebase === 'undefined' || typeof auth === 'undefined') {
-    console.error('Firebase not loaded!');
-    return;
-  }
-});
+  document.addEventListener('DOMContentLoaded', function() {
 
-auth.onAuthStateChanged(async user=>{
-  if(!user){
-    showLogin();
-    return;
+    function waitForFirebase(callback) {
+      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+        callback();
+  } else {
+        setTimeout(function() { waitForFirebase(callback); }, 100);
   }
-  if(!ALLOWED_EMAILS.includes(user.email)){
-    alert('Acesso restrito. Use corujalabs_dev@gmail.com ou solanobicalho@gmail.com');
-    auth.signOut();
-    return;
   }
-  currentUID = user.uid;
-  showApp(user);
-  document.getElementById('sts').textContent='Carregando...';
-  await fsLoad(currentUID);
-  _dataLoaded = true;
-  loadReceita();
-  loadEmails();
-  load();
-  setTimeout(renderFinanceiro, 300);
-  if(needsSave) setTimeout(()=>fsSave(currentUID), 2000);
-});
+
+    waitForFirebase(function() {
+      auth.onAuthStateChanged(async function(user) {
+        if(!user){
+          showLogin();
+          return;
+  }
+        if(!ALLOWED_EMAILS.includes(user.email)){
+          alert('Acesso restrito. Use corujalabs_dev@gmail.com ou solanobicalho@gmail.com');
+          auth.signOut();
+          return;
+  }
+        currentUID = user.uid;
+        showApp(user);
+        document.getElementById('sts').textContent='Carregando...';
+        await fsLoad(currentUID);
+        _dataLoaded = true;
+        loadReceita();
+        loadEmails();
+        load();
+        setTimeout(renderFinanceiro, 300);
+        if(needsSave) setTimeout(()=>fsSave(currentUID), 2000);
+  });
+  });
+
+  })
 
 // Override save() to use Firestore — only after data loaded
 const _origSave = save;
