@@ -1836,10 +1836,11 @@ function showApp(user){
 }
 
 // Firestore helpers
+  let needsSave = false;
 async function fsLoad(uid){
   try{
     const doc = await db.collection('hubs').doc(uid).get();
-    let needsSave = false;
+    needsSave = false;
     if(doc.exists){
       const saved = doc.data();
       if(saved.projects) D.projects = saved.projects;
