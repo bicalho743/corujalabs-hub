@@ -1816,8 +1816,10 @@ function renderProfiles(){
 }
 
 // === Adicionar rede no editor de perfil ===
+var EDIT_NETS = {};
+function editListFor(id, p){ if(!EDIT_NETS[id]||!EDIT_NETS[id].length){ EDIT_NETS[id] = configuredNetworks(p).slice(); } return EDIT_NETS[id]; }
 function readEditRows(id, p){
-  const list = p._edit && p._edit.length ? p._edit : configuredNetworks(p);
+  const list = editListFor(id, p);
   list.forEach(n=>{
     const g = (suf)=>{ const e=document.getElementById('pe-'+id+'-'+n+'-'+suf); return e? e.value.trim() : (p.networks&&p.networks[n]?p.networks[n][suf]:''); };
     const ms = document.getElementById('pe-'+id+'-'+n+'-metrics');
@@ -1837,8 +1839,9 @@ function addNetworkToEdit(id){
   const net = sel? sel.value : '';
   if(!net) return;
   readEditRows(id, p);
-  p._edit = p._edit && p._edit.length ? p._edit.slice() : configuredNetworks(p).slice();
-  if(!p._edit.includes(net)) p._edit.push(net);
+  var L = editListFor(id, p);
+  if(!L.includes(net)) L.push(net);
+  EDIT_NETS[id] = L;
   if(!p.networks[net]) p.networks[net] = emptyNet(net);
   const detail = document.getElementById('profile-detail-'+id);
   if(detail){ detail.classList.remove('active'); detail.innerHTML=''; }
@@ -1859,7 +1862,7 @@ function startEditProfile(id){
     </div>
   </div>
   <div class="network-table">
-    ${(p._edit=(p._edit&&p._edit.length?p._edit:configuredNetworks(p))).map(n=>{
+    ${editListFor(p.id,p).map(n=>{
       const x=nets[n]||emptyNet(n);
       return `<div class="network-edit-grid">
         <div><div class="profile-net">${safeText(n)}</div></div>
@@ -1871,14 +1874,14 @@ function startEditProfile(id){
       </div>`;
     }).join('')}
   </div>
-  <div style="margin-top:10px"><select class="tinput" id="pe-addnet-${id}" style="max-width:200px;display:inline-block">${NETWORKS.filter(n=>!(p._edit||[]).includes(n)).map(n=>`<option value="${n}">${n}</option>`).join('')}</select><button class="btn btn-g btn-sm" style="margin-left:6px" onclick="addNetworkToEdit('${id}')">➕ Adicionar rede</button></div>\n  <div class="factions" style="margin-top:12px"><button class="btn btn-p btn-sm" onclick="saveEditProfile('${id}')">Salvar perfil</button><button class="btn btn-g btn-sm" onclick="renderProfiles();setTimeout(()=>toggleDetail('${id}','profile'),50)">Cancelar</button></div>`;
+  <div style="margin-top:10px"><select class="tinput" id="pe-addnet-${id}" style="max-width:200px;display:inline-block">${NETWORKS.filter(n=>!editListFor(p.id,p).includes(n)).map(n=>`<option value="${n}">${n}</option>`).join('')}</select><button class="btn btn-g btn-sm" style="margin-left:6px" onclick="addNetworkToEdit('${id}')">➕ Adicionar rede</button></div>\n  <div class="factions" style="margin-top:12px"><button class="btn btn-p btn-sm" onclick="saveEditProfile('${id}')">Salvar perfil</button><button class="btn btn-g btn-sm" onclick="renderProfiles();setTimeout(()=>toggleDetail('${id}','profile'),50)">Cancelar</button></div>`;
 }
 function saveEditProfile(id){
   const p=D.profiles.find(x=>x.id===id); if(!p) return;
   p.name=document.getElementById('pe-name-'+id).value.trim()||p.name;
   p.notes=document.getElementById('pe-notes-'+id).value.trim();
   p.networks=p.networks||{};
-  (p._edit&&p._edit.length?p._edit:configuredNetworks(p)).forEach(n=>{
+  editListFor(id,p).forEach(n=>{
     p.networks[n]={
       handle:document.getElementById(`pe-${id}-${n}-handle`).value.trim(),
       url:document.getElementById(`pe-${id}-${n}-url`).value.trim().replace(/^https?:\/\//,''),
@@ -1889,7 +1892,7 @@ function saveEditProfile(id){
       metrics:document.getElementById(`pe-${id}-${n}-metrics`).value
     };
   });
-  delete p._edit; save();renderProfiles();updateBadges();
+  delete EDIT_NETS[id]; save();renderProfiles();updateBadges();
 }
 
 // COSTS
