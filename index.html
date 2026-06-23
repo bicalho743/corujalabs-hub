@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -858,7 +858,7 @@ window.db   = firebase.firestore();
     <div class="fg">
       <div class="fgrp"><label class="flbl">Nome</label><input class="finput" id="t-name" placeholder="Firebase"></div>
       <div class="fgrp"><label class="flbl">Categoria</label><select class="fsel" id="t-cat"><option>Auth</option><option>Deploy</option><option>Database</option><option>Email</option><option>Pagamento</option><option>Analytics</option><option>Dev</option><option>Loja</option><option>DNS / Hospedagem</option><option>Outro</option></select></div>
-      <div class="fgrp"><label class="flbl">Email / conta</label><input class="finput" id="t-email"></div>
+      <div class="fgrp"><label class="flbl">Email / conta</label><input class="finput" id="t-email"></div>      <div class="fgrp"><label class="flbl">Senha</label><input class="finput" id="t-password" type="password" placeholder="••••••••"></div>
       <div class="fgrp"><label class="flbl">URL do painel</label><input class="finput" id="t-url"></div>
       <div class="fgrp s2"><label class="flbl">Notas</label><textarea class="fta" id="t-notes"></textarea></div>
     </div>
@@ -1525,7 +1525,7 @@ function renderTools(){
       <div></div>
       <div>Ferramenta</div>
       <div class="tcol-cat">Categoria</div>
-      <div class="tcol-email">Conta / Email</div>
+      <div class="tcol-email">Conta / Email</div>      <div>Senha</div>
       <div>Link / URL</div>
       <div></div>
     </div>
@@ -1535,7 +1535,7 @@ function renderTools(){
         <div>${toolFaviconHtml(t)}</div>
         <div class="tcell tcell-name" id="td-name-${t.id}">${t.name}</div>
         <div class="tcell dim tcol-cat" id="td-cat-${t.id}"><span class="tcat-badge" style="background:${meta.bg};color:${meta.col}">${t.cat}</span></div>
-        <div class="tcell dim tcol-email" id="td-email-${t.id}">${t.email||'—'}</div>
+        <div class="tcell dim tcol-email" id="td-email-${t.id}">${t.email||'—'}</div>        <div class="tcell" id="td-password-${t.id}">${t.password?'••••••••':'—'}</div>
         <div class="tcell" id="td-url-${t.id}">${t.url?`<a href="https://${t.url}" target="_blank">${t.url}</a>`:'<span style="color:var(--tx3)">—</span>'}</div>
         <div class="tactions">
           <button class="tedit-btn" onclick="startEditTool('${t.id}')" id="tbtn-${t.id}">Editar</button>
@@ -1566,7 +1566,7 @@ function saveEditTool(id){
   if(!t) return;
   t.name = document.getElementById('te-name-'+id).value.trim()||t.name;
   t.cat  = document.getElementById('te-cat-'+id).value;
-  t.email= document.getElementById('te-email-'+id).value.trim();
+  t.email= document.getElementById('te-email-'+id).value.trim();  t.password= document.getElementById('te-password-'+id).value.trim();
   t.url  = document.getElementById('te-url-'+id).value.trim().replace(/^https?:\/\//,'');
   save();renderTools();updateBadges();
 }
@@ -1707,7 +1707,7 @@ function addIdeia(){
 }
 function addTool(){
   const name=document.getElementById('t-name').value.trim();if(!name)return alert('Nome obrigatório');
-  D.tools.push({id:uid(),name,cat:document.getElementById('t-cat').value,email:document.getElementById('t-email').value.trim(),url:document.getElementById('t-url').value.trim(),notes:document.getElementById('t-notes').value.trim()});
+  D.tools.push({id:uid(),name,cat:document.getElementById('t-cat').value,email:document.getElementById('t-email').value.trim(),url:document.getElementById('t-url').value.trim(),password:document.getElementById('t-password').value.trim(),notes:document.getElementById('t-notes').value.trim()});
   save();renderAll();go('ferramentas');
 }
 function addCost(){
