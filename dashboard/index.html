@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coruja Labs &mdash; Metricas Windsor.ai</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --accent: #7c5cff;
+      --text: #e6e8ef;
+      --muted: #8b90a0;
+      --border: #2a2e3a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+    header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    h1 { font-size: 22px; font-weight: 600; }
+    .controls { display: flex; gap: 12px; margin-left: auto; align-items: center; }
+    select {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .card .label { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+    .card .value { font-size: 26px; font-weight: 700; }
+    .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 24px; }
+    .chart-wrap h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    td a { color: var(--accent); text-decoration: none; }
+    .error { background: #3a1d1d; border: 1px solid #6b2b2b; color: #ffb4b4; padding: 16px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>&#128202; Coruja Labs &mdash; Metricas</h1>
+    <div class="controls">
+      <label for="persona" style="color:var(--muted);font-size:13px;">Persona:</label>
+      <select id="persona">
+        <option value="tamara">Tamara Cavalcante</option>
+        <!-- Para adicionar novas personas, acrescente uma opcao aqui -->
+      </select>
+    </div>
+  </header>
+
+  <div id="meta" class="meta"></div>
+  <div id="content"></div>
+
+  <script>
+    const NUMBER_FMT = new Intl.NumberFormat("pt-BR");
+
+    function fmt(n) {
+      if (n === null || n === undefined || n === "") return "&mdash;";
+      const num = Number(n);
+      return isNaN(num) ? n : NUMBER_FMT.format(num);
+    }
+
+    function sum(rows, key) {
+      return rows.reduce((acc, r) => acc + (Number(r[key]) || 0), 0);
+    }
+
+    async function load(persona) {
+      const meta = document.getElementById("meta");
+      const content = document.getElementById("content");
+      content.innerHTML = "";
+      meta.textContent = "Carregando...";
+
+      let data;
+      try {
+        const resp = await fetch("../data/" + persona + "_metrics.json?_=" + Date.now());
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        data = await resp.json();
+      } catch (e) {
+        meta.textContent = "";
+        content.innerHTML =
+          '<div class="error">Nao foi possivel carregar <code>data/' + persona +
+          '_metrics.json</code>.<br>Rode <code>python metrics/fetch_metrics.py --persona ' +
+          persona + ' --days 30</code> primeiro. (' + e.message + ')</div>';
+        return;
+      }
+
+      meta.textContent =
+        data.label + " (@" + data.account_name + ") \u00b7 ultimos " + data.range_days +
+        " dias \u00b7 atualizado em " + new Date(data.generated_at).toLocaleString("pt-BR");
+
+      const acc = data.account_metrics || [];
+      const posts = data.post_metrics || [];
+      const latest = acc.length ? acc[acc.length - 1] : {};
+
+      // Cards resumo
+      const cards = [
+        { label: "Seguidores", value: latest.followers_count },
+        { label: "Alcance (periodo)", value: sum(acc, "reach_1d") },
+        { label: "Contas engajadas", value: sum(acc, "accounts_engaged") },
+        { label: "Curtidas", value: sum(acc, "likes") },
+        { label: "Comentarios", value: sum(acc, "comments") },
+        { label: "Salvamentos", value: sum(acc, "saves") },
+        { label: "Compartilhamentos", value: sum(acc, "shares") },
+        { label: "Visualizacoes", value: sum(acc, "views") },
+      ];
+      const cardsHtml = cards
+        .map(c => '<div class="card"><div class="label">' + c.label +
+          '</div><div class="value">' + fmt(c.value) + '</div></div>')
+        .join("");
+
+      content.innerHTML =
+        '<div class="cards">' + cardsHtml + '</div>' +
+        '<div class="chart-wrap"><h2>Seguidores ao longo do tempo</h2><canvas id="chFollowers" height="90"></canvas></div>' +
+        '<div class="chart-wrap"><h2>Alcance diario</h2><canvas id="chReach" height="90"></canvas></div>' +
+        '<div class="chart-wrap"><h2>Posts recentes</h2>' + buildPostsTable(posts) + '</div>';
+
+      const labels = acc.map(r => r.date);
+      drawLine("chFollowers", labels, acc.map(r => r.followers_count), "Seguidores");
+      drawBar("chReach", labels, acc.map(r => r.reach_1d), "Alcance");
+    }
+
+    function buildPostsTable(posts) {
+      if (!posts.length) return '<p style="color:var(--muted)">Nenhum post no periodo.</p>';
+      const rows = posts.slice(0, 30).map(p => {
+        const cap = (p.media_caption || "").slice(0, 60);
+        const link = p.media_permalink
+          ? '<a href="' + p.media_permalink + '" target="_blank" rel="noopener">abrir</a>'
+          : "&mdash;";
+        return '<tr><td>' + (p.timestamp || p.date || "") + '</td><td>' +
+          (p.media_type || "") + '</td><td>' + cap + '</td><td>' +
+          fmt(p.media_reach) + '</td><td>' + fmt(p.media_like_count) + '</td><td>' +
+          fmt(p.media_comments_count) + '</td><td>' + link + '</td></tr>';
+      }).join("");
+      return '<table><thead><tr><th>Data</th><th>Tipo</th><th>Legenda</th>' +
+        '<th>Alcance</th><th>Curtidas</th><th>Comentarios</th><th>Link</th></tr></thead><tbody>' +
+        rows + '</tbody></table>';
+    }
+
+    let charts = {};
+    function drawLine(id, labels, values, label) {
+      if (charts[id]) charts[id].destroy();
+      charts[id] = new Chart(document.getElementById(id), {
+        type: "line",
+        data: { labels, datasets: [{ label, data: values, borderColor: "#7c5cff", backgroundColor: "rgba(124,92,255,.15)", fill: true, tension: .3 }] },
+        options: { plugins: { legend: { labels: { color: "#e6e8ef" } } }, scales: { x: { ticks: { color: "#8b90a0" } }, y: { ticks: { color: "#8b90a0" } } } }
+      });
+    }
+    function drawBar(id, labels, values, label) {
+      if (charts[id]) charts[id].destroy();
+      charts[id] = new Chart(document.getElementById(id), {
+        type: "bar",
+        data: { labels, datasets: [{ label, data: values, backgroundColor: "#7c5cff" }] },
+        options: { plugins: { legend: { labels: { color: "#e6e8ef" } } }, scales: { x: { ticks: { color: "#8b90a0" } }, y: { ticks: { color: "#8b90a0" } } } }
+      });
+    }
+
+    document.getElementById("persona").addEventListener("change", e => load(e.target.value));
+    load(document.getElementById("persona").value);
+  </script>
+</body>
+</html>
