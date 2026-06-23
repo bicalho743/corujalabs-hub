@@ -1,0 +1,18 @@
+# Segredos / ambiente
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Observacao: os JSONs em data/ SAO versionados de proposito,
+# pois o dashboard e o GitHub Pages os leem. Se voce preferir NAO
+# versionar dados, descomente a linha abaixo:
+# data/*.json
