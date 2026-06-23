@@ -1170,7 +1170,7 @@ const DEFS = {
     {id:'t16',name:'Z-API',cat:'Dev',email:'',url:'app.z-api.io/app',notes:'API WhatsApp alternativa.'},
   ],
   profiles:[
-    {id:'pf1',name:'Tâmara Cavalcante',notes:'Perfil da marca Tâmara Cavalcante / Personal Organizer.',networks:{Instagram:{handle:'@tamaraorganiza',url:'instagram.com/tamaraorganiza',login:'',password:'',windsor:'instagram_insights',accountId:'',metrics:'Pendente'}}},
+    {id:'pf1',name:'Tâmara Cavalcante',notes:'Perfil da marca Tâmara Cavalcante / Personal Organizer.',networks:{Instagram:{handle:'@tamaraorganiza',url:'instagram.com/tamaraorganiza',login:'',password:'',windsor:'instagram_insights',accountId:'17841410001362576',metrics:'Conectado'}}},
     {id:'pf2',name:'Padre Miguel',notes:'Personagem católico para vídeos curtos e UGC.',networks:{Instagram:{handle:'',url:'',login:'',password:'',windsor:'instagram_public',accountId:'',metrics:'Não conectado'}}},
     {id:'pf3',name:'Conselhos',notes:'Perfil de conteúdo/conselhos.',networks:{Instagram:{handle:'',url:'',login:'',password:'',windsor:'instagram_public',accountId:'',metrics:'Não conectado'}}}
   ],
@@ -1715,6 +1715,49 @@ function configuredNetworks(p){
     return (x.handle||x.url||x.login||x.password||x.accountId||x.metrics==='Conectado');
   });
 }
+
+// === Métricas Windsor no card do perfil ===
+const METRICS_FILES = { 'pf1':'data/tamara_metrics.json' };
+function metricsPanelHtml(p){
+  const file = METRICS_FILES[p.id];
+  if(!file) return '';
+  return '<div class="metrics-panel" id="metrics-'+p.id+'" data-file="'+file+'" style="margin-top:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)"><div class="profile-muted" style="font-size:12px">Carregando métricas…</div></div>';
+}
+function fmtNum(v){ if(v===null||v===undefined||v==='') return '—'; const n=Number(v); if(isNaN(n)) return v; return n.toLocaleString('pt-BR'); }
+async function loadProfileMetrics(){
+  const panels = document.querySelectorAll('.metrics-panel[data-file]');
+  for(const panel of panels){
+    const file = panel.getAttribute('data-file');
+    try{
+      const res = await fetch(file + '?nc=' + Date.now());
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const d = await res.json();
+      const am = (d.account_metrics||[]);
+      const last = am.length ? am[am.length-1] : {};
+      const posts = (d.post_metrics||[]);
+      const totReach = am.reduce((s,r)=>s+(Number(r.reach)||0),0);
+      const totLikes = am.reduce((s,r)=>s+(Number(r.likes)||0),0);
+      const card = (lbl,val)=>'<div style="flex:1;min-width:90px"><div class="profile-muted" style="font-size:10px;text-transform:uppercase;letter-spacing:.04em">'+lbl+'</div><div style="font-size:18px;font-weight:700">'+val+'</div></div>';
+      panel.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
+          '<div style="font-weight:600;font-size:13px">📊 Métricas ('+(d.label||d.persona||'')+' · '+(d.range_days||'?')+'d)</div>'+
+          '<div class="profile-muted" style="font-size:10px">'+(d.generated_at? new Date(d.generated_at).toLocaleString('pt-BR'):'')+'</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:12px;flex-wrap:wrap">'+
+          card('Seguidores', fmtNum(last.followers_count))+
+          card('Alcance (último dia)', fmtNum(last.reach))+
+          card('Curtidas (último dia)', fmtNum(last.likes))+
+          card('Engajados (último dia)', fmtNum(last.accounts_engaged))+
+          card('Alcance total ('+(d.range_days||'?')+'d)', fmtNum(totReach))+
+          card('Curtidas total', fmtNum(totLikes))+
+          card('Posts coletados', fmtNum(posts.length))+
+        '</div>';
+    }catch(e){
+      panel.innerHTML = '<div class="profile-muted" style="font-size:12px;color:var(--red-tx,#c00)">Não foi possível carregar as métricas ('+e.message+'). Rode o workflow para gerar o arquivo.</div>';
+    }
+  }
+}
+
 function renderProfiles(){
   const el=document.getElementById('profiles-grid'); if(!el) return;
   migrateProfiles();
@@ -1734,7 +1777,7 @@ function renderProfiles(){
     ${list.map(p=>{
       const nets=ensureProfileNetworks(p);
       const conf=configuredNetworks(p);
-      const shown=netF?[netF]:NETWORKS;
+      const shown=netF?[netF]:configuredNetworks(p);
       const handles=conf.map(n=>nets[n].handle).filter(Boolean).slice(0,3).join(' · ')||'—';
       const logins=conf.map(n=>nets[n].login).filter(Boolean).slice(0,2).join(' · ')||'—';
       const connected=NETWORKS.filter(n=>nets[n].metrics==='Conectado').length;
@@ -1765,10 +1808,43 @@ function renderProfiles(){
             </div>`;
           }).join('')}
         </div>
+        ${metricsPanelHtml(p)}
       </div>`;
     }).join('')}
   </div>`;
+  loadProfileMetrics();
 }
+
+// === Adicionar rede no editor de perfil ===
+function readEditRows(id, p){
+  const list = p._edit && p._edit.length ? p._edit : configuredNetworks(p);
+  list.forEach(n=>{
+    const g = (suf)=>{ const e=document.getElementById('pe-'+id+'-'+n+'-'+suf); return e? e.value.trim() : (p.networks&&p.networks[n]?p.networks[n][suf]:''); };
+    const ms = document.getElementById('pe-'+id+'-'+n+'-metrics');
+    p.networks = p.networks||{};
+    p.networks[n] = {
+      handle:g('handle'), url:g('url'),
+      login:g('login'), password:g('password'),
+      windsor:g('windsor'),
+      accountId:(p.networks[n]||{}).accountId||'',
+      metrics: ms? ms.value : ((p.networks[n]||{}).metrics||'Não conectado')
+    };
+  });
+}
+function addNetworkToEdit(id){
+  const p = D.profiles.find(x=>x.id===id); if(!p) return;
+  const sel = document.getElementById('pe-addnet-'+id);
+  const net = sel? sel.value : '';
+  if(!net) return;
+  readEditRows(id, p);
+  p._edit = p._edit && p._edit.length ? p._edit.slice() : configuredNetworks(p).slice();
+  if(!p._edit.includes(net)) p._edit.push(net);
+  if(!p.networks[net]) p.networks[net] = emptyNet(net);
+  const detail = document.getElementById('profile-detail-'+id);
+  if(detail){ detail.classList.remove('active'); detail.innerHTML=''; }
+  startEditProfile(id);
+}
+
 function startEditProfile(id){
   migrateProfiles();
   const p=D.profiles.find(x=>x.id===id); if(!p) return;
@@ -1783,7 +1859,7 @@ function startEditProfile(id){
     </div>
   </div>
   <div class="network-table">
-    ${NETWORKS.map(n=>{
+    ${(p._edit=(p._edit&&p._edit.length?p._edit:configuredNetworks(p))).map(n=>{
       const x=nets[n]||emptyNet(n);
       return `<div class="network-edit-grid">
         <div><div class="profile-net">${safeText(n)}</div></div>
@@ -1795,14 +1871,14 @@ function startEditProfile(id){
       </div>`;
     }).join('')}
   </div>
-  <div class="factions" style="margin-top:12px"><button class="btn btn-p btn-sm" onclick="saveEditProfile('${id}')">Salvar perfil</button><button class="btn btn-g btn-sm" onclick="renderProfiles();setTimeout(()=>toggleDetail('${id}','profile'),50)">Cancelar</button></div>`;
+  <div style="margin-top:10px"><select class="tinput" id="pe-addnet-${id}" style="max-width:200px;display:inline-block">${NETWORKS.filter(n=>!(p._edit||[]).includes(n)).map(n=>`<option value="${n}">${n}</option>`).join('')}</select><button class="btn btn-g btn-sm" style="margin-left:6px" onclick="addNetworkToEdit('${id}')">➕ Adicionar rede</button></div>\n  <div class="factions" style="margin-top:12px"><button class="btn btn-p btn-sm" onclick="saveEditProfile('${id}')">Salvar perfil</button><button class="btn btn-g btn-sm" onclick="renderProfiles();setTimeout(()=>toggleDetail('${id}','profile'),50)">Cancelar</button></div>`;
 }
 function saveEditProfile(id){
   const p=D.profiles.find(x=>x.id===id); if(!p) return;
   p.name=document.getElementById('pe-name-'+id).value.trim()||p.name;
   p.notes=document.getElementById('pe-notes-'+id).value.trim();
   p.networks=p.networks||{};
-  NETWORKS.forEach(n=>{
+  (p._edit&&p._edit.length?p._edit:configuredNetworks(p)).forEach(n=>{
     p.networks[n]={
       handle:document.getElementById(`pe-${id}-${n}-handle`).value.trim(),
       url:document.getElementById(`pe-${id}-${n}-url`).value.trim().replace(/^https?:\/\//,''),
@@ -1813,7 +1889,7 @@ function saveEditProfile(id){
       metrics:document.getElementById(`pe-${id}-${n}-metrics`).value
     };
   });
-  save();renderProfiles();updateBadges();
+  delete p._edit; save();renderProfiles();updateBadges();
 }
 
 // COSTS
