@@ -178,29 +178,50 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .btn-cpri{background:var(--bg2);color:var(--tx2);border:1.5px solid var(--border);border-radius:var(--r);padding:5px 11px;font-size:12px;cursor:pointer;font-family:var(--sans);font-weight:600;transition:all .15s}
 .btn-cpri:hover{background:var(--bg3)}
 
-/* TOOLS LIST */
-.tool-list{display:flex;flex-direction:column;gap:0;background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
-.tool-row{display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr 80px;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);transition:background .12s;min-height:48px}
-.tool-row:last-child{border-bottom:none}
-.tool-row:hover{background:var(--bg2)}
-.tool-row.editing{background:#FFFBEB;border-left:3px solid var(--amber)}
-.tool-hdr{background:var(--bg2);font-size:11px;font-family:var(--mono);font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;padding:9px 16px;display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr 80px;gap:12px;border-bottom:1.5px solid var(--border)}
-.tool-favicon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--bg3);flex-shrink:0;overflow:hidden}
-.tool-favicon img{width:18px;height:18px;object-fit:contain}
-.tool-favicon .fb{font-size:12px;font-weight:800;font-family:var(--mono)}
-.tcell{font-size:13px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tcell.dim{color:var(--tx3);font-family:var(--mono);font-size:12px}
-.tcell a{color:var(--acc);text-decoration:none;font-family:var(--mono);font-size:12px}
-.tcell a:hover{text-decoration:underline}
-.tcell-name{font-size:14px;font-weight:700;color:var(--tx)}
-.tinput{width:100%;padding:5px 8px;border:1.5px solid var(--acc);border-radius:var(--r);font-size:13px;font-family:var(--sans);background:#fff;color:var(--tx);outline:none}
-.tactions{display:flex;gap:4px;justify-content:flex-end}
-.tedit-btn{padding:4px 8px;border:1.5px solid var(--border);border-radius:var(--r);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);background:transparent;color:var(--tx3);transition:all .15s}
-.tedit-btn:hover{background:var(--acc-bg);color:var(--acc);border-color:var(--acc)}
+/* TOOLS LIST — CARD UI */
+.tool-toolbar-note{font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:-8px;margin-bottom:14px}
+.tool-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:16px;background:transparent;border:none;border-radius:0;overflow:visible;box-shadow:none;margin-bottom:14px}
+.tool-hdr{display:none}
+.tool-row{display:flex;flex-direction:column;gap:14px;align-items:stretch;padding:18px;background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r3);box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;min-height:0;position:relative;overflow:hidden}
+.tool-row::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--acc),var(--purple));opacity:.9}
+.tool-row:last-child{border-bottom:1.5px solid var(--border)}
+.tool-row:hover{background:#fff;transform:translateY(-2px);box-shadow:var(--shadow2);border-color:rgba(79,110,247,.18)}
+.tool-row.editing{background:#FFFBEB;border-left:1.5px solid var(--border);border-color:#FDE68A}
+.tool-row.editing::before{background:linear-gradient(90deg,var(--amber),var(--red))}
+.tool-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:2px}
+.tool-title-wrap{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.tool-favicon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--bg3);flex-shrink:0;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.03)}
+.tool-favicon img{width:23px;height:23px;object-fit:contain}
+.tool-favicon .fb{font-size:13px;font-weight:800;font-family:var(--mono)}
+.tcell-name{font-size:15px;font-weight:800;color:var(--tx);letter-spacing:-.2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tool-subline{font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcat-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:var(--mono);padding:4px 9px;border-radius:999px;white-space:nowrap}
+.tcat-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.75}
+.tool-meta{display:flex;flex-direction:column;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+.tool-meta-row{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;min-width:0}
+.tool-meta-label{color:var(--tx3);font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.tool-meta-value{color:var(--tx2);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.tool-meta-value.mono{font-family:var(--mono);font-size:12px}
+.tool-card-actions{display:flex;align-items:center;gap:8px;margin-top:auto}
+.tool-open-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1;background:var(--acc);color:#fff;border:none;border-radius:var(--r2);padding:9px 12px;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 2px 8px rgba(79,110,247,.24);transition:all .15s;font-family:var(--sans)}
+.tool-open-btn:hover{background:#3A5AE8;text-decoration:none;transform:translateY(-1px)}
+.tool-open-btn.disabled{background:var(--bg3);color:var(--tx3);box-shadow:none;pointer-events:none}
+.tool-mini-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--bg2);color:var(--tx2);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:all .15s;white-space:nowrap}
+.tool-mini-btn:hover{background:var(--acc-bg);color:var(--acc);border-color:rgba(79,110,247,.25)}
+.tool-mini-btn.ok{background:var(--green-bg);color:var(--green-tx);border-color:rgba(34,197,94,.25)}
+.tactions{display:flex;gap:5px;justify-content:flex-end;align-items:center;flex-shrink:0}
+.tedit-btn{padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);background:var(--bg1);color:var(--tx3);transition:all .15s}
+.tedit-btn:hover{background:var(--acc-bg);color:var(--acc);border-color:rgba(79,110,247,.25)}
 .tedit-btn.save{background:var(--green-bg);color:var(--green-tx);border-color:rgba(34,197,94,.3)}
 .tedit-btn.save:hover{background:rgba(34,197,94,.2)}
-.tcat-badge{display:inline-flex;font-size:11px;font-weight:600;font-family:var(--mono);padding:2px 8px;border-radius:20px}
-@media(max-width:900px){.tool-row,.tool-hdr{grid-template-columns:32px 1fr 1fr 80px}.tool-row .tcol-email,.tool-row .tcol-cat,.tool-hdr .tcol-email,.tool-hdr .tcol-cat{display:none}}
+.ibtn{background:transparent;border:none;cursor:pointer;color:var(--tx3);padding:7px;border-radius:var(--r);display:flex;align-items:center;transition:all .15s}
+.ibtn:hover{background:var(--red-bg);color:var(--red-tx)}
+.tinput{width:100%;padding:8px 10px;border:1.5px solid var(--acc);border-radius:var(--r);font-size:13px;font-family:var(--sans);background:#fff;color:var(--tx);outline:none}
+.tool-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+.tool-edit-grid .full{grid-column:1/-1}
+.tool-edit-label{font-size:10px;font-family:var(--mono);font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+@media(max-width:900px){.tool-list{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}}
+@media(max-width:700px){.tool-list{grid-template-columns:1fr}.tool-card-actions{flex-wrap:wrap}.tool-open-btn{min-width:100%}.tool-edit-grid{grid-template-columns:1fr}.tool-edit-grid .full{grid-column:auto}}
 
 /* COSTS */
 .ctable{width:100%;border-collapse:collapse}
@@ -1509,37 +1530,101 @@ function toolFaviconHtml(t){
   return `<div class="tool-favicon" style="background:${meta.bg}">${fallback}</div>`;
 }
 
+function safeText(v){
+  return String(v??'').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+
+function normalizeUrl(url){
+  const clean = (url||'').trim().replace(/^https?:\/\//,'');
+  return clean ? `https://${clean}` : '';
+}
+
+function copyToolPassword(id){
+  const t = D.tools.find(x=>x.id===id);
+  if(!t || !t.password) return;
+  navigator.clipboard.writeText(t.password).then(()=>{
+    const btn=document.getElementById('copy-pass-'+id);
+    if(btn){
+      const old=btn.innerHTML;
+      btn.classList.add('ok');
+      btn.innerHTML='Copiado';
+      setTimeout(()=>{btn.classList.remove('ok');btn.innerHTML=old;},1200);
+    }
+  });
+}
+
+function toggleToolPassword(id){
+  const t = D.tools.find(x=>x.id===id);
+  if(!t || !t.password) return;
+  const el=document.getElementById('pass-value-'+id);
+  const btn=document.getElementById('reveal-pass-'+id);
+  if(!el || !btn) return;
+  const visible=el.dataset.visible==='1';
+  el.dataset.visible=visible?'0':'1';
+  el.textContent=visible?'••••••••':t.password;
+  btn.textContent=visible?'Revelar':'Ocultar';
+}
+
 function renderTools(){
   const search=(document.getElementById('tool-search')?.value||'').toLowerCase();
   const catF=document.getElementById('tool-cat-filter')?.value||'';
   const el = document.getElementById('tgrid');
   let toolList=D.tools;
   if(catF) toolList=toolList.filter(t=>t.cat===catF);
-  if(search) toolList=toolList.filter(t=>t.name.toLowerCase().includes(search)||t.cat.toLowerCase().includes(search)||(t.email||'').toLowerCase().includes(search)||(t.notes||'').toLowerCase().includes(search));
+  if(search) toolList=toolList.filter(t=>
+    (t.name||'').toLowerCase().includes(search)||
+    (t.cat||'').toLowerCase().includes(search)||
+    (t.email||'').toLowerCase().includes(search)||
+    (t.notes||'').toLowerCase().includes(search)||
+    (t.url||'').toLowerCase().includes(search)
+  );
   if(!D.tools.length){el.innerHTML='<div class="empty"><strong>Nenhuma ferramenta</strong>Adicione seus serviços.</div>';return;}
   if(!toolList.length){el.innerHTML='<div class="empty">Nenhuma ferramenta com esse filtro.</div>';return;}
-  const catOpts = Object.keys(catMeta).map(k=>`<option ${''}>` + k + '</option>').join('');
+
   el.innerHTML = `
+  <div class="tool-toolbar-note">${toolList.length} ferramenta${toolList.length>1?'s':''} encontrada${toolList.length>1?'s':''}</div>
   <div class="tool-list">
-    <div class="tool-hdr">
-      <div></div>
-      <div>Ferramenta</div>
-      <div class="tcol-cat">Categoria</div>
-      <div class="tcol-email">Conta / Email</div>      <div>Senha</div>
-      <div>Link / URL</div>
-      <div></div>
-    </div>
     ${toolList.map(t=>{
       const meta=catMeta[t.cat]||catMeta.Outro;
+      const url=normalizeUrl(t.url);
+      const cleanUrl=(t.url||'').replace(/^https?:\/\//,'');
       return `<div class="tool-row" id="trow-${t.id}">
-        <div>${toolFaviconHtml(t)}</div>
-        <div class="tcell tcell-name" id="td-name-${t.id}">${t.name}</div>
-        <div class="tcell dim tcol-cat" id="td-cat-${t.id}"><span class="tcat-badge" style="background:${meta.bg};color:${meta.col}">${t.cat}</span></div>
-        <div class="tcell dim tcol-email" id="td-email-${t.id}">${t.email||'—'}</div>        <div class="tcell" id="td-password-${t.id}">${t.password?'••••••••':'—'}</div>
-        <div class="tcell" id="td-url-${t.id}">${t.url?`<a href="https://${t.url}" target="_blank">${t.url}</a>`:'<span style="color:var(--tx3)">—</span>'}</div>
-        <div class="tactions">
-          <button class="tedit-btn" onclick="startEditTool('${t.id}')" id="tbtn-${t.id}">Editar</button>
-          <button class="ibtn" onclick="delTool('${t.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
+        <div class="tool-card-head">
+          <div class="tool-title-wrap">
+            ${toolFaviconHtml(t)}
+            <div style="min-width:0;flex:1">
+              <div class="tcell-name" id="td-name-${t.id}">${safeText(t.name)}</div>
+              <div class="tool-subline" id="td-email-${t.id}">${safeText(t.email||'Sem email cadastrado')}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div id="td-cat-${t.id}"><span class="tcat-badge" style="background:${meta.bg};color:${meta.col}">${safeText(t.cat||'Outro')}</span></div>
+            <div class="tactions">
+              <button class="tedit-btn" onclick="startEditTool('${t.id}')" id="tbtn-${t.id}">Editar</button>
+              <button class="ibtn" onclick="delTool('${t.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-meta">
+          <div class="tool-meta-row">
+            <span class="tool-meta-label">Conta</span>
+            <span class="tool-meta-value">${safeText(t.email||'—')}</span>
+          </div>
+          <div class="tool-meta-row">
+            <span class="tool-meta-label">Senha</span>
+            <span class="tool-meta-value mono" id="pass-value-${t.id}" data-visible="0">${t.password?'••••••••':'—'}</span>
+          </div>
+          <div class="tool-meta-row" id="td-url-${t.id}">
+            <span class="tool-meta-label">URL</span>
+            <span class="tool-meta-value mono">${cleanUrl?safeText(cleanUrl):'—'}</span>
+          </div>
+        </div>
+
+        <div class="tool-card-actions">
+          ${url?`<a class="tool-open-btn" href="${safeText(url)}" target="_blank" rel="noopener">Abrir</a>`:`<span class="tool-open-btn disabled">Sem link</span>`}
+          <button class="tool-mini-btn" id="copy-pass-${t.id}" onclick="copyToolPassword('${t.id}')" ${!t.password?'disabled style="opacity:.45;cursor:not-allowed"':''}>Copiar senha</button>
+          <button class="tool-mini-btn" id="reveal-pass-${t.id}" onclick="toggleToolPassword('${t.id}')" ${!t.password?'disabled style="opacity:.45;cursor:not-allowed"':''}>Revelar</button>
         </div>
       </div>`;
     }).join('')}
@@ -1552,14 +1637,42 @@ function startEditTool(id){
   const catOpts = Object.keys(catMeta).map(k=>`<option ${k===t.cat?'selected':''}>${k}</option>`).join('');
   const row = document.getElementById('trow-'+id);
   row.classList.add('editing');
-  document.getElementById('td-name-'+id).innerHTML=`<input class="tinput" id="te-name-${id}" value="${t.name}">`;
-  document.getElementById('td-cat-'+id).innerHTML=`<select class="tinput" id="te-cat-${id}" style="padding:4px 6px">${catOpts}</select>`;
-  document.getElementById('td-email-'+id).innerHTML=`<input class="tinput" id="te-email-${id}" value="${t.email||''}" placeholder="email@...">`;
-    document.getElementById('td-password-'+id).innerHTML=`<input class="tinput" type="password" id="te-password-${id}" value="${t.password||''}" placeholder="Senha">`;
-  document.getElementById('td-url-'+id).innerHTML=`<input class="tinput" id="te-url-${id}" value="${t.url||''}" placeholder="console.firebase.google.com">`;
-  document.getElementById('tbtn-'+id).className='tedit-btn save';
-  document.getElementById('tbtn-'+id).textContent='Salvar';
-  document.getElementById('tbtn-'+id).onclick=()=>saveEditTool(id);
+  row.innerHTML = `
+    <div class="tool-card-head">
+      <div class="tool-title-wrap">
+        ${toolFaviconHtml(t)}
+        <div style="min-width:0;flex:1">
+          <div class="tcell-name">Editando ferramenta</div>
+          <div class="tool-subline">Atualize os campos e salve</div>
+        </div>
+      </div>
+      <div class="tactions">
+        <button class="tedit-btn save" onclick="saveEditTool('${id}')" id="tbtn-${id}">Salvar</button>
+        <button class="tedit-btn" onclick="renderTools()">Cancelar</button>
+      </div>
+    </div>
+    <div class="tool-edit-grid">
+      <div>
+        <div class="tool-edit-label">Nome</div>
+        <input class="tinput" id="te-name-${id}" value="${safeText(t.name)}">
+      </div>
+      <div>
+        <div class="tool-edit-label">Categoria</div>
+        <select class="tinput" id="te-cat-${id}">${catOpts}</select>
+      </div>
+      <div class="full">
+        <div class="tool-edit-label">Conta / email</div>
+        <input class="tinput" id="te-email-${id}" value="${safeText(t.email||'')}" placeholder="email@...">
+      </div>
+      <div>
+        <div class="tool-edit-label">Senha</div>
+        <input class="tinput" type="password" id="te-password-${id}" value="${safeText(t.password||'')}" placeholder="Senha">
+      </div>
+      <div>
+        <div class="tool-edit-label">Link / URL</div>
+        <input class="tinput" id="te-url-${id}" value="${safeText(t.url||'')}" placeholder="console.firebase.google.com">
+      </div>
+    </div>`;
 }
 
 function saveEditTool(id){
@@ -1567,7 +1680,8 @@ function saveEditTool(id){
   if(!t) return;
   t.name = document.getElementById('te-name-'+id).value.trim()||t.name;
   t.cat  = document.getElementById('te-cat-'+id).value;
-  t.email= document.getElementById('te-email-'+id).value.trim();  t.password= document.getElementById('te-password-'+id).value.trim();
+  t.email= document.getElementById('te-email-'+id).value.trim();
+  t.password= document.getElementById('te-password-'+id).value.trim();
   t.url  = document.getElementById('te-url-'+id).value.trim().replace(/^https?:\/\//,'');
   save();renderTools();updateBadges();
 }
