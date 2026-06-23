@@ -1,0 +1,8 @@
+# Coruja Labs - dependencias do coletor de metricas
+#
+# O script fetch_metrics.py usa apenas a biblioteca padrao do Python
+# (urllib, json, argparse), portanto nao ha dependencias obrigatorias.
+#
+# 'requests' fica disponivel como alternativa caso voce prefira reescrever
+# as chamadas HTTP de forma mais simples.
+requests>=2.31.0
