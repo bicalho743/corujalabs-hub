@@ -229,7 +229,17 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .profile-detail{display:none;background:#fff;border-bottom:1px solid var(--border);padding:0 14px 14px 14px}
 .profile-detail.active{display:block}
 .profile-detail-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media(max-width:900px){.profile-hdr,.profile-row{grid-template-columns:minmax(130px,1fr) 90px 80px}.profile-hdr .pcol-login,.profile-row .pcol-login,.profile-hdr .pcol-handle,.profile-row .pcol-handle,.profile-hdr .pcol-metric,.profile-row .pcol-metric{display:none}.profile-detail-box{grid-template-columns:1fr}}
+.network-table{display:flex;flex-direction:column;gap:0;background:var(--bg1);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.network-row,.network-hdr{display:grid;grid-template-columns:110px minmax(100px,1fr) minmax(120px,1fr) minmax(120px,1fr) 100px 90px;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px}
+.network-hdr{background:var(--bg2);font-size:10px;font-family:var(--mono);font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em}
+.network-row:last-child{border-bottom:none}
+.network-row:hover{background:var(--bg2)}
+.network-edit-grid{display:grid;grid-template-columns:90px 1fr 1fr 1fr 1fr 1fr;gap:8px;align-items:end;padding:10px;border-bottom:1px solid var(--border);background:#fff}
+.network-edit-grid:last-child{border-bottom:none}
+.network-edit-label{font-size:9px;font-family:var(--mono);font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.windsor-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;font-family:var(--mono);padding:3px 8px;border-radius:20px;background:var(--green-bg);color:var(--green-tx);width:max-content}
+.windsor-pill.off{background:var(--bg3);color:var(--tx3)}
+@media(max-width:900px){.profile-hdr,.profile-row{grid-template-columns:minmax(130px,1fr) 90px 80px}.profile-hdr .pcol-login,.profile-row .pcol-login,.profile-hdr .pcol-handle,.profile-row .pcol-handle,.profile-hdr .pcol-metric,.profile-row .pcol-metric{display:none}.profile-detail-box{grid-template-columns:1fr}.network-row,.network-hdr{grid-template-columns:90px 1fr 80px}.network-row .ncol-login,.network-row .ncol-windsor,.network-row .ncol-url,.network-hdr .ncol-login,.network-hdr .ncol-windsor,.network-hdr .ncol-url{display:none}.network-edit-grid{grid-template-columns:1fr}}
 
 /* COSTS */
 .ctable{width:100%;border-collapse:collapse}
@@ -958,6 +968,8 @@ const SM={
 };
 const priCls={1:'ip1',2:'ip2',3:'ip3',4:'ip4'};
 const priLbl={1:'Urgente',2:'Alta',3:'Média',4:'Baixa'};
+const NETWORKS=['Instagram','TikTok','YouTube','Facebook','X','LinkedIn','Site','Outro'];
+const WINDSOR_DEFAULT={Instagram:'instagram_insights',TikTok:'tiktok_organic',YouTube:'youtube_analytics',Facebook:'facebook_page_insights',X:'twitter_ads',LinkedIn:'linkedin_pages',Site:'ga4',Outro:''};
 
 const DEFAULT_CTX = `🖥️ AMBIENTE DE DESENVOLVIMENTO — CONTEXTO FIXO
 
@@ -1158,9 +1170,9 @@ const DEFS = {
     {id:'t16',name:'Z-API',cat:'Dev',email:'',url:'app.z-api.io/app',notes:'API WhatsApp alternativa.'},
   ],
   profiles:[
-    {id:'pf1',name:'Tâmara Cavalcante',network:'Instagram',handle:'@tamaraorganiza',login:'',password:'',url:'instagram.com/tamaraorganiza',windsor:'instagram_insights',metrics:'Pendente',notes:'Perfil da marca Tâmara Cavalcante / Personal Organizer.'},
-    {id:'pf2',name:'Padre Miguel',network:'Instagram',handle:'',login:'',password:'',url:'',windsor:'instagram_public',metrics:'Não conectado',notes:'Personagem católico para vídeos curtos e UGC.'},
-    {id:'pf3',name:'Conselhos',network:'Instagram',handle:'',login:'',password:'',url:'',windsor:'instagram_public',metrics:'Não conectado',notes:'Perfil de conteúdo/conselhos.'}
+    {id:'pf1',name:'Tâmara Cavalcante',notes:'Perfil da marca Tâmara Cavalcante / Personal Organizer.',networks:{Instagram:{handle:'@tamaraorganiza',url:'instagram.com/tamaraorganiza',login:'',password:'',windsor:'instagram_insights',accountId:'',metrics:'Pendente'}}},
+    {id:'pf2',name:'Padre Miguel',notes:'Personagem católico para vídeos curtos e UGC.',networks:{Instagram:{handle:'',url:'',login:'',password:'',windsor:'instagram_public',accountId:'',metrics:'Não conectado'}}},
+    {id:'pf3',name:'Conselhos',notes:'Perfil de conteúdo/conselhos.',networks:{Instagram:{handle:'',url:'',login:'',password:'',windsor:'instagram_public',accountId:'',metrics:'Não conectado'}}}
   ],
   costs:[{"id":"imp000","service":"Replit","val":144.5,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-01-03","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp001","service":"IOF","val":5.09,"freq":"Único","proj":"","cur":"BRL","date":"2026-01-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp002","service":"OpenAI ChatGPT","val":42.58,"freq":"Único","proj":"","cur":"BRL","date":"2026-01-11","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp003","service":"IOF","val":1.48,"freq":"Único","proj":"","cur":"BRL","date":"2026-01-12","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp004","service":"Google One","val":49.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-01-16","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp005","service":"Replit","val":138.5,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-02-03","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp006","service":"Replit","val":32.35,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-02-03","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp007","service":"IOF","val":1.11,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp008","service":"IOF","val":4.88,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp009","service":"Render","val":66.93,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-02-06","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp010","service":"Render","val":36.8,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-02-06","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp011","service":"IOF","val":2.33,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-07","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp012","service":"IOF","val":1.28,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-07","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp013","service":"OpenAI ChatGPT","val":42.41,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-11","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp014","service":"IOF","val":1.49,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-12","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp015","service":"Google One","val":49.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-02-16","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp016","service":"Meta Ads (Facebook)","val":340.39,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-02-23","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp017","service":"Meta Ads (Facebook)","val":83.09,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-02","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp018","service":"Claude.ai","val":117.76,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-03-05","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp019","service":"IOF","val":4.11,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-06","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp020","service":"Meta Ads (Facebook)","val":151.88,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-10","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp021","service":"Meta Ads (Facebook)","val":83.09,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-11","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp022","service":"Meta Ads (Facebook)","val":24.51,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-13","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp023","service":"Google One","val":49.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-16","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp024","service":"Replit","val":110.6,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-03-18","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp025","service":"IOF","val":3.87,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-19","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp026","service":"Replit","val":288.58,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-03-20","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp027","service":"IOF","val":10.1,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-21","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp028","service":"Locaweb","val":64.9,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-29","cat":"Infraestrutura","nature":"Operacional","obs":""},{"id":"imp029","service":"Locaweb","val":64.9,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-29","cat":"Infraestrutura","nature":"Operacional","obs":""},{"id":"imp030","service":"Render","val":59.59,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-03-29","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp031","service":"Replit","val":285.47,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-03-29","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp032","service":"IOF","val":2.06,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-30","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp033","service":"IOF","val":9.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-03-30","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp034","service":"Locaweb","val":31.8,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-03-31","cat":"Infraestrutura","nature":"Operacional","obs":""},{"id":"imp035","service":"IOF","val":24.28,"freq":"Único","proj":"","cur":"BRL","date":"2026-04-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp036","service":"Replit","val":273.72,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-04-01","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp037","service":"IOF","val":9.57,"freq":"Único","proj":"","cur":"BRL","date":"2026-04-02","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp038","service":"Claude.ai","val":117.29,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-04-09","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp039","service":"IOF","val":4.1,"freq":"Único","proj":"","cur":"BRL","date":"2026-04-10","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp040","service":"Meta Ads (Facebook)","val":84.11,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-12","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp041","service":"Meta Ads (Facebook)","val":40.36,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-13","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp042","service":"Escritório Virtual Marcus","val":216.7,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-16","cat":"Administrativo","nature":"Operacional","obs":""},{"id":"imp043","service":"Escritório Virtual Marcus","val":216.7,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-16","cat":"Administrativo","nature":"Operacional","obs":""},{"id":"imp044","service":"Escritório Virtual Marcus","val":216.7,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-16","cat":"Administrativo","nature":"Operacional","obs":""},{"id":"imp045","service":"Replit","val":254.28,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-04-18","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp046","service":"Replit","val":105.4,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-04-18","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp047","service":"IOF","val":8.91,"freq":"Único","proj":"","cur":"BRL","date":"2026-04-19","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp048","service":"IOF","val":3.69,"freq":"Único","proj":"","cur":"BRL","date":"2026-04-19","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp049","service":"Meta Ads (Facebook)","val":83.13,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-29","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp050","service":"Netlify Netlify.Com","val":46.79,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-04-30","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp051","service":"Meta Ads (Facebook)","val":83.16,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-01","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp052","service":"Google Ads","val":40.12,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-01","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp053","service":"Google Play","val":132.0,"freq":"Único","proj":"Multiplicamente","cur":"BRL","date":"2026-05-03","cat":"Loja","nature":"Investimento","obs":""},{"id":"imp054","service":"IOF","val":1.63,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp055","service":"IOF","val":0.33,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp056","service":"IOF","val":4.65,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-04","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp057","service":"Meta Ads (Facebook)","val":83.09,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-08","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp058","service":"Meta Ads (Facebook)","val":83.71,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-09","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp059","service":"Claude.ai","val":110.0,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-05-09","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp060","service":"IOF","val":0.49,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-11","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp061","service":"IOF","val":1.21,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-11","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp062","service":"X Premium","val":14.0,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-11","cat":"SaaS / Assinaturas","nature":"Investimento","obs":""},{"id":"imp063","service":"Render","val":65.8,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-05-12","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp064","service":"Render","val":67.74,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-05-12","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp065","service":"Meta Ads (Facebook)","val":55.78,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-13","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp066","service":"IOF","val":0.72,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-13","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp067","service":"IOF","val":0.74,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-13","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp068","service":"Anthropic API","val":270.0,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-05-13","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp069","service":"IOF","val":2.97,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-14","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp070","service":"Claude.ai","val":110.0,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-05-14","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp071","service":"Anthropic API","val":102.17,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-05-14","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp072","service":"IOF","val":3.85,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-15","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp073","service":"IOF","val":1.12,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-15","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp074","service":"Google One","val":49.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-17","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp076","service":"Replit","val":17.16,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-05-19","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp077","service":"Replit","val":106.6,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-05-19","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp078","service":"IOF","val":0.59,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-20","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp079","service":"IOF","val":3.73,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-20","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp080","service":"Meta Ads (Facebook)","val":83.11,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-25","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp081","service":"Kling AI","val":39.02,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-05-31","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp082","service":"OpenAI API","val":26.8,"freq":"Único","proj":"","cur":"BRL","date":"2026-05-31","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp083","service":"ElevenLabs","val":32.16,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-05-31","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp084","service":"ElevenLabs","val":117.92,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-05-31","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp085","service":"X Developer","val":27.93,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-05-31","cat":"SaaS / Assinaturas","nature":"Investimento","obs":""},{"id":"imp086","service":"IOF","val":1.34,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp087","service":"IOF","val":0.96,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp088","service":"IOF","val":0.96,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp089","service":"IOF","val":4.13,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp090","service":"IOF","val":1.13,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-01","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp091","service":"Kling AI","val":54.42,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-01","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp092","service":"Railway","val":26.65,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-06-01","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp093","service":"X Premium","val":14.82,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-06-01","cat":"SaaS / Assinaturas","nature":"Investimento","obs":""},{"id":"imp094","service":"X Developer","val":26.65,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-06-01","cat":"SaaS / Assinaturas","nature":"Investimento","obs":""},{"id":"imp095","service":"IOF","val":0.96,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-02","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp096","service":"IOF","val":0.96,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-02","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp097","service":"IOF","val":1.92,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-02","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp098","service":"IOF","val":0.53,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-02","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp099","service":"Google","val":96.99,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-02","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp100","service":"Google Workspace","val":34.77,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-03","cat":"Operacional","nature":"Operacional","obs":""},{"id":"imp101","service":"HeyGen","val":163.62,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-04","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp102","service":"IOF","val":5.71,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-05","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp103","service":"Kling AI","val":146.72,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-05","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp104","service":"Render","val":66.18,"freq":"Único","proj":"PlannerOrganiza SaaS","cur":"BRL","date":"2026-06-05","cat":"Infraestrutura","nature":"Investimento","obs":""},{"id":"imp105","service":"IOF","val":5.15,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-06","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp106","service":"IOF","val":2.33,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-06","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp107","service":"Locaweb","val":68.28,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-06-06","cat":"Infraestrutura","nature":"Operacional","obs":""},{"id":"imp108","service":"Midjourney","val":54.6,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-11","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp109","service":"Fal.ai","val":113.07,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-12","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp110","service":"IOF","val":1.91,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-12","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp111","service":"Anthropic API","val":263.03,"freq":"Único","proj":"Empresa / Desenvolvimento","cur":"BRL","date":"2026-06-12","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp112","service":"Fal.ai","val":108.2,"freq":"Único","proj":"Personagens Virtuais","cur":"BRL","date":"2026-06-13","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp113","service":"IOF","val":3.95,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-13","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp114","service":"IOF","val":9.2,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-13","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp115","service":"OpenAI API","val":54.1,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-13","cat":"Ferramentas IA","nature":"Investimento","obs":""},{"id":"imp116","service":"Upload Post","val":123.78,"freq":"Único","proj":"Tâmara Cavalcante","cur":"BRL","date":"2026-06-13","cat":"Marketing","nature":"Marketing","obs":""},{"id":"imp117","service":"IOF","val":4.33,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-14","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp118","service":"IOF","val":3.79,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-14","cat":"IOF / Taxas","nature":"Operacional","obs":""},{"id":"imp119","service":"IOF","val":1.89,"freq":"Único","proj":"","cur":"BRL","date":"2026-06-14","cat":"IOF / Taxas","nature":"Operacional","obs":""}],
   ideias:[
@@ -1668,41 +1680,140 @@ function saveEditTool(id){
   save();renderTools();updateBadges();
 }
 
+function emptyNet(network){
+  return {handle:'',url:'',login:'',password:'',windsor:WINDSOR_DEFAULT[network]||'',accountId:'',metrics:'Não conectado'};
+}
+function ensureProfileNetworks(p){
+  if(!p.networks) p.networks={};
+  // migração automática do formato antigo: 1 linha por rede
+  if(p.network && !p.networks[p.network]){
+    p.networks[p.network]={handle:p.handle||'',url:p.url||'',login:p.login||'',password:p.password||'',windsor:p.windsor||WINDSOR_DEFAULT[p.network]||'',accountId:p.accountId||'',metrics:p.metrics||'Não conectado'};
+  }
+  NETWORKS.forEach(n=>{ if(!p.networks[n]) p.networks[n]=emptyNet(n); });
+  return p.networks;
+}
+function migrateProfiles(){
+  D.profiles=D.profiles||[];
+  // agrupa registros antigos com mesmo nome em um perfil único com várias redes
+  const map={};
+  D.profiles.forEach(p=>{
+    const key=(p.name||'Sem nome').trim().toLowerCase();
+    if(!map[key]) map[key]={id:p.id||uid(),name:p.name||'Sem nome',notes:p.notes||'',networks:{}};
+    if(p.notes && !map[key].notes) map[key].notes=p.notes;
+    if(p.network){
+      map[key].networks[p.network]={handle:p.handle||'',url:p.url||'',login:p.login||'',password:p.password||'',windsor:p.windsor||WINDSOR_DEFAULT[p.network]||'',accountId:p.accountId||'',metrics:p.metrics||'Não conectado'};
+    } else if(p.networks){
+      Object.assign(map[key].networks,p.networks);
+    }
+  });
+  D.profiles=Object.values(map).map(p=>{ensureProfileNetworks(p);return p;});
+}
+function configuredNetworks(p){
+  const nets=ensureProfileNetworks(p);
+  return NETWORKS.filter(n=>{
+    const x=nets[n]||{};
+    return (x.handle||x.url||x.login||x.password||x.accountId||x.metrics==='Conectado');
+  });
+}
 function renderProfiles(){
   const el=document.getElementById('profiles-grid'); if(!el) return;
+  migrateProfiles();
   const search=(document.getElementById('profile-search')?.value||'').toLowerCase();
   const netF=document.getElementById('profile-net-filter')?.value||'';
-  D.profiles=D.profiles||[];
-  let list=D.profiles;
-  if(netF) list=list.filter(p=>p.network===netF);
-  if(search) list=list.filter(p=>(p.name||'').toLowerCase().includes(search)||(p.network||'').toLowerCase().includes(search)||(p.handle||'').toLowerCase().includes(search)||(p.login||'').toLowerCase().includes(search)||(p.notes||'').toLowerCase().includes(search));
+  let list=D.profiles||[];
+  if(search) list=list.filter(p=>{
+    const nets=ensureProfileNetworks(p);
+    const networkText=NETWORKS.map(n=>`${n} ${nets[n].handle||''} ${nets[n].login||''} ${nets[n].url||''} ${nets[n].windsor||''}`).join(' ');
+    return (p.name||'').toLowerCase().includes(search)||(p.notes||'').toLowerCase().includes(search)||networkText.toLowerCase().includes(search);
+  });
+  if(netF) list=list.filter(p=>!!ensureProfileNetworks(p)[netF]);
   if(!D.profiles.length){el.innerHTML='<div class="empty"><strong>Nenhum perfil</strong>Adicione os perfis que você administra.</div>';return;}
   if(!list.length){el.innerHTML='<div class="empty">Nenhum perfil com esse filtro.</div>';return;}
   el.innerHTML=`<div class="profile-list">
-    <div class="profile-hdr"><div>Perfil</div><div>Rede</div><div class="pcol-handle">Handle</div><div class="pcol-login">Login</div><div class="pcol-metric">Métricas</div><div></div></div>
+    <div class="profile-hdr"><div>Perfil</div><div>Redes</div><div class="pcol-handle">Principais handles</div><div class="pcol-login">Logins</div><div class="pcol-metric">Métricas</div><div></div></div>
     ${list.map(p=>{
-      const url=normalizeUrl(p.url);
+      const nets=ensureProfileNetworks(p);
+      const conf=configuredNetworks(p);
+      const shown=netF?[netF]:NETWORKS;
+      const handles=conf.map(n=>nets[n].handle).filter(Boolean).slice(0,3).join(' · ')||'—';
+      const logins=conf.map(n=>nets[n].login).filter(Boolean).slice(0,2).join(' · ')||'—';
+      const connected=NETWORKS.filter(n=>nets[n].metrics==='Conectado').length;
       return `<div class="profile-row" onclick="toggleDetail('${p.id}','profile')">
-        <div><div class="profile-name">${safeText(p.name)}</div><div class="profile-muted">${safeText(p.notes||'')}</div></div>
-        <div><span class="profile-net">${safeText(p.network||'Outro')}</span></div>
-        <div class="profile-muted pcol-handle">${safeText(p.handle||'—')}</div>
-        <div class="profile-muted pcol-login">${safeText(p.login||'—')}</div>
-        <div class="profile-muted pcol-metric">${safeText(p.metrics||'Não conectado')}</div>
+        <div><div class="profile-name">${safeText(p.name)}</div><div class="profile-muted">${safeText(p.notes||'Clique para configurar todas as redes')}</div></div>
+        <div><span class="profile-net">${conf.length||0}/${NETWORKS.length}</span></div>
+        <div class="profile-muted pcol-handle">${safeText(handles)}</div>
+        <div class="profile-muted pcol-login">${safeText(logins)}</div>
+        <div class="profile-muted pcol-metric">${connected?connected+' conectada(s)':'Não conectado'}</div>
         <div class="tactions" onclick="event.stopPropagation()">
-          ${url?`<a class="tool-open-mini" href="${safeText(url)}" target="_blank" rel="noopener">Abrir</a>`:''}
+          <button class="tedit-btn" onclick="startEditProfile('${p.id}')">Editar</button>
           <button class="ibtn" onclick="delProfile('${p.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
         </div>
       </div>
       <div class="profile-detail" id="profile-detail-${p.id}">
-        <div class="profile-detail-box">
-          <div><div class="detail-k">Login</div><div class="detail-v mono">${safeText(p.login||'—')}</div></div>
-          <div><div class="detail-k">Senha</div><div class="detail-v mono">${p.password?'••••••••':'—'}</div>${p.password?`<div class="detail-actions"><button class="detail-btn" id="copy-prof-${p.id}" onclick="copySecret('${safeText(p.password)}','copy-prof-${p.id}')">Copiar senha</button></div>`:''}</div>
-          <div><div class="detail-k">Windsor</div><div class="detail-v mono">${safeText(p.windsor||'—')}</div></div>
-          <div><div class="detail-k">Notas</div><div class="detail-v">${safeText(p.notes||'—')}</div></div>
+        <div class="network-table">
+          <div class="network-hdr"><div>Rede</div><div>Handle</div><div class="ncol-login">Login</div><div class="ncol-url">URL</div><div class="ncol-windsor">Windsor</div><div>Status</div></div>
+          ${shown.map(n=>{
+            const x=nets[n]||emptyNet(n);
+            const url=normalizeUrl(x.url);
+            return `<div class="network-row">
+              <div><span class="profile-net">${safeText(n)}</span></div>
+              <div class="profile-muted">${safeText(x.handle||'—')}</div>
+              <div class="profile-muted ncol-login">${safeText(x.login||'—')}</div>
+              <div class="profile-muted ncol-url">${url?`<a class="tool-open-mini" href="${safeText(url)}" target="_blank" rel="noopener">Abrir</a>`:'—'}</div>
+              <div class="ncol-windsor"><span class="windsor-pill ${x.windsor?'':'off'}">${safeText(x.windsor||'—')}</span></div>
+              <div class="profile-muted">${safeText(x.metrics||'Não conectado')}</div>
+            </div>`;
+          }).join('')}
         </div>
       </div>`;
     }).join('')}
   </div>`;
+}
+function startEditProfile(id){
+  migrateProfiles();
+  const p=D.profiles.find(x=>x.id===id); if(!p) return;
+  const detail=document.getElementById('profile-detail-'+id);
+  if(!detail) return;
+  detail.classList.add('active');
+  const nets=ensureProfileNetworks(p);
+  detail.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;margin-bottom:10px">
+    <div class="fg">
+      <div class="fgrp"><label class="flbl">Nome do perfil</label><input class="finput" id="pe-name-${id}" value="${safeText(p.name)}"></div>
+      <div class="fgrp"><label class="flbl">Notas gerais</label><input class="finput" id="pe-notes-${id}" value="${safeText(p.notes||'')}"></div>
+    </div>
+  </div>
+  <div class="network-table">
+    ${NETWORKS.map(n=>{
+      const x=nets[n]||emptyNet(n);
+      return `<div class="network-edit-grid">
+        <div><div class="profile-net">${safeText(n)}</div></div>
+        <div><div class="network-edit-label">Handle</div><input class="tinput" id="pe-${id}-${n}-handle" value="${safeText(x.handle||'')}" placeholder="@usuario"></div>
+        <div><div class="network-edit-label">URL</div><input class="tinput" id="pe-${id}-${n}-url" value="${safeText(x.url||'')}" placeholder="instagram.com/usuario"></div>
+        <div><div class="network-edit-label">Login</div><input class="tinput" id="pe-${id}-${n}-login" value="${safeText(x.login||'')}"></div>
+        <div><div class="network-edit-label">Senha</div><input class="tinput" type="password" id="pe-${id}-${n}-password" value="${safeText(x.password||'')}"></div>
+        <div><div class="network-edit-label">Windsor / status</div><input class="tinput" id="pe-${id}-${n}-windsor" value="${safeText(x.windsor||WINDSOR_DEFAULT[n]||'')}" placeholder="connector"><select class="tinput" id="pe-${id}-${n}-metrics" style="margin-top:4px"><option ${x.metrics==='Não conectado'?'selected':''}>Não conectado</option><option ${x.metrics==='Pendente'?'selected':''}>Pendente</option><option ${x.metrics==='Conectado'?'selected':''}>Conectado</option></select></div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="factions" style="margin-top:12px"><button class="btn btn-p btn-sm" onclick="saveEditProfile('${id}')">Salvar perfil</button><button class="btn btn-g btn-sm" onclick="renderProfiles();setTimeout(()=>toggleDetail('${id}','profile'),50)">Cancelar</button></div>`;
+}
+function saveEditProfile(id){
+  const p=D.profiles.find(x=>x.id===id); if(!p) return;
+  p.name=document.getElementById('pe-name-'+id).value.trim()||p.name;
+  p.notes=document.getElementById('pe-notes-'+id).value.trim();
+  p.networks=p.networks||{};
+  NETWORKS.forEach(n=>{
+    p.networks[n]={
+      handle:document.getElementById(`pe-${id}-${n}-handle`).value.trim(),
+      url:document.getElementById(`pe-${id}-${n}-url`).value.trim().replace(/^https?:\/\//,''),
+      login:document.getElementById(`pe-${id}-${n}-login`).value.trim(),
+      password:document.getElementById(`pe-${id}-${n}-password`).value.trim(),
+      windsor:document.getElementById(`pe-${id}-${n}-windsor`).value.trim(),
+      accountId:(p.networks[n]||{}).accountId||'',
+      metrics:document.getElementById(`pe-${id}-${n}-metrics`).value
+    };
+  });
+  save();renderProfiles();updateBadges();
 }
 
 // COSTS
@@ -1842,7 +1953,19 @@ function addIdeia(){
 function addProfile(){
   const name=document.getElementById('pf-name').value.trim();if(!name)return alert('Nome obrigatório');
   D.profiles=D.profiles||[];
-  D.profiles.push({id:uid(),name,network:document.getElementById('pf-network').value,handle:document.getElementById('pf-handle').value.trim(),url:document.getElementById('pf-url').value.trim(),login:document.getElementById('pf-login').value.trim(),password:document.getElementById('pf-password').value.trim(),windsor:document.getElementById('pf-windsor').value.trim(),metrics:document.getElementById('pf-metrics').value,notes:document.getElementById('pf-notes').value.trim()});
+  const network=document.getElementById('pf-network').value;
+  const profile={id:uid(),name,notes:document.getElementById('pf-notes').value.trim(),networks:{}};
+  NETWORKS.forEach(n=>profile.networks[n]=emptyNet(n));
+  profile.networks[network]={
+    handle:document.getElementById('pf-handle').value.trim(),
+    url:document.getElementById('pf-url').value.trim().replace(/^https?:\/\//,''),
+    login:document.getElementById('pf-login').value.trim(),
+    password:document.getElementById('pf-password').value.trim(),
+    windsor:document.getElementById('pf-windsor').value.trim()||WINDSOR_DEFAULT[network]||'',
+    accountId:'',
+    metrics:document.getElementById('pf-metrics').value
+  };
+  D.profiles.push(profile);
   save();renderAll();go('perfis');clrForm('perfil');
 }
 function addTool(){
