@@ -1555,6 +1555,7 @@ function startEditTool(id){
   document.getElementById('td-name-'+id).innerHTML=`<input class="tinput" id="te-name-${id}" value="${t.name}">`;
   document.getElementById('td-cat-'+id).innerHTML=`<select class="tinput" id="te-cat-${id}" style="padding:4px 6px">${catOpts}</select>`;
   document.getElementById('td-email-'+id).innerHTML=`<input class="tinput" id="te-email-${id}" value="${t.email||''}" placeholder="email@...">`;
+    document.getElementById('td-password-'+id).innerHTML=`<input class="tinput" type="password" id="te-password-${id}" value="${t.password||''}" placeholder="Senha">`;
   document.getElementById('td-url-'+id).innerHTML=`<input class="tinput" id="te-url-${id}" value="${t.url||''}" placeholder="console.firebase.google.com">`;
   document.getElementById('tbtn-'+id).className='tedit-btn save';
   document.getElementById('tbtn-'+id).textContent='Salvar';
