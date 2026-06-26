@@ -921,7 +921,7 @@ window.db   = firebase.firestore();
       <div class="fgrp"><label class="flbl">URL</label><input class="finput" id="pf-url" placeholder="instagram.com/usuario"></div>
       <div class="fgrp"><label class="flbl">Login / email</label><input class="finput" id="pf-login"></div>
       <div class="fgrp"><label class="flbl">Senha</label><input class="finput" id="pf-password" type="password" placeholder="••••••••"></div>
-      <div class="fgrp"><label class="flbl">Windsor source / conector</label><input class="finput" id="pf-windsor" placeholder="instagram_insights, tiktok_organic..."></div>
+      <div class="fgrp"><label class="flbl">Windsor source / conector</label><input class="finput" id="pf-windsor" placeholder="instagram_insights, tiktok_organic..."><a href="https://app.windsor.ai/sources" target="_blank" style="display:inline-block;margin-top:4px;font-size:10px;color:var(--acc);text-decoration:none;font-weight:700;" title="Abrir Windsor para ver conectores">? Windsor</a></div>
       <div class="fgrp"><label class="flbl">Status métricas</label><select class="fsel" id="pf-metrics"><option>Não conectado</option><option>Conectado</option><option>Pendente</option></select></div>
       <div class="fgrp s2"><label class="flbl">Notas</label><textarea class="fta" id="pf-notes" placeholder="Objetivo do perfil, público, observações de acesso..."></textarea></div>
     </div>
@@ -1859,7 +1859,7 @@ function startEditProfile(id){
     <div class="fg">
       <div class="fgrp"><label class="flbl">Nome do perfil</label><input class="finput" id="pe-name-${id}" value="${safeText(p.name)}"></div>
       <div class="fgrp"><label class="flbl">Notas gerais</label><input class="finput" id="pe-notes-${id}" value="${safeText(p.notes||'')}"></div>
-    <div class="fgrp s2"><label class="flbl">Windsor persona</label><input class="finput" id="pe-windsor-${id}" value="${safeText(p.windsor||'')}" placeholder="tamara, padremiguel..."></div>
+    <div class="fgrp s2"><label class="flbl">Windsor persona</label><input class="finput" id="pe-windsor-${id}" value="${safeText(p.windsor||'')}" placeholder="tamara, padremiguel..."><a href="https://app.windsor.ai/conversations" target="_blank" style="display:inline-block;margin-top:4px;font-size:10px;color:var(--acc);text-decoration:none;font-weight:700;" title="Abrir Windsor Conversations">? Windsor AI</a></div>
     </div>
   </div>
   <div class="network-table">
