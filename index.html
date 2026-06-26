@@ -1881,8 +1881,7 @@ function saveEditProfile(id){
   const p=D.profiles.find(x=>x.id===id); if(!p) return;
   p.name=document.getElementById('pe-name-'+id).value.trim()||p.name;
   p.notes=document.getElementById('pe-notes-'+id).value.trim();
-  const wEl=document.getElementById('pe-windsor-'+id); p.windsor=wEl?wEl.value.trim():(p.windsor||'');
-  const wEl=document.getElementById('pe-windsor-'+id); p.windsor=wEl?wEl.value.trim():(p.windsor||'');
+  p.windsor=(document.getElementById('pe-windsor-'+id)||{value:p.windsor||''}).value.trim();
   p.networks=p.networks||{};
   editListFor(id,p).forEach(n=>{
     p.networks[n]={
