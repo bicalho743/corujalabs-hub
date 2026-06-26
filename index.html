@@ -1871,7 +1871,7 @@ function startEditProfile(id){
         <div><div class="network-edit-label">URL</div><input class="tinput" id="pe-${id}-${n}-url" value="${safeText(x.url||'')}" placeholder="instagram.com/usuario"></div>
         <div><div class="network-edit-label">Login</div><input class="tinput" id="pe-${id}-${n}-login" value="${safeText(x.login||'')}"></div>
         <div><div class="network-edit-label">Senha</div><input class="tinput" type="password" id="pe-${id}-${n}-password" value="${safeText(x.password||'')}"></div>
-        <div><div class="network-edit-label">Windsor / status</div><input class="tinput" id="pe-${id}-${n}-windsor" value="${safeText(x.windsor||WINDSOR_DEFAULT[n]||'')}" placeholder="connector"><select class="tinput" id="pe-${id}-${n}-metrics" style="margin-top:4px"><option ${x.metrics==='Não conectado'?'selected':''}>Não conectado</option><option ${x.metrics==='Pendente'?'selected':''}>Pendente</option><option ${x.metrics==='Conectado'?'selected':''}>Conectado</option></select></div>
+        <div><div class="network-edit-label">Windsor / status</div><input class="tinput" id="pe-${id}-${n}-windsor" value="${safeText(x.windsor||WINDSOR_DEFAULT[n]||'')}" placeholder="connector"><a href="https://app.windsor.ai/sources" target="_blank" style="display:inline-block;margin-top:4px;font-size:10px;color:var(--acc);text-decoration:none;font-weight:700;" title="Abrir Windsor para ver conectores">↗ Windsor</a><select class="tinput" id="pe-${id}-${n}-metrics" style="margin-top:4px"><option ${x.metrics==='Não conectado'?'selected':''}>Não conectado</option><option ${x.metrics==='Pendente'?'selected':''}>Pendente</option><option ${x.metrics==='Conectado'?'selected':''}>Conectado</option></select></div>
       </div>`;
     }).join('')}
   </div>
@@ -1881,6 +1881,7 @@ function saveEditProfile(id){
   const p=D.profiles.find(x=>x.id===id); if(!p) return;
   p.name=document.getElementById('pe-name-'+id).value.trim()||p.name;
   p.notes=document.getElementById('pe-notes-'+id).value.trim();
+  const wEl=document.getElementById('pe-windsor-'+id); p.windsor=wEl?wEl.value.trim():(p.windsor||'');
   const wEl=document.getElementById('pe-windsor-'+id); p.windsor=wEl?wEl.value.trim():(p.windsor||'');
   p.networks=p.networks||{};
   editListFor(id,p).forEach(n=>{
