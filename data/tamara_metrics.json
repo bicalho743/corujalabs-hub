@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-06-27T10:59:31.480956+00:00",
+  "generated_at": "2026-06-28T11:11:05.406611+00:00",
   "account_metrics": [
-    {
-      "date": "2026-05-28",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 308.0,
-      "accounts_engaged": 13.0,
-      "likes": 18.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-05-29",
       "datasource": "instagram",
@@ -342,7 +331,18 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6155.0,
+      "followers_count": null,
+      "reach": 900.0,
+      "accounts_engaged": 19.0,
+      "likes": 28.0,
+      "comments": 0.0
+    },
+    {
+      "date": "2026-06-28",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6160.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
@@ -350,20 +350,6 @@
     }
   ],
   "post_metrics": [
-    {
-      "date": "2026-05-28",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "media_type": "REELS",
-      "media_caption": "A forma como a gente organiza o closet muda completamente a forma como a gente começa o dia. 🤍\nPorque quando cada peça tem o seu lugar — quando você passa a mão e já sabe o que vai encontrar — o que era rotina vira leveza.\nNão é só sobre ter tudo organizado.\nÉ sobre sentir que a casa trabalha por você.\nQuer transformar o seu espaço?\n#personalorganizer #closet #organizacao #tamaracavalcante",
-      "media_reach": 276.0,
-      "media_engagement": 9.0,
-      "media_saved": 1.0,
-      "media_shares": 0.0,
-      "media_comments_count": 0.0,
-      "media_like_count": 8.0,
-      "media_permalink": "https://www.instagram.com/reel/DY37vsvPXbY/"
-    },
     {
       "date": "2026-05-29",
       "datasource": "instagram",
