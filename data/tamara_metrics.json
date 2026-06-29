@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-06-28T11:11:05.406611+00:00",
+  "generated_at": "2026-06-29T13:10:55.762566+00:00",
   "account_metrics": [
-    {
-      "date": "2026-05-29",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 265.0,
-      "accounts_engaged": 13.0,
-      "likes": 15.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-05-30",
       "datasource": "instagram",
@@ -342,7 +331,18 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6160.0,
+      "followers_count": null,
+      "reach": 676.0,
+      "accounts_engaged": 16.0,
+      "likes": 29.0,
+      "comments": 0.0
+    },
+    {
+      "date": "2026-06-29",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6157.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
@@ -350,20 +350,6 @@
     }
   ],
   "post_metrics": [
-    {
-      "date": "2026-05-29",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "media_type": "REELS",
-      "media_caption": "A forma como a gente organiza um closet muda completamente a forma como a gente vive a própria rotina. 🤍\n\nPorque quando existe uma organização pensada — cada peça no lugar certo, cada espaço respeitando a sua lógica — revisar deixa de ser uma tarefa.\n\nVira um momento de certeza.\n\nVocê abre, passa o olho, e já sabe: está tudo onde precisa estar. Sem procurar. Sem ajustar. Sem estresse.\n\nNão é só sobre ter um closet bonito.\n\nÉ sobre sentir que a sua casa está trabalhando por você — todos os dias.\n\nQuer transformar o seu espaço?\n\n#personalorganizer #closet #organizacao #mercadodeluxo #tamaracavalcante",
-      "media_reach": 267.0,
-      "media_engagement": 8.0,
-      "media_saved": 1.0,
-      "media_shares": 0.0,
-      "media_comments_count": 0.0,
-      "media_like_count": 7.0,
-      "media_permalink": "https://www.instagram.com/reel/DY7jDRGPKDA/"
-    },
     {
       "date": "2026-06-21",
       "datasource": "instagram",
