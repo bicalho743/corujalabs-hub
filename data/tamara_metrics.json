@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-06-29T13:10:55.762566+00:00",
+  "generated_at": "2026-06-30T11:47:06.539952+00:00",
   "account_metrics": [
-    {
-      "date": "2026-05-30",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 179.0,
-      "accounts_engaged": 16.0,
-      "likes": 14.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-05-31",
       "datasource": "instagram",
@@ -342,7 +331,18 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6157.0,
+      "followers_count": null,
+      "reach": 639.0,
+      "accounts_engaged": 43.0,
+      "likes": 57.0,
+      "comments": 2.0
+    },
+    {
+      "date": "2026-06-30",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6158.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
@@ -363,6 +363,20 @@
       "media_comments_count": 0.0,
       "media_like_count": 3.0,
       "media_permalink": "https://www.instagram.com/p/DZ25k37kdG1/"
+    },
+    {
+      "date": "2026-06-29",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "media_type": "REELS",
+      "media_caption": "Algumas memórias a gente mede em Copas do Mundo. #copamundo2026",
+      "media_reach": 441.0,
+      "media_engagement": 37.0,
+      "media_saved": 0.0,
+      "media_shares": 0.0,
+      "media_comments_count": 2.0,
+      "media_like_count": 35.0,
+      "media_permalink": "https://www.instagram.com/reel/DaLs-c7vCeV/"
     }
   ]
 }
