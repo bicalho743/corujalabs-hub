@@ -2203,6 +2203,7 @@ async function fsLoad(uid){
     } else {
       needsSave = true; // no document yet — save all defaults
     }
+    try{localStorage.setItem(SK,JSON.stringify(D));}catch(e){}
     // needsSave handled after _dataLoaded is set below
     const edoc = await db.collection('emails').doc(uid).get();
     if(edoc.exists && edoc.data().rows) emailRows = edoc.data().rows;
