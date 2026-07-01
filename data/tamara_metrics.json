@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-06-30T11:47:06.539952+00:00",
+  "generated_at": "2026-07-01T12:11:20.308639+00:00",
   "account_metrics": [
-    {
-      "date": "2026-05-31",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 130.0,
-      "accounts_engaged": 6.0,
-      "likes": 8.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-06-01",
       "datasource": "instagram",
@@ -342,7 +331,18 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6158.0,
+      "followers_count": null,
+      "reach": 177.0,
+      "accounts_engaged": 12.0,
+      "likes": 7.0,
+      "comments": 0.0
+    },
+    {
+      "date": "2026-07-01",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6157.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
@@ -370,12 +370,12 @@
       "account_name": "tamaraorganiza",
       "media_type": "REELS",
       "media_caption": "Algumas memórias a gente mede em Copas do Mundo. #copamundo2026",
-      "media_reach": 441.0,
-      "media_engagement": 37.0,
+      "media_reach": 481.0,
+      "media_engagement": 40.0,
       "media_saved": 0.0,
       "media_shares": 0.0,
       "media_comments_count": 2.0,
-      "media_like_count": 35.0,
+      "media_like_count": 38.0,
       "media_permalink": "https://www.instagram.com/reel/DaLs-c7vCeV/"
     }
   ]
