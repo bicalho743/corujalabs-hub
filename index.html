@@ -1628,11 +1628,12 @@ function toolFaviconHtml(t){
   const meta = catMeta[effCat(t)]||catMeta.Outro;
   const src = getFaviconUrl(t);
   const fallback = `<span class="fb" style="color:${meta.col};background:${meta.bg};width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:7px">${t.name.slice(0,2).toUpperCase()}</span>`;
+  const fallbackJs = fallback.replace(/"/g,'\\"');
   if(src){
     return `<div class="tool-favicon">
       <img src="${src}" width="28" height="28" style="object-fit:contain;border-radius:3px"
-        onerror="this.outerHTML='${fallback.replace(/'/g,"\\'")}'"
-        onload="if(!this.naturalWidth){this.outerHTML='${fallback.replace(/'/g,"\\'")}'}">
+        onerror='this.outerHTML="${fallbackJs}"'
+        onload='if(!this.naturalWidth){this.outerHTML="${fallbackJs}"}'>
     </div>`;
   }
   return `<div class="tool-favicon" style="background:${meta.bg}">${fallback}</div>`;
