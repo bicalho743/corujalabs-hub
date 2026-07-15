@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-07-14T10:50:35.094367+00:00",
+  "generated_at": "2026-07-15T10:54:15.776247+00:00",
   "account_metrics": [
-    {
-      "date": "2026-06-14",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 645.0,
-      "accounts_engaged": 5.0,
-      "likes": 3.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-06-15",
       "datasource": "instagram",
@@ -333,7 +322,7 @@
       "source": "instagram",
       "followers_count": null,
       "reach": 3996.0,
-      "accounts_engaged": 21.0,
+      "accounts_engaged": 22.0,
       "likes": 22.0,
       "comments": 0.0
     },
@@ -342,18 +331,29 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6162.0,
+      "followers_count": null,
+      "reach": 2696.0,
+      "accounts_engaged": 20.0,
+      "likes": 46.0,
+      "comments": 0.0
+    },
+    {
+      "date": "2026-07-15",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6163.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
       "comments": null
     },
     {
-      "date": "2026-07-14",
+      "date": "2026-07-15",
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6162.0,
+      "followers_count": 6163.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
