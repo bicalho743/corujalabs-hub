@@ -5,19 +5,8 @@
   "account_id": "17841410001362576",
   "account_name": "tamaraorganiza",
   "range_days": 30,
-  "generated_at": "2026-07-19T10:37:17.065999+00:00",
+  "generated_at": "2026-07-20T11:48:39.352489+00:00",
   "account_metrics": [
-    {
-      "date": "2026-06-19",
-      "datasource": "instagram",
-      "account_name": "tamaraorganiza",
-      "source": "instagram",
-      "followers_count": null,
-      "reach": 760.0,
-      "accounts_engaged": 14.0,
-      "likes": 12.0,
-      "comments": 0.0
-    },
     {
       "date": "2026-06-20",
       "datasource": "instagram",
@@ -342,7 +331,18 @@
       "datasource": "instagram",
       "account_name": "tamaraorganiza",
       "source": "instagram",
-      "followers_count": 6184.0,
+      "followers_count": null,
+      "reach": 5967.0,
+      "accounts_engaged": 90.0,
+      "likes": 81.0,
+      "comments": 48.0
+    },
+    {
+      "date": "2026-07-20",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "source": "instagram",
+      "followers_count": 6431.0,
       "reach": null,
       "accounts_engaged": null,
       "likes": null,
@@ -391,6 +391,20 @@
       "media_comments_count": 35.0,
       "media_like_count": 46.0,
       "media_permalink": "https://www.instagram.com/reel/Da0XAGjxug5/"
+    },
+    {
+      "date": "2026-07-19",
+      "datasource": "instagram",
+      "account_name": "tamaraorganiza",
+      "media_type": "REELS",
+      "media_caption": "Mais um projeto finalizado. E mais uma casa entregue pronta para começar.\n\nA forma como a gente organiza uma mudança muda completamente a forma como a nova casa é vivida.\n\nNesse projeto, viajei para outro estado para cuidar da organização pós-mudança de uma residência inteira. Uma casa nova, recém-entregue, com tudo ainda por definir.\n\nUma mudança bem feita não começa no caminhão. Começa nas decisões que ninguém vê — no estudo de cada ambiente, na leitura da rotina da família, na escolha do lugar certo para cada coisa antes mesmo que ela seja usada pela primeira vez.\n\nA cozinha organizada para os movimentos naturais de quem cozinha ali. O closet acompanhando a manhã, sem procura. A lavanderia com sistema que resiste ao dia corrido. A cristaleira respeitando uso, beleza e frequência. Os objetos importantes da família encontrando lugar sem perder significado.\n\nÉ um trabalho de método, tempo e atenção. Cada gaveta pensada, cada prateleira definida, cada detalhe resolvido antes que a rotina comece.\n\nE quando termina, o que fica não é só a beleza dos ambientes. É o café da manhã do dia seguinte acontecendo sem procura. É a primeira noite com conforto. É a família chegando e simplesmente vivendo.\n\nPorque o verdadeiro luxo de uma casa é ela funcionar em silêncio, sem pedir atenção.\n\nSua casa pronta para ser vivida.\n\nVamos transformar o seu espaço?",
+      "media_reach": 535.0,
+      "media_engagement": 12.0,
+      "media_saved": 0.0,
+      "media_shares": 1.0,
+      "media_comments_count": 0.0,
+      "media_like_count": 11.0,
+      "media_permalink": "https://www.instagram.com/reel/Da-bU06PFsD/"
     }
   ]
 }
