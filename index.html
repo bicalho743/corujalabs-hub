@@ -261,7 +261,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .mc-hero-val{font-size:40px;font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-top:4px}
 .mc-hero-val small{font-size:16px;font-weight:600;opacity:.7;letter-spacing:0}
 .mc-chips{display:flex;gap:8px;flex-wrap:wrap}
-.mc-chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:var(--r2);padding:8px 12px;min-width:120px}
+.mc-chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:var(--r2);padding:8px 12px;min-width:112px}
 .mc-chip-l{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;opacity:.75}
 .mc-chip-v{font-size:16px;font-weight:800;font-family:var(--mono);margin-top:2px}
 .mc-stack{display:flex;height:10px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.18);margin-top:22px;position:relative;z-index:1}
@@ -295,12 +295,15 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .mc-add .finput{background:var(--bg1)}
 .mc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-top:1px solid var(--border);font-size:13px;font-weight:700;color:var(--tx2)}
 .mc-total b{font-family:var(--mono);font-size:16px;color:var(--tx)}
+.mc-total-q{border-top:1px dashed var(--border);padding-top:10px;padding-bottom:10px}
+.mc-total-q small{font-weight:500;color:var(--tx3)}
+.mc-total-q b{font-size:14px;color:var(--acc)}
 .mc-empty{padding:40px 20px;text-align:center;color:var(--tx3);font-size:14px}
 .mc-empty-ic{width:52px;height:52px;border-radius:14px;background:var(--acc-bg);color:var(--acc);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
 .mc-empty strong{display:block;color:var(--tx);font-size:16px;margin-bottom:4px}
 @media(max-width:800px){
   .mc-hero{padding:20px}.mc-hero-val{font-size:32px}
-  .mc-chips{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:6px}.mc-chip:first-child{grid-column:1/-1}.mc-chip{min-width:0;padding:8px 10px}.mc-chip-v{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mc-chips{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:6px}.mc-chip{min-width:0;padding:8px 10px}.mc-chip-v{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mc-hdr{display:none}
   .mc-row{grid-template-columns:1fr 34px;gap:8px 10px;padding:12px 14px}
   .mc-name{grid-column:1/-1}.mc-row .mc-share{grid-column:1/-1}
@@ -2222,6 +2225,7 @@ function renderMonthly(){
     <div class="mc-hero-top">
       <div><div class="mc-hero-lbl">Total por mês</div><div class="mc-hero-val"><small>R$</small> ${fmtBRL(total)}</div></div>
       <div class="mc-chips">
+        <div class="mc-chip"><div class="mc-chip-l">Por trimestre</div><div class="mc-chip-v">R$ ${fmtBRL(total*3)}</div></div>
         <div class="mc-chip"><div class="mc-chip-l">Por ano</div><div class="mc-chip-v">R$ ${fmtBRL(total*12)}</div></div>
         <div class="mc-chip"><div class="mc-chip-l">Projetos</div><div class="mc-chip-v">${rows.length}</div></div>
         <div class="mc-chip"><div class="mc-chip-l">Média</div><div class="mc-chip-v">R$ ${fmtBRL(rows.length?total/rows.length:0)}</div></div>
@@ -2247,7 +2251,7 @@ function renderMonthly(){
         <div class="mc-share"><div class="mc-share-bg"><div style="width:${pct(m)}%;background:${col(i)}"></div></div><span class="mc-share-pct">${pct(m).toFixed(0)}%</span></div>
         <div class="mc-money"><span>R$</span><input inputmode="decimal" value="${fmtBRL(m.val)}" onfocus="this.select()" onchange="updateMonthly('${m.id}','val',parseBRL(this.value))" onkeydown="if(event.key==='Enter')this.blur()"></div>
         <button class="mc-del" title="Remover" onclick="delMonthly('${m.id}')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>
-      </div>`;}).join('')+`<div class="mc-total"><span>Total mensal</span><b>R$ ${fmtBRL(total)}</b></div>`;
+      </div>`;}).join('')+`<div class="mc-total"><span>Total mensal</span><b>R$ ${fmtBRL(total)}</b></div><div class="mc-total mc-total-q"><span>Total trimestral <small>(3 meses)</small></span><b>R$ ${fmtBRL(total*3)}</b></div>`;
   }
   const dl=document.getElementById('mc-proj-list');
   if(dl){const used=new Set(rows.map(m=>m.proj));dl.innerHTML=D.projects.filter(p=>p&&!used.has(p.name)).map(p=>`<option value="${safeText(p.name)}">`).join('');}
