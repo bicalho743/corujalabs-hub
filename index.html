@@ -298,6 +298,13 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .mc-total-q{border-top:1px dashed var(--border);padding-top:10px;padding-bottom:10px}
 .mc-total-q small{font-weight:500;color:var(--tx3)}
 .mc-total-q b{font-size:14px;color:var(--acc)}
+.mc-link{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg1);border:1px solid var(--border);border-left:4px solid var(--acc);border-radius:var(--r2);padding:12px 16px;margin-bottom:14px;cursor:pointer;box-shadow:var(--shadow);transition:all .15s}
+.mc-link:hover{box-shadow:var(--shadow2);transform:translateY(-1px)}
+.mc-link-t{font-size:14px;font-weight:700;color:var(--tx);flex:1;min-width:180px}
+.mc-link-t small{display:block;font-size:12px;font-weight:500;color:var(--tx3)}
+.mc-link-v{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--tx2)}
+.mc-link-v b{color:var(--acc)}
+.ctotal:empty{display:none}
 .mc-empty{padding:40px 20px;text-align:center;color:var(--tx3);font-size:14px}
 .mc-empty-ic{width:52px;height:52px;border-radius:14px;background:var(--acc-bg);color:var(--acc);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
 .mc-empty strong{display:block;color:var(--tx);font-size:16px;margin-bottom:4px}
@@ -914,6 +921,7 @@ window.db   = firebase.firestore();
       <select id="cost-freq-filter" onchange="renderCosts()" style="background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--mono);color:var(--tx2);outline:none">
         <option value="">Todas frequências</option>
         <option value="Mensal">Mensal</option>
+        <option value="Trimestral">Trimestral</option>
         <option value="Anual">Anual</option>
         <option value="Único">Único</option>
       </select>
@@ -921,6 +929,7 @@ window.db   = firebase.firestore();
       <button class="btn btn-g btn-sm" onclick="resetCosts()" title="Recarregar dados padrão">↺ Reset</button>
     </div>
   </div>
+  <div class="mc-link" id="mc-link" onclick="go('mensal')"></div>
   <div class="fcard" style="padding:0;overflow:hidden"><table class="ctable" id="ctable"></table></div>
   <div class="ctotal" id="ctotal"></div>
 </div>
@@ -1022,7 +1031,7 @@ window.db   = firebase.firestore();
     <div class="fg g3">
       <div class="fgrp"><label class="flbl">Serviço</label><input class="finput" id="c-name" placeholder="Render Pro"></div>
       <div class="fgrp"><label class="flbl">Valor</label><input class="finput" id="c-val" placeholder="49.90"></div>
-      <div class="fgrp"><label class="flbl">Frequência</label><select class="fsel" id="c-freq"><option>Mensal</option><option>Anual</option><option>Único</option></select></div>
+      <div class="fgrp"><label class="flbl">Frequência</label><select class="fsel" id="c-freq"><option>Mensal</option><option>Trimestral</option><option>Anual</option><option>Único</option></select></div>
       <div class="fgrp"><label class="flbl">Moeda</label><select class="fsel" id="c-cur"><option value="BRL">R$ BRL</option><option value="USD">US$ USD</option></select></div>
       <div class="fgrp"><label class="flbl">Data do pagamento</label><input class="finput" type="date" id="c-date"></div>
       <div class="fgrp"><label class="flbl">Projeto</label><select class="fsel" id="c-proj"><option value="">— Geral</option></select></div>
@@ -2054,7 +2063,11 @@ function renderCosts(){
   });
 
   if(!D.costs.length){el.innerHTML='<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--tx3)">Nenhum custo.</td></tr>';document.getElementById('ctotal').innerHTML='';return;}
-  if(!list.length){el.innerHTML='<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--tx3)">Nenhum resultado.</td></tr>';document.getElementById('ctotal').innerHTML='';return;}
+  if(!list.length){
+    const msg=freqF&&freqF!=='Único'
+      ? `Nenhum lançamento marcado como <b>${freqF}</b>. Os lançamentos importados são todos "Único" — mude a frequência na coluna <b>Freq.</b>, ou use a página <a href="#" onclick="go('mensal');return false" style="color:var(--acc);font-weight:700">Custo mensal</a>.`
+      : 'Nenhum resultado.';
+    el.innerHTML=`<tr><td colspan="7" style="padding:32px;text-align:center;color:var(--tx3);line-height:1.7">${msg}</td></tr>`;document.getElementById('ctotal').innerHTML='';return;}
 
   let brl=0, usd=0;
   list.forEach(c=>{
@@ -2083,7 +2096,7 @@ function renderCosts(){
     return `<tr>
       <td style="font-weight:600">${c.service}</td>
       <td><select style="${selStyle}" onchange="updateCostField('${c.id}','proj',this.value)">${projOpts}</select></td>
-      <td><span class="badge" style="background:var(--bg3);color:var(--tx2)">${c.freq}</span></td>
+      <td><select style="${selStyle}" onchange="updateCostField('${c.id}','freq',this.value);renderCosts()">${['Mensal','Trimestral','Anual','Único',...(['Mensal','Trimestral','Anual','Único'].includes(c.freq)?[]:[c.freq])].map(o=>`<option ${o===c.freq?'selected':''}>${o}</option>`).join('')}</select></td>
       <td><input type="date" value="${c.date||''}" onchange="updateCostDate('${c.id}',this.value)" style="border:1px solid var(--border);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--mono);color:var(--tx2);background:var(--bg1);outline:none;cursor:pointer;width:130px" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></td>
       <td style="font-family:var(--mono);font-weight:700">${vs}</td>
       <td style="white-space:nowrap">
@@ -2253,6 +2266,8 @@ function renderMonthly(){
         <button class="mc-del" title="Remover" onclick="delMonthly('${m.id}')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>
       </div>`;}).join('')+`<div class="mc-total"><span>Total mensal</span><b>R$ ${fmtBRL(total)}</b></div><div class="mc-total mc-total-q"><span>Total trimestral <small>(3 meses)</small></span><b>R$ ${fmtBRL(total*3)}</b></div>`;
   }
+  const lk=document.getElementById('mc-link');
+  if(lk) lk.innerHTML=`<div class="mc-link-t">Custo mensal dos projetos que vou continuar<small>${rows.length} projeto(s) · clique para abrir</small></div><div class="mc-link-v">Mês <b>R$ ${fmtBRL(total)}</b> · Trimestre <b>R$ ${fmtBRL(total*3)}</b></div>`;
   const dl=document.getElementById('mc-proj-list');
   if(dl){const used=new Set(rows.map(m=>m.proj));dl.innerHTML=D.projects.filter(p=>p&&!used.has(p.name)).map(p=>`<option value="${safeText(p.name)}">`).join('');}
 }
