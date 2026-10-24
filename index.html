@@ -253,6 +253,74 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--san
 .ctlabel{font-size:13px;color:var(--tx2);font-weight:600}
 .ctval{font-size:17px;font-weight:800;font-family:var(--mono);color:var(--acc)}
 
+/* ===== VISUAL REFRESH ===== */
+.main{background:radial-gradient(1100px 520px at -5% -10%,rgba(79,110,247,.09),transparent 60%),radial-gradient(900px 480px at 105% -5%,rgba(236,72,153,.08),transparent 60%),radial-gradient(800px 600px at 50% 120%,rgba(20,184,166,.07),transparent 60%),var(--bg)}
+.sidebar{background:linear-gradient(180deg,#FFFFFF 0%,#FAFBFF 100%)}
+.ni{--c:var(--acc);padding:6px 10px}
+.ni svg{width:30px;height:30px;padding:7px;border-radius:9px;background:color-mix(in srgb,var(--c) 12%,transparent);color:var(--c);transition:all .15s}
+.ni:hover svg{background:color-mix(in srgb,var(--c) 20%,transparent)}
+.ni.active{background:color-mix(in srgb,var(--c) 11%,#fff);color:color-mix(in srgb,var(--c) 75%,#111)}
+.ni.active svg{background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 70%,#8B5CF6));color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--c) 40%,transparent)}
+.ni.active .nb{background:var(--c);color:#fff}
+.page{--pc:var(--acc);--pc2:var(--purple)}
+.ph{background:linear-gradient(120deg,color-mix(in srgb,var(--pc) 15%,#fff) 0%,color-mix(in srgb,var(--pc2) 10%,#fff) 100%);border:1px solid color-mix(in srgb,var(--pc) 18%,transparent);border-radius:var(--r4);padding:22px 24px;position:relative;overflow:hidden;align-items:center}
+.ph::after{content:'';position:absolute;right:-50px;top:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--pc2) 28%,transparent),transparent 70%);pointer-events:none}
+.ph>*{position:relative;z-index:1}
+.pt{display:flex;align-items:center;gap:12px}
+.pt-ic{width:42px;height:42px;border-radius:12px;padding:10px;color:#fff;background:linear-gradient(135deg,var(--pc),var(--pc2));box-shadow:0 6px 16px color-mix(in srgb,var(--pc) 35%,transparent);flex-shrink:0}
+.ps{margin-left:54px}
+.sec-lbl{display:flex;align-items:center;gap:8px}
+.sec-lbl::before{content:'';width:8px;height:8px;border-radius:3px;background:linear-gradient(135deg,var(--pc),var(--pc2))}
+.sc{border:none}
+.sc.c1{background:linear-gradient(135deg,#EEF1FE,#F3EEFF)}.sc.c1 .sv{color:#4338CA}
+.sc.c2{background:linear-gradient(135deg,#E9FBF0,#E3FAF6)}.sc.c2 .sv{color:#15803D}
+.sc.c3{background:linear-gradient(135deg,#EAF2FF,#E6FAFD)}.sc.c3 .sv{color:#1D4ED8}
+.sc.c4{background:linear-gradient(135deg,#FFF7E6,#FFEFEF)}.sc.c4 .sv{color:#C2410C}
+.sc::before{height:4px}
+.proj-list-wrap{border:none}
+.pc-av{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.pc-row:hover{background:linear-gradient(90deg,var(--bg2),transparent)}
+.phases{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(min-width:1600px){.phases{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:700px){.phases{grid-template-columns:1fr}}
+.add-t input{min-width:0}
+.phcard{border-top:4px solid var(--border)}
+.phcard.ph-done{background:linear-gradient(180deg,#F0FDF4,#fff);border-color:#BBF7D0;border-top-color:var(--green);opacity:1}
+.phcard.ph-cur{background:linear-gradient(180deg,#EEF1FE,#fff);border-color:#C7D2FE;border-top-color:var(--acc);box-shadow:0 6px 18px rgba(79,110,247,.15)}
+.pipe-block{background:var(--bg1);border-radius:var(--r3);padding:18px;box-shadow:var(--shadow)}
+
+/* PRONTOS */
+.pr-sel{background:var(--bg1);border:1.5px solid var(--border);border-radius:var(--r2);padding:8px 13px;font-size:13px;font-family:var(--sans);color:var(--tx2);outline:none}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:28px}
+.pr-card{background:var(--bg1);border-radius:var(--r3);padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden;cursor:pointer;transition:all .2s}
+.pr-card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.pr-card::before{content:'';position:absolute;inset:0 0 auto 0;height:70px;background:linear-gradient(135deg,var(--c1),var(--c2));opacity:.14}
+.pr-card-top{display:flex;align-items:center;gap:12px;position:relative}
+.pr-name{font-size:15px;font-weight:800;color:var(--tx);line-height:1.2}
+.pr-url{font-size:11px;font-family:var(--mono);color:var(--acc);text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.pr-url:hover{text-decoration:underline}
+.pr-meta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:12px;color:var(--tx3);font-family:var(--mono)}
+.pr-meta b{color:var(--green-tx)}
+.pr-proj{background:var(--bg1);border-radius:var(--r3);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.pr-proj-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 8%,#fff),#fff)}
+.pr-proj-h .pr-name{flex:1}
+.pr-count{font-size:12px;font-family:var(--mono);font-weight:700;color:var(--green-tx);background:var(--green-bg);padding:3px 10px;border-radius:20px}
+.pr-phase{padding:10px 18px 4px}
+.pr-phase-l{font-size:10px;font-family:var(--mono);font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:4px}
+.pr-task{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13px;color:var(--tx);border-bottom:1px dashed var(--border)}
+.pr-phase .pr-task:last-child{border-bottom:none}
+.pr-check{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#22C55E,#14B8A6);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pr-task-t{flex:1;min-width:0}
+.pr-date{font-size:11px;font-family:var(--mono);color:var(--tx3)}
+.pr-undo{opacity:0;border:1px solid var(--border);background:var(--bg1);border-radius:var(--r);padding:3px 8px;font-size:11px;font-weight:600;color:var(--tx3);cursor:pointer;font-family:var(--sans);transition:all .15s}
+.pr-task:hover .pr-undo{opacity:1}
+.pr-undo:hover{background:var(--amber-bg);color:var(--amber-tx);border-color:#FDE68A}
+.pr-recent{background:var(--bg1);border-radius:var(--r3);box-shadow:var(--shadow);padding:6px 18px;margin-bottom:28px}
+.pr-recent .pr-task{border-bottom:1px solid var(--border)}
+.pr-recent .pr-task:last-child{border-bottom:none}
+.pr-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+@media(max-width:700px){.ps{margin-left:0}.pr-undo{opacity:1}}
+
 /* CUSTO MENSAL */
 .mc-hero{background:linear-gradient(135deg,#1E2A78 0%,#4F6EF7 55%,#8B5CF6 100%);border-radius:var(--r4);padding:26px 28px;color:#fff;box-shadow:0 10px 30px rgba(79,110,247,.25);margin-bottom:18px;position:relative;overflow:hidden}
 .mc-hero::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
@@ -547,6 +615,10 @@ window.db   = firebase.firestore();
     <div class="ni" onclick="go('pipeline')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       <span>Pipeline</span>
+    </div>
+    <div class="ni" onclick="go('prontos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Prontos</span><span class="nb" id="nb-prontos">0</span>
     </div>
     <div class="ni" onclick="go('ideias')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -872,6 +944,20 @@ window.db   = firebase.firestore();
   <div class="ph"><div><div class="pt">Pipeline</div><div class="ps">Fase a fase de cada projeto</div></div></div>
   <select class="pipe-sel" id="pipe-sel" onchange="renderPipeline()"><option value="">Todos os projetos</option></select>
   <div id="pipe-container"></div>
+</div>
+
+<!-- PRONTOS -->
+<div class="page" id="page-prontos">
+  <div class="ph">
+    <div><div class="pt">Prontos</div><div class="ps">O que já foi entregue: projetos no ar e tarefas concluídas</div></div>
+    <div class="pa"><select class="pr-sel" id="pr-proj" onchange="renderProntos()"><option value="">Todos os projetos</option></select></div>
+  </div>
+  <div class="stats" id="pr-stats"></div>
+  <p class="sec-lbl">Projetos no ar</p>
+  <div class="pr-grid" id="pr-live"></div>
+  <div id="pr-recent"></div>
+  <p class="sec-lbl">Entregas concluídas por projeto</p>
+  <div id="pr-done"></div>
 </div>
 
 <!-- IDEIAS -->
@@ -1326,7 +1412,7 @@ function load(){
 function uid(){return 'x'+Math.random().toString(36).slice(2,8)}
 
 function renderAll(){
-  updateBadges();renderDash();renderProjetos();renderProfiles();renderPipeline();renderIdeias();renderTools();renderCosts();renderMonthly();renderMainLog();populateSels();renderFinanceiro();
+  updateBadges();renderDash();renderProjetos();renderProfiles();renderPipeline();renderIdeias();renderTools();renderCosts();renderMonthly();renderProntos();renderMainLog();populateSels();renderFinanceiro();
   renderPrompt();document.getElementById('ctx-edit').value=CTX;
 }
 
@@ -1335,6 +1421,7 @@ function updateBadges(){
   document.getElementById('nb-ideas').textContent=D.ideias.length;
   document.getElementById('nb-tools').textContent=D.tools.length;
   const nbp=document.getElementById('nb-profiles'); if(nbp) nbp.textContent=(D.profiles||[]).length;
+  const nbr=document.getElementById('nb-prontos'); if(nbr) nbr.textContent=D.projects.reduce((a,p)=>a+(p&&p.phases||[]).reduce((b,ph)=>b+((ph&&ph.tasks)||[]).filter(t=>t.done).length,0),0);
   const nbm=document.getElementById('nb-mensal'); if(nbm) nbm.textContent=(D.monthly||[]).length;
 }
 
@@ -1342,9 +1429,30 @@ function go(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const ord=['dashboard','empresa','prompt','projetos','perfis','pipeline','ideias','ferramentas','custos','mensal','financeiro','log','add'];
-  document.querySelectorAll('.ni')[ord.indexOf(p)]?.classList.add('active');
+  document.querySelector(`.ni[onclick="go('${p}')"]`)?.classList.add('active');
 }
+
+// Cor de cada seção: ícone do menu, cabeçalho e ícone da página
+const PAGE_COLORS={
+  dashboard:['#4F6EF7','#8B5CF6'], empresa:['#16A34A','#14B8A6'], prompt:['#0EA5E9','#6366F1'],
+  projetos:['#3B82F6','#06B6D4'], perfis:['#EC4899','#8B5CF6'], pipeline:['#8B5CF6','#4F6EF7'],
+  prontos:['#22C55E','#14B8A6'], ideias:['#F59E0B','#F97316'], ferramentas:['#0EA5E9','#64748B'],
+  custos:['#EF4444','#F59E0B'], mensal:['#6366F1','#EC4899'], financeiro:['#14B8A6','#22C55E'],
+  log:['#6366F1','#EC4899'], add:['#4F6EF7','#22C55E'],
+};
+function applyPageColors(){
+  Object.entries(PAGE_COLORS).forEach(([k,[c1,c2]])=>{
+    const ni=document.querySelector(`.ni[onclick="go('${k}')"]`);
+    if(ni) ni.style.setProperty('--c',c1);
+    const pg=document.getElementById('page-'+k);
+    if(!pg) return;
+    pg.style.setProperty('--pc',c1); pg.style.setProperty('--pc2',c2);
+    const pt=pg.querySelector('.ph .pt');
+    const ic=ni&&ni.querySelector('svg');
+    if(pt&&ic&&!pt.querySelector('.pt-ic')){const c=ic.cloneNode(true);c.setAttribute('class','pt-ic');pt.prepend(c);}
+  });
+}
+applyPageColors();
 
 // PROMPT
 function renderPrompt(){
@@ -1441,8 +1549,8 @@ function renderModalTasks(p){
 function toggleTaskModal(pid,fi,ti){
   const p=D.projects.find(x=>x.id===pid);
   if(!p?.phases?.[fi]?.tasks) return;
-  p.phases[fi].tasks[ti].done=!p.phases[fi].tasks[ti].done;
-  save();renderModalTasks(p);renderPipeline();
+  flipTask(p.phases[fi].tasks[ti]);
+  save();renderModalTasks(p);renderPipeline();renderProntos();updateBadges();
 }
 
 function switchModalTab(tab){
@@ -1518,8 +1626,7 @@ function projCard(p, idx){
   const fase=PHASES[parseInt(p.fase)||0]||'';
   const num=String((idx||0)+1).padStart(2,'0');
   return `<div class="pc-row" onclick="openProj('${p.id}')" style="cursor:pointer">
-    <div class="pc-num">${num}</div>
-    <div class="pc-accent" style="background:${sm.col}"></div>
+    <div class="pc-av" style="background:linear-gradient(135deg,${sm.col},color-mix(in srgb,${sm.col} 55%,#8B5CF6))" title="#${num}">${safeText(initials(p.name))}</div>
     <div class="pc-main">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span class="pn" style="font-size:15px">${p.name}</span>
@@ -1529,7 +1636,7 @@ function projCard(p, idx){
     </div>
     <div class="pc-fase" style="color:${sm.col}">${parseInt(p.fase)+1} \u2014 ${fase}</div>
     <div class="pc-prog-wrap">
-      <div class="prog-bg" style="width:120px"><div class="prog-fill" style="width:${prog}%;background:${sm.col}"></div></div>
+      <div class="prog-bg" style="width:120px"><div class="prog-fill" style="width:${prog}%;background:linear-gradient(90deg,color-mix(in srgb,${sm.col} 55%,#fff),${sm.col})"></div></div>
       <span style="font-size:11px;font-family:var(--mono);color:var(--tx3);margin-left:6px">${prog}%</span>
     </div>
     <button class="ibtn" onclick="event.stopPropagation();delProj('${p.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button>
@@ -1566,7 +1673,7 @@ function renderPipeline(){
 }
 function toggleTask(pid,fi,ti){
   const p=D.projects.find(x=>x.id===pid);if(!p?.phases?.[fi]?.tasks)return;
-  p.phases[fi].tasks[ti].done=!p.phases[fi].tasks[ti].done;save();renderPipeline();
+  flipTask(p.phases[fi].tasks[ti]);save();renderPipeline();renderProntos();updateBadges();
 }
 function addTask(pid,fi){
   const inp=document.getElementById(`ti-${pid}-${fi}`);if(!inp?.value.trim())return;
@@ -1574,6 +1681,65 @@ function addTask(pid,fi){
   if(!p.phases)p.phases=Array(6).fill(null).map(()=>({tasks:[],note:''}));
   if(!p.phases[fi])p.phases[fi]={tasks:[],note:''};
   p.phases[fi].tasks.push({t:inp.value.trim(),done:false});inp.value='';save();renderPipeline();
+}
+
+// PRONTOS
+function flipTask(tk){
+  tk.done=!tk.done;
+  if(tk.done) tk.doneAt=new Date().toISOString().slice(0,10); else delete tk.doneAt;
+}
+function undoTask(pid,fi,ti){
+  const p=D.projects.find(x=>x&&x.id===pid);if(!p?.phases?.[fi]?.tasks?.[ti])return;
+  flipTask(p.phases[fi].tasks[ti]);save();renderProntos();renderPipeline();updateBadges();
+}
+function fmtDate(d){return d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}):'';}
+function projHref(u){u=String(u||'').trim();return u&&!/\s/.test(u)&&u.includes('.')?(/^https?:/.test(u)?u:'https://'+u):'';}
+function renderProntos(){
+  const sel=document.getElementById('pr-proj');
+  if(!sel) return;
+  const projAll=D.projects.filter(Boolean);
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Todos os projetos</option>'+projAll.map(p=>`<option value="${p.id}" ${p.id===cur?'selected':''}>${safeText(p.name)}</option>`).join('');
+  const projs=cur?projAll.filter(p=>p.id===cur):projAll;
+  const grad=p=>{const c=(SM[p.status]||SM.dev).col;return [c,`color-mix(in srgb,${c} 55%,#8B5CF6)`];};
+  const av=p=>{const [a,b]=grad(p);return `<div class="pc-av" style="background:linear-gradient(135deg,${a},${b})">${safeText(initials(p.name))}</div>`;};
+
+  let total=0, done=[], phasesDone=0, phasesAll=0;
+  projs.forEach(p=>{
+    const c=parseInt(p.fase)||0; phasesDone+=Math.min(c,6)+((parseInt(p.progress)||0)>=100?1:0); phasesAll+=6;
+    (p.phases||[]).forEach((ph,fi)=>((ph&&ph.tasks)||[]).forEach((tk,ti)=>{total++; if(tk.done) done.push({p,fi,ti,tk});}));
+  });
+  const ready=projs.filter(p=>p.status==='live'||(parseInt(p.progress)||0)>=100);
+
+  document.getElementById('pr-stats').innerHTML=[
+    {l:'Projetos no ar',v:ready.length,s:`de ${projs.length} projeto(s)`,c:'c2'},
+    {l:'Entregas concluídas',v:done.length,s:`de ${total} tarefas`,c:'c1'},
+    {l:'Fases concluídas',v:phasesDone,s:`de ${phasesAll} fases`,c:'c3'},
+    {l:'Progresso geral',v:Math.round(done.length/Math.max(1,total)*100)+'%',s:'das tarefas',c:'c4'},
+  ].map(x=>`<div class="sc ${x.c}"><div class="sl">${x.l}</div><div class="sv">${x.v}</div><div class="ss">${x.s}</div></div>`).join('');
+
+  document.getElementById('pr-live').innerHTML=ready.length?ready.map(p=>{
+    const [c1,c2]=grad(p); const sm=SM[p.status]||SM.dev; const href=projHref(p.url);
+    const n=done.filter(d=>d.p===p).length;
+    return `<div class="pr-card" style="--c1:${c1};--c2:${c2}" onclick="openProj('${p.id}')">
+      <div class="pr-card-top">${av(p)}<div style="min-width:0"><div class="pr-name">${safeText(p.name)}</div>${href?`<a class="pr-url" href="${safeText(href)}" target="_blank" onclick="event.stopPropagation()">${safeText(p.url)}</a>`:`<span class="pr-url" style="color:var(--tx3)">${safeText(p.url||'')}</span>`}</div></div>
+      <div class="pr-meta"><span class="badge ${sm.cls}">${sm.l}</span><span><b>${n}</b> entregas · ${Math.min(100,parseInt(p.progress)||0)}%</span></div>
+    </div>`;}).join(''):'<div class="empty" style="grid-column:1/-1"><strong>Nenhum projeto no ar ainda</strong>Projetos com status "Ao vivo" ou 100% aparecem aqui.</div>';
+
+  const since=new Date(Date.now()-30*864e5).toISOString().slice(0,10);
+  const recent=done.filter(d=>d.tk.doneAt&&d.tk.doneAt>=since).sort((a,b)=>b.tk.doneAt.localeCompare(a.tk.doneAt));
+  const check='<div class="pr-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></div>';
+  const taskRow=(d,showProj)=>{const [c1]=grad(d.p);return `<div class="pr-task">${check}<span class="pr-task-t">${safeText(d.tk.t)}</span>${showProj?`<span class="pr-tag" style="background:color-mix(in srgb,${c1} 14%,#fff);color:color-mix(in srgb,${c1} 80%,#111)">${safeText(d.p.name)}</span>`:''}${d.tk.doneAt?`<span class="pr-date">${fmtDate(d.tk.doneAt)}</span>`:''}<button class="pr-undo" onclick="undoTask('${d.p.id}',${d.fi},${d.ti})">desfazer</button></div>`;};
+  document.getElementById('pr-recent').innerHTML=recent.length?`<p class="sec-lbl">Concluídas nos últimos 30 dias</p><div class="pr-recent">${recent.slice(0,12).map(d=>taskRow(d,true)).join('')}</div>`:'';
+
+  const byProj=projs.map(p=>({p,items:done.filter(d=>d.p===p),tot:(p.phases||[]).reduce((a,ph)=>a+((ph&&ph.tasks)||[]).length,0)})).filter(x=>x.items.length).sort((a,b)=>b.items.length-a.items.length);
+  document.getElementById('pr-done').innerHTML=byProj.length?byProj.map(({p,items,tot})=>{
+    const [c1,c2]=grad(p); const fis=[...new Set(items.map(d=>d.fi))].sort((a,b)=>a-b);
+    return `<div class="pr-proj" style="--c1:${c1};--c2:${c2}">
+      <div class="pr-proj-h">${av(p)}<div class="pr-name">${safeText(p.name)}</div><span class="pr-count">${items.length}/${tot}</span></div>
+      ${fis.map(fi=>`<div class="pr-phase"><div class="pr-phase-l" style="color:${c1}">Fase ${fi+1} — ${PHASES[fi]||''}</div>${items.filter(d=>d.fi===fi).map(d=>taskRow(d,false)).join('')}</div>`).join('')}
+      <div style="height:8px"></div>
+    </div>`;}).join(''):'<div class="empty"><strong>Nada concluído ainda</strong>Marque tarefas como feitas no Pipeline e elas aparecem aqui.</div>';
 }
 
 // IDEIAS
@@ -2098,7 +2264,7 @@ function renderCosts(){
       <td><select style="${selStyle}" onchange="updateCostField('${c.id}','proj',this.value)">${projOpts}</select></td>
       <td><select style="${selStyle}" onchange="updateCostField('${c.id}','freq',this.value);renderCosts()">${['Mensal','Trimestral','Anual','Único',...(['Mensal','Trimestral','Anual','Único'].includes(c.freq)?[]:[c.freq])].map(o=>`<option ${o===c.freq?'selected':''}>${o}</option>`).join('')}</select></td>
       <td><input type="date" value="${c.date||''}" onchange="updateCostDate('${c.id}',this.value)" style="border:1px solid var(--border);border-radius:5px;padding:4px 7px;font-size:12px;font-family:var(--mono);color:var(--tx2);background:var(--bg1);outline:none;cursor:pointer;width:130px" onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></td>
-      <td style="font-family:var(--mono);font-weight:700">${vs}</td>
+      <td style="font-family:var(--mono);font-weight:700;white-space:nowrap">${vs}</td>
       <td style="white-space:nowrap">
         <select style="${selStyle}" onchange="updateCostField('${c.id}','cat',this.value)">${catOpts}</select>
         <select style="${selStyle};margin-top:3px" onchange="updateCostField('${c.id}','nature',this.value)">${natOpts}</select>
